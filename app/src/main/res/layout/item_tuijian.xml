@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:gravity="center_vertical"
+        android:paddingTop="9dp"
+        android:paddingBottom="9dp">
+
+        <com.yijian.them.view.CircleImageView
+            android:id="@+id/civHead"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="top" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tvNickName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/color_FF333333"
+                    android:textSize="14dp" />
+
+                <ImageView
+                    android:id="@+id/ivMore"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:src="@mipmap/home_more" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:gravity="center_vertical"
+                android:id="@+id/llAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/home_icon_position" />
+
+                <TextView
+                    android:layout_marginLeft="5dp"
+                    android:id="@+id/tvAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_FF999999"
+                    android:textSize="10dp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="15dp"
+                android:lineSpacingMultiplier="1.2"
+                android:textColor="@color/color_FF333333"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/tvTag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:background="@drawable/shape_3b7aff_20_line_bg"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textColor="@color/color_3B7AFF"
+                android:textSize="12dp"
+                android:visibility="gone" />
+
+            <com.gcssloop.widget.RCRelativeLayout
+                android:id="@+id/rcrlImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
+                app:round_corner="10dp">
+
+                <com.yijian.them.view.NoScrollGridView
+                    android:id="@+id/nsgvImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:horizontalSpacing="10dp"
+                    android:scrollbars="none"
+                    android:verticalSpacing="10dp" />
+            </com.gcssloop.widget.RCRelativeLayout>
+
+            <TextView
+                android:id="@+id/tvGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/shape_3b7aff_25_bg"
+                android:drawableLeft="@mipmap/dynamic_icon_im"
+                android:drawablePadding="5dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:paddingRight="10dp"
+                android:textColor="@color/white"
+                android:textSize="14dp"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginRight="15dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tvTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/color_FF999999"
+                    android:textSize="12dp" />
+
+                <TextView
+                    android:id="@+id/tvPLNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="60dp"
+                    android:layout_weight="1"
+                    android:drawableLeft="@mipmap/home_pl"
+                    android:drawablePadding="5dp"
+                    android:text="评论"
+                    android:textColor="@color/color_FF333333"
+                    android:textSize="12dp" />
+
+                <TextView
+                    android:id="@+id/tvZanNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/home_zan"
+                    android:drawablePadding="5dp"
+                    android:gravity=""
+                    android:text="点赞"
+                    android:textColor="@color/color_FF333333"
+                    android:textSize="12dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="27dp"
+        android:drawableLeft="@mipmap/login_icon_psw"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:text="新密码"
+        android:textColor="@color/color_FF333333"
+        android:textSize="14dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+
+        <EditText
+            android:id="@+id/etPasswordNew"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:hint="请输入您的新密码"
+            android:inputType="textPassword"
+            android:maxLength="20"
+            android:singleLine="true"
+            android:imeOptions="actionNext"
+            android:paddingLeft="15dp"
+            android:textColor="@color/color_FF333333"
+            android:textSize="14dp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="44dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="30dp"
+        android:background="@color/color_line" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="27dp"
+        android:drawableLeft="@mipmap/login_icon_psw"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:text="确认密码"
+        android:textColor="@color/color_FF333333"
+        android:textSize="14dp" />
+
+    <EditText
+        android:id="@+id/etPassword"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@android:color/transparent"
+        android:hint="请确认您的新密码"
+        android:inputType="textPassword"
+        android:maxLength="20"
+        android:singleLine="true"
+        android:imeOptions="actionNext"
+        android:paddingLeft="15dp"
+        android:textColor="@color/color_FF333333"
+        android:textSize="14dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="44dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="30dp"
+        android:background="@color/color_line" />
+
+
+    <TextView
+        android:id="@+id/tvSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/shape_3b7aff_25_bg"
+        android:gravity="center"
+        android:text="完成"
+        android:textColor="@color/white"
+        android:textSize="16dp" />
+</LinearLayout>

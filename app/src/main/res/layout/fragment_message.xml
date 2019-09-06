@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="113dp"
+        android:layout_marginLeft="30dp"
+        android:gravity="center">
+
+        <RelativeLayout
+            android:id="@+id/rlSystem"
+            android:layout_width="0dp"
+            android:layout_height="113dp"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:drawableTop="@mipmap/message_notice"
+                android:drawablePadding="5dp"
+                android:text="官方通知"
+                android:textColor="@color/color_FF333333"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/tvSystemNum"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="45dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/shape_red_message_bg"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="12dp"
+                android:visibility="invisible" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_marginRight="15dp"
+            android:id="@+id/rlTeamMessage"
+            android:layout_width="0dp"
+            android:layout_height="113dp"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:drawableTop="@mipmap/message_message"
+                android:drawablePadding="5dp"
+                android:text="小队消息"
+                android:textColor="@color/color_FF333333"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/tvTeamNum"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="90dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/shape_red_message_bg"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="12dp"
+                android:visibility="invisible" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_marginRight="10dp"
+            android:id="@+id/rlPZ"
+            android:layout_width="0dp"
+            android:layout_height="113dp"
+            android:layout_weight="1"
+            android:gravity="right">
+
+            <TextView
+                android:id="@+id/tvPZNum"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="45dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/shape_red_message_bg"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="12dp"
+                android:visibility="invisible" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:drawableTop="@mipmap/message_like"
+                android:drawablePadding="5dp"
+                android:text="评论与赞"
+                android:textColor="@color/color_FF333333"
+                android:textSize="12dp" />
+
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="#FFF7F7F7"/>
+
+    <com.tencent.qcloud.tim.uikit.modules.conversation.ConversationLayout
+        android:id="@+id/conversation_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

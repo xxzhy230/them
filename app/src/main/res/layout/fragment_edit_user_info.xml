@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="none">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:text=" Hi !"
+            android:textColor="@color/color_FF333333"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="请完善您的信息"
+            android:textColor="@color/color_FF333333"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <RelativeLayout
+            android:id="@+id/rlHead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp">
+
+            <com.yijian.them.view.CircleImageView
+                android:id="@+id/civHead"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+
+                android:scaleType="centerCrop"
+                android:src="@mipmap/register_icon_avatar" />
+
+            <ImageView
+                android:id="@+id/ivHeadState"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="80dp"
+                android:src="@mipmap/register_icon_camera" />
+        </RelativeLayout>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="50dp"
+            android:drawableLeft="@mipmap/register_icon_nick"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:text="昵称"
+            android:textColor="@color/color_FF333333"
+            android:textSize="14dp" />
+
+
+        <EditText
+            android:id="@+id/etNick"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="33dp"
+            android:layout_marginRight="30dp"
+            android:background="@android:color/transparent"
+            android:hint="请输入您的昵称"
+            android:maxLength="10"
+            android:paddingLeft="15dp"
+            android:textColor="@color/color_FF333333"
+            android:textSize="14dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="44dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="30dp"
+            android:background="@color/color_line" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="25dp"
+            android:drawableLeft="@mipmap/register_icon_gender"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:text="性别"
+            android:textColor="@color/color_FF333333"
+            android:textSize="14dp" />
+
+        <RadioGroup
+            android:id="@+id/rgSex"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="48dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="30dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbSexMan"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:background="@drawable/selector_sex_bg"
+                android:button="@null"
+                android:checked="true"
+                android:drawableLeft="@drawable/selector_sex_man_icon"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                android:text="男"
+                android:textColor="@drawable/selector_sex_text" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_weight="1"
+                android:button="@null" />
+
+            <RadioButton
+                android:id="@+id/rbSexWoman"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:background="@drawable/selector_sex_bg"
+                android:button="@null"
+                android:drawableLeft="@drawable/selector_sex_woman_icon"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                android:text="女"
+                android:textColor="@drawable/selector_sex_text" />
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="10dp"
+            android:drawableLeft="@mipmap/register_icon_birth"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:text="生日"
+            android:textColor="@color/color_FF333333"
+            android:textSize="14dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="33dp"
+            android:layout_marginRight="30dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvBirth"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:digits="1234567890"
+                android:gravity="center_vertical"
+                android:hint="请选择自己的生日"
+                android:inputType="number"
+                android:maxLength="11"
+                android:paddingLeft="15dp"
+                android:textColor="@color/color_FF333333"
+                android:textSize="14dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:background="@android:color/transparent"
+                android:digits="1234567890"
+                android:gravity="center_vertical"
+                android:hint="仅自己可见"
+                android:inputType="number"
+                android:maxLength="11"
+                android:paddingLeft="15dp"
+                android:textColor="@color/color_FF333333"
+                android:textSize="14dp" />
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="44dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="30dp"
+            android:background="@color/color_line" />
+
+        <TextView
+            android:id="@+id/tvLogin"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/shape_f7f7f7_25_bg"
+            android:gravity="center"
+            android:text="完成"
+            android:textColor="@color/color_FF9F9F9F"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+</ScrollView>

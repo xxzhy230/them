@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_statusbar" />
+
+    <TextView
+        android:id="@+id/tvCannel"
+        android:layout_width="60dp"
+        android:layout_height="45dp"
+        android:gravity="center"
+        android:text="取消"
+        android:textColor="@color/color_FF333333"
+        android:textSize="16dp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="40dp"
+        android:background="@drawable/shape_black_5_line_bg"
+        android:orientation="vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="10dp">
+
+        <CheckBox
+            android:id="@+id/cb1"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:button="@null"
+            android:drawableRight="@drawable/selector_report_bg"
+            android:gravity="center_vertical"
+            android:text="广告内容"
+            android:textColor="@color/color_FF333333"
+            android:textSize="15dp" />
+
+        <CheckBox
+            android:id="@+id/cb2"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:button="@null"
+            android:drawableRight="@drawable/selector_report_bg"
+            android:gravity="center_vertical"
+            android:text="不友善内容"
+            android:textColor="@color/color_FF333333"
+            android:textSize="15dp" />
+
+        <CheckBox
+            android:id="@+id/cb3"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:button="@null"
+            android:drawableRight="@drawable/selector_report_bg"
+            android:gravity="center_vertical"
+            android:text="违规违法内容"
+            android:textColor="@color/color_FF333333"
+            android:textSize="15dp" />
+
+        <CheckBox
+            android:id="@+id/cb4"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:button="@null"
+            android:drawableRight="@drawable/selector_report_bg"
+            android:gravity="center_vertical"
+            android:text="抄袭"
+            android:textColor="@color/color_FF333333"
+            android:textSize="15dp" />
+
+        <CheckBox
+            android:id="@+id/cb5"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:button="@null"
+            android:drawableRight="@drawable/selector_report_bg"
+            android:gravity="center_vertical"
+            android:text="虚假互动内容"
+            android:textColor="@color/color_FF333333"
+            android:textSize="15dp" />
+
+        <CheckBox
+            android:id="@+id/cb6"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:button="@null"
+            android:drawableRight="@drawable/selector_report_bg"
+            android:gravity="center_vertical"
+            android:text="其他"
+            android:textColor="@color/color_FF333333"
+            android:textSize="15dp" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/etContent"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="40dp"
+        android:background="@drawable/shape_black_5_line_bg"
+        android:gravity="top"
+        android:textSize="14dp"
+        android:textColor="@color/color_FF666666"
+        android:hint="写下你的举报内容...(最多100个字)"
+        android:maxLength="100"
+        android:padding="10dp" />
+
+    <TextView
+        android:id="@+id/tvSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/shape_3b7aff_25_bg"
+        android:paddingLeft="50dp"
+        android:paddingTop="10dp"
+        android:paddingRight="50dp"
+        android:paddingBottom="10dp"
+        android:text="提交"
+        android:textColor="@color/white"
+        android:textSize="16dp" />
+</LinearLayout>

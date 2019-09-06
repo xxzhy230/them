@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/etContent"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_margin="10dp"
+        android:background="@color/white"
+        android:gravity="top"
+        android:hint="快来告诉我们你遇到的问题或者你的建议想法哦~"
+        android:padding="5dp"
+        android:textColor="@color/color_FF333333"
+        android:textSize="14dp" />
+    <ImageView
+        android:id="@+id/ivAddImage"
+        android:layout_marginLeft="15dp"
+        android:layout_width="83dp"
+        android:layout_height="83dp"
+        android:src="@mipmap/self_add"
+        />
+    <View
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/line"/>
+    <EditText
+        android:id="@+id/etPhoneOREmail"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:background="@color/white"
+        android:hint="留个手机号或者邮箱呀"
+        android:padding="5dp"
+        android:maxLength="30"
+        android:singleLine="true"
+        android:textColor="@color/color_FF333333"
+        android:textSize="14dp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/line"/>
+</LinearLayout>

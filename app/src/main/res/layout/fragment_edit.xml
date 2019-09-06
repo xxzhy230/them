@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <EditText
+        android:id="@+id/etNickOrRemark"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@color/white"
+        android:gravity="top"
+        android:hint="介绍一下你自己哟"
+        android:padding="15dp"
+        android:textColor="@color/color_FF333333"
+        android:textColorHint="@color/color_FF999999"
+        android:textSize="14dp" />
+
+    <TextView
+        android:id="@+id/tvLength"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="15dp"
+        android:gravity="right"
+        android:text="30"
+        android:textColor="@color/color_FF999999"
+        android:textSize="14dp" />
+
+</LinearLayout>

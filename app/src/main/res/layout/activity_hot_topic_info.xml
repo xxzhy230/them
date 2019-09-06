@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/srlLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+        <com.scwang.smartrefresh.header.DropBoxHeader
+            android:layout_width="match_parent"
+            android:layout_height="100dp" />
+
+        <!--<ScrollView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:scrollbars="none">-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/ivImageBg"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="fitXY" />
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:background="#bb3B7AFF"
+                            android:scaleType="fitXY" />
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="75dp">
+
+                        <ImageView
+                            android:id="@+id/ivHead"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:scaleType="centerCrop" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="10dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvTagName"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:textColor="@color/black"
+                                android:textSize="14dp" />
+
+                            <TextView
+                                android:id="@+id/tvTagContent"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:textSize="14dp" />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvFollow"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="40dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/shape_white_5_line_bg"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textSize="14dp" />
+                </RelativeLayout>
+
+                <RadioGroup
+                    android:id="@+id/rgTagInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp">
+
+                    <RadioButton
+                        android:id="@+id/rbRecommended"
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:button="@null"
+                        android:checked="true"
+                        android:gravity="center"
+                        android:text="推荐"
+                        android:textColor="@drawable/selector_topic_text"
+                        android:textSize="15dp" />
+
+                    <RadioButton
+                        android:id="@+id/rbNew"
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:text="最新"
+                        android:textColor="@drawable/selector_topic_text"
+                        android:textSize="15dp" />
+
+                    <RadioButton
+                        android:id="@+id/rbGroup"
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:text="群聊"
+                        android:textColor="@drawable/selector_topic_text"
+                        android:textSize="15dp" />
+                </RadioGroup>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <com.yijian.them.view.MyListView
+                            android:id="@+id/mlvTopicDynamic"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/color_fa"
+                            android:divider="@android:color/transparent"
+                            android:dividerHeight="10dp"
+                            android:scrollbars="none" />
+                        <com.yijian.them.view.MyListView
+                            android:visibility="gone"
+                            android:layout_marginTop="10dp"
+                            android:id="@+id/mlvTopicGroup"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/color_fa"
+                            android:divider="@android:color/transparent"
+                            android:dividerHeight="10dp"
+                            android:scrollbars="none" />
+                    </RelativeLayout>
+
+                    <include
+                        android:visibility="gone"
+                        layout="@layout/include_default"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:layout_marginTop="50dp" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+        <!--</ScrollView>-->
+
+        <com.scwang.smartrefresh.layout.footer.ClassicsFooter
+            android:layout_width="match_parent"
+            android:layout_height="80dp" />
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="25dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="15dp"
+            android:paddingTop="10dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="10dp"
+            android:src="@mipmap/navi_back" />
+
+
+        <TextView
+            android:id="@+id/tvCreat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="15dp"
+            android:paddingTop="10dp"
+            android:paddingRight="18dp"
+            android:paddingBottom="10dp"
+            android:text="举报"
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+    </RelativeLayout>
+</RelativeLayout>
+

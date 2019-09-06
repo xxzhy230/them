@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="RefreshLayout">
+        <attr name="direction">
+            <enum name="top" value="0" />
+            <enum name="bottom" value="1" />
+            <enum name="both" value="2" />
+        </attr>
+    </declare-styleable>
+
+
+
+    <attr name="item_count" format="integer" />
+    <declare-styleable name="MiUiViewPagerIndicator">
+        <attr name="item_count" />
+    </declare-styleable>
+    <declare-styleable name="BGButton">
+        <!--圆角-->
+        <attr name="topLeftRadius" format="dimension" />
+        <attr name="topRightRadius" format="dimension" />
+        <attr name="bottomLeftRadius" format="dimension" />
+        <attr name="bottomRightRadius" format="dimension" />
+        <attr name="radii" format="dimension" />
+        <!--正常填充色-->
+        <attr name="normalSolid" format="color" />
+        <!--按下填充色-->
+        <attr name="pressedSolid" format="color" />
+        <!--边框颜色，大小-->
+        <attr name="normalStrokeWidth" format="dimension" />
+        <attr name="normalStrokeColor" format="color" />
+        <attr name="pressedStrokeWidth" format="dimension" />
+        <attr name="pressedStrokeColor" format="color" />
+        <!--文字按下颜色-->
+        <attr name="pressedTextColor" format="color" />
+        <attr name="normalTextColor" format="color" />
+    </declare-styleable>
+
+
+    <declare-styleable name="SwipeBackLayout">
+        <attr name="edge_size" format="dimension" />
+        <attr name="edge_flag">
+            <enum name="left" value="0" />
+            <enum name="right" value="1" />
+            <enum name="bottom" value="2" />
+            <enum name="all" value="3" />
+        </attr>
+        <attr name="shadow_left" format="reference" />
+        <attr name="shadow_right" format="reference" />
+        <attr name="shadow_bottom" format="reference" />
+    </declare-styleable>
+
+    <attr name="SwipeBackLayoutStyle" format="reference" />
+    <!--圆形图-->
+    <declare-styleable name="CircleImageView">
+        <attr name="civ_border_width" format="dimension" />
+        <attr name="civ_border_color" format="color" />
+        <attr name="civ_border_overlay" format="boolean" />
+        <attr name="civ_fill_color" format="color" />
+        <attr name="border_width" format="dimension" />
+        <attr name="border_color" format="color" />
+    </declare-styleable>
+
+    <attr name="borderRadius" format="dimension" />
+    <attr name="type">
+        <enum name="circle" value="0" />
+        <enum name="round" value="1" />
+    </attr>
+
+
+    <declare-styleable name="FilletImageView">
+        <attr name="borderRadius" />
+        <attr name="type" />
+    </declare-styleable>
+
+
+</resources>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <include layout="@layout/include_status_bar" />
+    <FrameLayout
+        android:id="@+id/flMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+    <RadioGroup
+        android:background="@color/white"
+        android:id="@+id/rgMain"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp">
+
+        <RadioButton
+            android:id="@+id/rbHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:checked="true"
+            android:drawableTop="@drawable/selector_home"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:text="首页"
+            android:textColor="@color/color_FF333333"
+            android:textSize="10dp" />
+
+        <RadioButton
+            android:id="@+id/rbTeam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/selector_team"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:text="小队"
+            android:textColor="@color/color_FF333333"
+            android:textSize="10dp" />
+
+        <RadioButton
+            android:id="@+id/rbMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/selector_message"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:text="消息"
+            android:textColor="@color/color_FF333333"
+            android:textSize="10dp" />
+
+        <RadioButton
+            android:id="@+id/rbMine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/selector_mine"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:text="我的"
+            android:textColor="@color/color_FF333333"
+            android:textSize="10dp" />
+
+    </RadioGroup>
+</LinearLayout>
