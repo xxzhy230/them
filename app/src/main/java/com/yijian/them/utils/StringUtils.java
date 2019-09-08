@@ -4,6 +4,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.text.DecimalFormat;
+import java.util.Calendar;
 
 public class StringUtils {
     public static String double6String(double dou) {
@@ -28,5 +29,20 @@ public class StringUtils {
         }
     }
 
+    public static String getAge(String date) {
+        String[] split = date.split("-");
+        String year = split[0];
+        int age = getYear() - Integer.parseInt(year);
+        return age + "";
+    }
 
+    /**
+     * 获取年
+     *
+     * @return
+     */
+    public static int getYear() {
+        Calendar cd = Calendar.getInstance();
+        return cd.get(Calendar.YEAR);
+    }
 }

@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.tencent.imsdk.TIMCallBack;
+import com.tencent.imsdk.TIMManager;
 import com.yijian.them.R;
 import com.yijian.them.api.AuthApi;
 import com.yijian.them.basic.BasicActivity;
@@ -87,8 +89,8 @@ public class LoginFragment extends BasicFragment {
                             SPUtils.putToken(token);
                             SPUtils.putString(Config.LOGINPHONE,phone);
                             SPUtils.putString(Config.USERSIGN, userSign);
-                            JumpUtils.jumpMainActivity(getActivity());
-                            getActivity().finish();
+
+                            messageLogin();
                         }
                     }
 
@@ -98,4 +100,20 @@ public class LoginFragment extends BasicFragment {
                     }
                 }));
     }
+
+    private void messageLogin(){
+    TIMManager.getInstance().login(SPUtils.getInt(Config.USERID) + "", SPUtils.getString(Config.USERSIGN), new TIMCallBack() {
+        @Override
+        public void onError(int i, String s) {
+            Log.d("IM登录 Error: ", s);
+        }
+
+        @Override
+        public void onSuccess() {
+            Log.d("IM登录 : ", "Success");
+            JumpUtils.jumpMainActivity(getActivity());
+            getActivity().finish();
+        }
+    });
+}
 }

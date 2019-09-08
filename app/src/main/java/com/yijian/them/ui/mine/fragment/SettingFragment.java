@@ -1,10 +1,13 @@
 package com.yijian.them.ui.mine.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.tencent.imsdk.TIMCallBack;
+import com.tencent.imsdk.TIMManager;
 import com.yijian.them.R;
 import com.yijian.them.basic.BasicFragment;
 import com.yijian.them.utils.JumpUtils;
@@ -107,10 +110,24 @@ public class SettingFragment extends BasicFragment {
                 dialog = new ThemDialog(getActivity(), false, null, new DialogOnitem() {
                     @Override
                     public void onItemClickListener(int position) {
-                        AppManager.getAppManager().finishAllActivity();
-                        Fragments.init().finish();
-                        SPUtils.getInstance().edit().clear().commit();
-                        JumpUtils.jumpLoginActivity(getActivity(), 0, "", "");
+                        //登出
+                        TIMManager.getInstance().logout(new TIMCallBack() {
+                            @Override
+                            public void onError(int code, String desc) {
+
+                                //错误码 code 和错误描述 desc，可用于定位请求失败原因
+                                //错误码 code 列表请参见错误码表
+                                Log.d("退出失败 ", "logout failed. code: " + code + " errmsg: " + desc);
+                            }
+
+                            @Override
+                            public void onSuccess() {
+                                AppManager.getAppManager().finishAllActivity();
+                                Fragments.init().finish();
+                                SPUtils.getInstance().edit().clear().commit();
+                                JumpUtils.jumpLoginActivity(getActivity(), 0, "", "");
+                            }
+                        });
                     }
                 }, "退出登录", "点击确认退出登录");
                 dialog.show();

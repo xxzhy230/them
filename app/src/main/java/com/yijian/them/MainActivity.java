@@ -58,7 +58,6 @@ public class MainActivity extends BasicActivity implements RadioGroup.OnCheckedC
         rgMain.setOnCheckedChangeListener(this);
         initFragment();
         getUserInfo();
-        messageLogin();
     }
 
     private void initFragment() {
@@ -132,19 +131,5 @@ public class MainActivity extends BasicActivity implements RadioGroup.OnCheckedC
     }
 
 
-    private void messageLogin(){
-        TIMManager.getInstance().login(SPUtils.getInt(Config.USERID) + "", SPUtils.getString(Config.USERSIGN), new TIMCallBack() {
-            @Override
-            public void onError(int i, String s) {
-                Log.d("IM登录 Error: ", s);
-            }
 
-            @Override
-            public void onSuccess() {
-                Log.d("IM登录 : ", "Success");
-
-            }
-        });
-
-    }
 }

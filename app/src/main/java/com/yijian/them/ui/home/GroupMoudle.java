@@ -260,7 +260,7 @@ public class GroupMoudle {
             this.topicName = topicName;
         }
 
-        //获取活体标签
+        //获取话题标签
         private String createDte;
         private String tagDesc;
         private String tagHeat;
@@ -411,9 +411,7 @@ public class GroupMoudle {
         }
 
 
-        /**
-         * 获取随机话题{
-         */
+
 
     }
 }

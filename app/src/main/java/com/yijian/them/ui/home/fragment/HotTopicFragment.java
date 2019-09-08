@@ -24,10 +24,12 @@ import com.yijian.them.common.Config;
 import com.yijian.them.ui.home.GroupMoudle;
 import com.yijian.them.ui.home.adapter.HotTopicAdapter;
 import com.yijian.them.ui.home.adapter.TagAdapter;
+import com.yijian.them.utils.JumpUtils;
 import com.yijian.them.utils.dialog.AlertUtils;
 import com.yijian.them.utils.http.CallBack;
 import com.yijian.them.utils.http.Http;
 import com.yijian.them.utils.http.JsonResult;
+import com.yqjr.utils.spUtils.SPUtils;
 import com.yqjr.utils.utils.ToastUtils;
 
 import java.util.List;
@@ -63,10 +65,22 @@ public class HotTopicFragment extends BasicFragment implements OnRefreshListener
     private int page = 1;
     private TagAdapter adapter;
     private String topicName;
+    private int topicType;// 0 动态选择   1 话题广场
+    private int selectPosition = 0;
 
     @Override
     protected void onClickEvent() {
         context = (BasicActivity) getActivity();
+        topicType = SPUtils.getInt(Config.TOPICTYPE);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        page = 1;
+        if (adapter != null) {
+            adapter.clear();
+        }
         topic();
     }
 
@@ -86,6 +100,7 @@ public class HotTopicFragment extends BasicFragment implements OnRefreshListener
         lvTopicTitle.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectPosition = position;
                 if (hotTopicAdapter != null) {
                     GroupMoudle.DataBean item = hotTopicAdapter.getItem(position);
                     topicName = item.getTopicName();
@@ -94,7 +109,16 @@ public class HotTopicFragment extends BasicFragment implements OnRefreshListener
                     }
                     topicId = item.getTopicId();
                     hotTopicAdapter.setSelectPosition(position);
-                    tag();
+                    page = 1;
+                    if (adapter != null) {
+                        adapter.clear();
+                    }
+                    if (position == 0) {
+                        followList();
+                    } else {
+                        tag();
+                    }
+
                 }
             }
         });
@@ -102,16 +126,50 @@ public class HotTopicFragment extends BasicFragment implements OnRefreshListener
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 GroupMoudle.DataBean item = adapter.getItem(position);
-                Intent intent = new Intent();
-                intent.putExtra(Config.TOPICID, topicId);
-                intent.putExtra(Config.TOPICNAME, topicName);
-                intent.putExtra(Config.TAGID, item.getTagId());
-                intent.putExtra(Config.TAGNAME, item.getTagName());
-                getActivity().setResult(0, intent);
-                getActivity().finish();
+                if (topicType == 0) {
+                    Intent intent = new Intent();
+                    intent.putExtra(Config.TOPICID, topicId);
+                    intent.putExtra(Config.TOPICNAME, topicName);
+                    intent.putExtra(Config.TAGID, item.getTagId());
+                    intent.putExtra(Config.TAGNAME, item.getTagName());
+                    getActivity().setResult(0, intent);
+                    getActivity().finish();
+                } else {
+                    JumpUtils.jumpHotTopicInfoActivity(getActivity(), item.getTagId());
+                }
+
             }
         });
 
+    }
+
+    private void followList() {
+        Http.http.createApi(AuthApi.class).followList(page + "")
+                .compose(context.<JsonResult<List<GroupMoudle.DataBean>>>bindToLifecycle())
+                .compose(context.<JsonResult<List<GroupMoudle.DataBean>>>applySchedulers())
+                .subscribe(context.newSubscriber(new CallBack<List<GroupMoudle.DataBean>>() {
+                    @Override
+                    public void success(List<GroupMoudle.DataBean> dataBeans, int code) {
+                        if (code == 10000) {
+                            if (page == 1) {
+                                llDefault.setVisibility(View.VISIBLE);
+                                ivDefault.setImageResource(R.mipmap.default_dynamic);
+                                tvDefault.setText("暂无数据");
+                            }
+                            srlLayout.finishLoadMoreWithNoMoreData();
+                        } else if (code == 10001) {
+                            llDefault.setVisibility(View.GONE);
+                            page++;
+                            adapter.setDataBeans(dataBeans);
+                        }
+                    }
+
+                    @Override
+                    public void fail(String errorMessage, int status) {
+                        AlertUtils.dismissProgress();
+                        ToastUtils.toastCenter(getActivity(), errorMessage + "");
+                    }
+                }));
     }
 
     private void topic() {
@@ -123,12 +181,9 @@ public class HotTopicFragment extends BasicFragment implements OnRefreshListener
                     @Override
                     public void success(List<GroupMoudle.DataBean> dataBeans, int code) {
                         if (dataBeans != null && dataBeans.size() > 0) {
-                            GroupMoudle.DataBean dataBean = dataBeans.get(0);
-                            topicId = dataBean.getTopicId();
-                            topicName = dataBean.getTopicName();
                             hotTopicAdapter = new HotTopicAdapter(dataBeans);
                             lvTopicTitle.setAdapter(hotTopicAdapter);
-                            tag();
+                            followList();
                         } else {
                             AlertUtils.dismissProgress();
                         }
@@ -143,7 +198,7 @@ public class HotTopicFragment extends BasicFragment implements OnRefreshListener
     }
 
     private void tag() {
-        Http.http.createApi(AuthApi.class).tag(topicId, page + "")
+        Http.http.createApi(AuthApi.class).tag(page + "", topicId)
                 .compose(context.<JsonResult<List<GroupMoudle.DataBean>>>bindToLifecycle())
                 .compose(context.<JsonResult<List<GroupMoudle.DataBean>>>applySchedulers())
                 .subscribe(context.newSubscriber(new CallBack<List<GroupMoudle.DataBean>>() {
@@ -157,6 +212,7 @@ public class HotTopicFragment extends BasicFragment implements OnRefreshListener
                             }
                             srlLayout.finishLoadMoreWithNoMoreData();
                         } else if (code == 10001) {
+                            llDefault.setVisibility(View.GONE);
                             page++;
                             adapter.setDataBeans(dataBeans);
                         }
@@ -178,7 +234,7 @@ public class HotTopicFragment extends BasicFragment implements OnRefreshListener
                 getActivity().finish();
                 break;
             case R.id.tvCreat:
-
+                JumpUtils.jumpDynamicActivity(getActivity(), 10, "", "");
                 break;
         }
 
@@ -188,13 +244,21 @@ public class HotTopicFragment extends BasicFragment implements OnRefreshListener
     @Override
     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
         page = 1;
-        tag();
+        if (selectPosition == 0) {
+            followList();
+        } else {
+            tag();
+        }
         refreshLayout.finishRefresh();
     }
 
     @Override
     public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-        tag();
+        if (selectPosition == 0) {
+            followList();
+        } else {
+            tag();
+        }
         refreshLayout.finishLoadMore();
     }
 

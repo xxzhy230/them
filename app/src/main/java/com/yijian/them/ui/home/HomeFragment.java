@@ -11,6 +11,7 @@ import com.yijian.them.basic.BasicFragment;
 import com.yijian.them.ui.home.adapter.HomeAdapter;
 import com.yijian.them.ui.home.fragment.GuanzhuFragment;
 import com.yijian.them.ui.home.fragment.NearbyFragment;
+import com.yijian.them.ui.home.fragment.NewFragment;
 import com.yijian.them.ui.home.fragment.TuijianFragment;
 import com.yijian.them.utils.JumpUtils;
 import com.yijian.them.view.NoScrollViewPager;
@@ -30,6 +31,8 @@ public class HomeFragment extends BaseFragment {
     TextView tvNeary;
     @BindView(R.id.tvGuanzhu)
     TextView tvGuanzhu;
+    @BindView(R.id.tvNew)
+    TextView tvNew;
     @BindView(R.id.ivSearch)
     ImageView ivSearch;
     @BindView(R.id.ivAdd)
@@ -40,6 +43,7 @@ public class HomeFragment extends BaseFragment {
     private TuijianFragment tuijianFragment = new TuijianFragment();
     private NearbyFragment nearbyFragment = new NearbyFragment();
     private GuanzhuFragment guanzhuFragment = new GuanzhuFragment();
+    private NewFragment newFragment = new NewFragment();
 
     @Override
     protected View getResourceView() {
@@ -67,10 +71,11 @@ public class HomeFragment extends BaseFragment {
         fragments.add(tuijianFragment);
         fragments.add(nearbyFragment);
         fragments.add(guanzhuFragment);
+        fragments.add(newFragment);
     }
 
 
-    @OnClick({R.id.tvTuijian, R.id.tvNeary, R.id.tvGuanzhu, R.id.ivSearch, R.id.ivAdd})
+    @OnClick({R.id.tvTuijian, R.id.tvNeary, R.id.tvGuanzhu, R.id.ivSearch, R.id.ivAdd, R.id.tvNew})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tvTuijian:
@@ -85,11 +90,15 @@ public class HomeFragment extends BaseFragment {
                 nsvpHome.setCurrentItem(2);
                 showTextState(2);
                 break;
+            case R.id.tvNew:
+                nsvpHome.setCurrentItem(3);
+                showTextState(3);
+                break;
             case R.id.ivSearch:
-                JumpUtils.jumpDynamicActivity(getActivity(),9,"","");
+                JumpUtils.jumpDynamicActivity(getActivity(), 9, "", "");
                 break;
             case R.id.ivAdd:
-                JumpUtils.jumpDynamicActivity(getActivity(),2,"","");
+                JumpUtils.jumpDynamicActivity(getActivity(), 2, "", "");
                 break;
         }
     }
@@ -103,6 +112,8 @@ public class HomeFragment extends BaseFragment {
                 tvGuanzhu.setTextSize(14);
                 tvNeary.setTextColor(getResources().getColor(R.color.color_FF666666));
                 tvNeary.setTextSize(14);
+                tvNew.setTextColor(getResources().getColor(R.color.color_FF666666));
+                tvNew.setTextSize(14);
                 break;
             case 1:
                 tvTuijian.setTextColor(getResources().getColor(R.color.color_FF666666));
@@ -111,6 +122,8 @@ public class HomeFragment extends BaseFragment {
                 tvGuanzhu.setTextSize(14);
                 tvNeary.setTextColor(getResources().getColor(R.color.black));
                 tvNeary.setTextSize(18);
+                tvNew.setTextColor(getResources().getColor(R.color.color_FF666666));
+                tvNew.setTextSize(14);
                 break;
             case 2:
                 tvTuijian.setTextColor(getResources().getColor(R.color.color_FF666666));
@@ -119,6 +132,19 @@ public class HomeFragment extends BaseFragment {
                 tvNeary.setTextSize(14);
                 tvGuanzhu.setTextColor(getResources().getColor(R.color.black));
                 tvGuanzhu.setTextSize(18);
+                tvNew.setTextColor(getResources().getColor(R.color.color_FF666666));
+                tvNew.setTextSize(14);
+                break;
+
+            case 3:
+                tvTuijian.setTextColor(getResources().getColor(R.color.color_FF666666));
+                tvTuijian.setTextSize(14);
+                tvNeary.setTextColor(getResources().getColor(R.color.color_FF666666));
+                tvNeary.setTextSize(14);
+                tvGuanzhu.setTextColor(getResources().getColor(R.color.color_FF666666));
+                tvGuanzhu.setTextSize(14);
+                tvNew.setTextColor(getResources().getColor(R.color.black));
+                tvNew.setTextSize(18);
                 break;
         }
 

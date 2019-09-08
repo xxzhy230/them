@@ -11,6 +11,8 @@ import com.yijian.them.common.Config;
 import com.yijian.them.ui.home.activity.DynamicActivity;
 import com.yijian.them.ui.home.activity.HotTopicInfoActivity;
 import com.yijian.them.ui.home.activity.ReportActivity;
+import com.yijian.them.ui.home.activity.SearchActivity;
+import com.yijian.them.ui.home.activity.TagActivity;
 import com.yijian.them.ui.login.LoginActivity;
 import com.yijian.them.ui.login.SplashActivity;
 import com.yijian.them.ui.login.WelcomeActivity;
@@ -20,6 +22,7 @@ import com.yijian.them.ui.mine.activity.FollowerActivity;
 import com.yijian.them.ui.mine.activity.MineActivity;
 import com.yijian.them.ui.mine.activity.UserInfoActivity;
 import com.yijian.them.ui.mine.activity.WebActivity;
+import com.yijian.them.ui.team.TeamActivity;
 import com.yijian.them.ui.team.TeamInfoActivity;
 
 public class JumpUtils {
@@ -136,5 +139,24 @@ public class JumpUtils {
         Intent intent = new Intent(mContext, HotTopicInfoActivity.class);
         intent.putExtra(Config.TAGID, tagId);
         mContext.startActivity(intent);
+    }
+
+    public static void jumpTagActivity(Fragment mFragment) {
+        Intent intent = new Intent(mFragment.getContext(), TagActivity.class);
+        mFragment.startActivityForResult(intent, 1);
+    }
+
+    public static void jumpSearchActivity(Context mContext, String item) {
+        Intent intent = new Intent(mContext, SearchActivity.class);
+        intent.putExtra(Config.SEARCHKEY, item);
+        mContext.startActivity(intent);
+    }
+
+    public static void jumpTeamActivity(Context context, int type, String title, String teamId) {
+        Intent intent = new Intent(context, TeamActivity.class);
+        intent.putExtra(Config.TEAMID, teamId);
+        intent.putExtra(Config.TEAMTYPE, type);
+        intent.putExtra(Config.TEAMTITLE, title);
+        context.startActivity(intent);
     }
 }

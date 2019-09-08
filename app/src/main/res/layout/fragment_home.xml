@@ -13,16 +13,24 @@
             android:id="@+id/tvTuijian"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="30dp"
+            android:paddingLeft="25dp"
             android:text="推荐"
             android:textColor="@color/black"
             android:textSize="18dp" />
+        <TextView
+            android:id="@+id/tvNew"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="25dp"
+            android:text="最新"
+            android:textColor="@color/color_FF666666"
+            android:textSize="14dp" />
 
         <TextView
             android:id="@+id/tvNeary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="30dp"
+            android:paddingLeft="25dp"
             android:text="附近"
             android:textColor="@color/color_FF666666"
             android:textSize="14dp" />
@@ -31,7 +39,7 @@
             android:id="@+id/tvGuanzhu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="30dp"
+            android:paddingLeft="25dp"
             android:text="关注"
             android:textColor="@color/color_FF666666"
             android:textSize="14dp" />

@@ -10,7 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -25,6 +27,7 @@ import com.yijian.them.common.App;
 import com.yijian.them.common.Config;
 import com.yijian.them.ui.login.DataMoudle;
 import com.yijian.them.ui.team.adapter.TeamAdapter;
+import com.yijian.them.utils.JumpUtils;
 import com.yijian.them.utils.StringUtils;
 import com.yijian.them.utils.http.CallBack;
 import com.yijian.them.utils.http.Http;
@@ -55,6 +58,12 @@ public class TeamFragment extends BasicFragment implements OnRefreshListener, On
     LinearLayout llDefault;
     @BindView(R.id.srlLayout)
     SmartRefreshLayout srlLayout;
+    @BindView(R.id.sbRadius)
+    SeekBar sbRadius;
+    @BindView(R.id.tvRadius)
+    TextView tvRadius;
+    private String radius = "20";
+    int progress = 0;
     private int page = 1;
     private TeamAdapter teamAdapter;
 
@@ -68,6 +77,67 @@ public class TeamFragment extends BasicFragment implements OnRefreshListener, On
     @Override
     public void onClickEvent() {
 
+
+        sbRadius.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            //停止触摸
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                progress = seekBar.getProgress();
+                if (progress <= 10 && progress > 0) {
+                    sbRadius.setProgress(0);
+                } else if (progress < 20 && progress > 10) {
+                    sbRadius.setProgress(20);
+                } else if (progress < 30 && progress >= 20) {
+                    sbRadius.setProgress(20);
+                } else if (progress < 40 && progress >= 30) {
+                    sbRadius.setProgress(40);
+                } else if (progress <= 50 && progress >= 40) {
+                    sbRadius.setProgress(40);
+                } else if (progress <= 60 && progress >= 50) {
+                    sbRadius.setProgress(60);
+                } else if (progress <= 70 && progress >= 60) {
+                    sbRadius.setProgress(60);
+                } else if (progress <= 80 && progress >= 70) {
+                    sbRadius.setProgress(80);
+                }
+                radius = progress + "";
+                srlLayout.autoRefresh();
+                App.mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        onRefresh(srlLayout);
+                    }
+                }, 800);
+
+            }
+
+            //开始触摸
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            //拖动过程中
+            public void onProgressChanged(SeekBar seekBar, int progress,
+                                          boolean fromUser) {
+                System.out.println("滑动 : " + progress);
+                if (progress <= 10 && progress > 0) {
+                    tvRadius.setText("距离20Km");
+                } else if (progress < 20 && progress > 10) {
+                    tvRadius.setText("距离40Km");
+                } else if (progress < 30 && progress >= 20) {
+                    tvRadius.setText("距离40Km");
+                } else if (progress < 40 && progress >= 30) {
+                    tvRadius.setText("距离60Km");
+                } else if (progress <= 50 && progress >= 40) {
+                    tvRadius.setText("距离60Km");
+                } else if (progress <= 60 && progress >= 50) {
+                    tvRadius.setText("距离80Km");
+                } else if (progress <= 70 && progress >= 60) {
+                    tvRadius.setText("距离80Km");
+                } else if (progress <= 80 && progress >= 70) {
+                    tvRadius.setText("距离100Km");
+                }
+            }
+        });
     }
 
     @Override
@@ -87,7 +157,7 @@ public class TeamFragment extends BasicFragment implements OnRefreshListener, On
         App.locationUtil.setOnLocationListener(new LocationUtil.OnLocationListener() {
             @Override
             public void onLocation(double latitude, double longitude, String cityCode) {
-                getTeam(cityCode, latitude + "", longitude + "", "30");
+                getTeam(cityCode, latitude + "", longitude + "", radius);
             }
         });
 
@@ -95,12 +165,12 @@ public class TeamFragment extends BasicFragment implements OnRefreshListener, On
     }
 
     private void getTeam(String cityCode, String latitude, String longitude, String radius) {
-        Http.http.createApi(AuthApi.class).getTeamList(cityCode, latitude, longitude, page+"", radius)
+        Http.http.createApi(AuthApi.class).getTeamList(cityCode, latitude, longitude, page + "", radius)
                 .compose(context.<JsonResult<List<TeamMoudle.DataBean>>>bindToLifecycle())
                 .compose(context.<JsonResult<List<TeamMoudle.DataBean>>>applySchedulers())
                 .subscribe(context.newSubscriber(new CallBack<List<TeamMoudle.DataBean>>() {
                     @Override
-                    public void success(List<TeamMoudle.DataBean> response,int code) {
+                    public void success(List<TeamMoudle.DataBean> response, int code) {
                         Log.d("获取小队: ", response + "");
                         if (code == 10001) {
                             teamAdapter.setData(response);
@@ -132,6 +202,7 @@ public class TeamFragment extends BasicFragment implements OnRefreshListener, On
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ivMenu:
+                JumpUtils.jumpTeamActivity(getActivity(), 1, "我参与的小队", "");
                 break;
             case R.id.ivAdd:
                 break;
@@ -140,13 +211,14 @@ public class TeamFragment extends BasicFragment implements OnRefreshListener, On
 
     @Override
     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+        System.out.println("----------------");
         page = 1;
         App.locationUtil.onceLocation(true);
         App.locationUtil.startLocation();
         App.locationUtil.setOnLocationListener(new LocationUtil.OnLocationListener() {
             @Override
             public void onLocation(double latitude, double longitude, String cityCode) {
-                getTeam(cityCode, latitude + "", longitude + "", "30");
+                getTeam(cityCode, latitude + "", longitude + "", radius);
             }
         });
         refreshLayout.finishRefresh();
@@ -159,7 +231,7 @@ public class TeamFragment extends BasicFragment implements OnRefreshListener, On
         App.locationUtil.setOnLocationListener(new LocationUtil.OnLocationListener() {
             @Override
             public void onLocation(double latitude, double longitude, String cityCode) {
-                getTeam(cityCode, latitude + "", longitude + "",  "30");
+                getTeam(cityCode, latitude + "", longitude + "", radius);
             }
         });
         refreshLayout.finishLoadMore();

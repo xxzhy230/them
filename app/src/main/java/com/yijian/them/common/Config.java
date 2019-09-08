@@ -35,6 +35,10 @@ public class Config {
     public static final String REPORTEDID = "reportedId";
     public static final String COMMENTID = "commentId";
     public static final String TEAMID = "TEAMID";
+    public static final String TOPICTYPE = "TOPICTYPE";
+    public static final String SEARCHKEY = "SEARCHKEY";
+    public static final String TEAMTYPE = "TEAMTYPE";
+    public static final String TEAMTITLE = "TEAMTITLE";
     public static GroupMoudle.DataBean dataBean;
 
 }

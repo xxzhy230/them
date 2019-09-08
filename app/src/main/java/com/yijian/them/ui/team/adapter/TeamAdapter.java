@@ -47,22 +47,29 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.TeamViewHolder
         holder.tvTeamNum.setText("参与人数:");
         double teamImgHeight = dataBean.getTeamImgHeight();
         double teamImgWidth = dataBean.getTeamImgWidth();
-        if (teamImgHeight < 750) {
-            teamImgHeight = teamImgHeight * 2;
-        } else {
-            if (teamImgWidth < 750) {
-                teamImgWidth = teamImgWidth * 2;
-            }
-        }
+        //图片宽高比
+        double rate = teamImgWidth / teamImgHeight;
+        //屏幕宽度一半
         int width = App.mWidth / 2 - StringUtils.dp2px(mContext, 10);
-        int height = (int) (width * teamImgHeight / teamImgWidth);
+        int height;
+        if (rate > 1.5) {
+            teamImgHeight = 1335;
+            teamImgWidth = 750;
+            height = (int) (width * teamImgHeight / teamImgWidth);
+        } else if (rate <= 1.5 && rate >= 0.7) {
+            height = (int) (width * teamImgHeight * 1.7 / teamImgWidth);
+        } else {
+            height = (int) (width * teamImgHeight / teamImgWidth);
+        }
+
+
         ViewGroup.LayoutParams layoutParams = holder.rlTeam.getLayoutParams();
         layoutParams.height = height;
         holder.rlTeam.setLayoutParams(layoutParams);
         List<String> teamImgUrls = dataBean.getTeamImgUrls();
         if (teamImgUrls != null && teamImgUrls.size() > 0) {
             String s = teamImgUrls.get(0);
-            Picasso.with(mContext).load(s).transform(new PicassoRoundTransform()).into(holder.ivTeamBg);
+            Picasso.with(mContext).load(s).into(holder.ivTeamBg);
         }
         List<TeamMoudle.DataBean.MembersBean> members = dataBean.getMembers();
         if (members != null && members.size() > 0) {
@@ -70,7 +77,6 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.TeamViewHolder
             String realImg = membersBean.getRealImg();
             String gender = membersBean.getGender();
             String nickName = membersBean.getNickName();
-            String birthday = membersBean.getBirthday();
             holder.tvNickName.setText(nickName);
             Picasso.with(mContext).load(realImg).into(holder.civHead);
             if ("1".equals(gender)) {
@@ -84,7 +90,7 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.TeamViewHolder
             holder.rlTeam.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    JumpUtils.jumpTeamInfoActivity(mContext,dataBean.getTeamId());
+                    JumpUtils.jumpTeamInfoActivity(mContext, dataBean.getTeamId());
                 }
             });
         }

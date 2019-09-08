@@ -12,10 +12,10 @@
         android:gravity="center_vertical">
 
         <ImageView
-            android:layout_centerVertical="true"
             android:id="@+id/ivBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:paddingLeft="15dp"
             android:paddingTop="10dp"
             android:paddingRight="15dp"
@@ -34,17 +34,17 @@
             android:paddingRight="18dp"
             android:paddingBottom="10dp"
             android:text="创建"
-            android:textSize="16dp"
             android:textColor="@color/black"
+            android:textSize="16dp"
             android:textStyle="bold" />
     </RelativeLayout>
 
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/srlLayout"
-        android:visibility="visible"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="visible">
 
         <com.scwang.smartrefresh.header.DropBoxHeader
             android:layout_width="match_parent"
@@ -58,6 +58,7 @@
                 android:id="@+id/lvTopicTitle"
                 android:layout_width="88dp"
                 android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
                 android:background="@color/color_fa"
                 android:divider="@android:color/transparent"
                 android:dividerHeight="10dp"
@@ -75,6 +76,8 @@
                     android:layout_height="match_parent"
                     android:divider="@android:color/transparent"
                     android:dividerHeight="10dp"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
                     android:scrollbars="none" />
             </LinearLayout>
 

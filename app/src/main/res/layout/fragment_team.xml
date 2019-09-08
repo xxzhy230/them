@@ -14,10 +14,20 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="小队"
             android:textColor="@color/black"
-            android:textSize="29dp" />
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvRadius"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="距离20Km"
+            android:textColor="@color/black"
+            android:textSize="18dp" />
 
         <ImageView
             android:id="@+id/ivMenu"
@@ -39,24 +49,44 @@
             android:paddingBottom="10dp"
             android:src="@mipmap/team_icon_publish" />
     </LinearLayout>
+
+    <SeekBar
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:id="@+id/sbRadius"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="2dp"
+        android:minHeight="4dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:max="80"
+        android:progressDrawable="@drawable/bg_seek_bar_drawable"
+        android:thumb="@mipmap/icon_calculator_slide_circle"
+        android:thumbOffset="0dp" />
+
     <include layout="@layout/include_default" />
+
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/srlLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <com.scwang.smartrefresh.header.DropBoxHeader
             android:layout_width="match_parent"
             android:layout_height="100dp" />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvTeam"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="5dp" />
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp" />
+
         <com.scwang.smartrefresh.layout.footer.ClassicsFooter
             android:layout_width="match_parent"
-            android:layout_height="80dp"/>
+            android:layout_height="80dp" />
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
 </LinearLayout>

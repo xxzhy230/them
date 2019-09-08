@@ -1,6 +1,5 @@
-package com.yijian.them.ui.home.activity;
+package com.yijian.them.ui.team;
 
-import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -17,7 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class DynamicActivity extends BasicActivity {
+public class TeamActivity extends BasicActivity {
     @BindView(R.id.v_include_bar)
     View v_include_bar;
     @BindView(R.id.tvTitleBar)
@@ -36,15 +35,15 @@ public class DynamicActivity extends BasicActivity {
 
     @Override
     public int initView() {
-        return R.layout.activity_dynamic;
+        return R.layout.activity_team;
     }
 
     @Override
     public void initData() {
         ButterKnife.bind(this);
-        messageType = getIntent().getIntExtra(Config.DYNAMICTYPE, 0);
-        String title = getIntent().getStringExtra(Config.DYNAMICTITLE);
-        dynamicId = getIntent().getStringExtra(Config.DYNAMICID);
+        messageType = getIntent().getIntExtra(Config.TEAMTYPE, 0);
+        String title = getIntent().getStringExtra(Config.TEAMTITLE);
+        dynamicId = getIntent().getStringExtra(Config.TEAMID);
         tvTitleBar.setText(title);
         if (messageType == 2
                 || messageType == 3
@@ -60,7 +59,7 @@ public class DynamicActivity extends BasicActivity {
             tvRightBar.setVisibility(View.VISIBLE);
             tvRightBar.setText("创建群");
         }
-        Fragments.init().commitDynamic(messageType, getSupportFragmentManager(), R.id.flDynamic, dynamicId);
+        Fragments.init().commitTeam(messageType, getSupportFragmentManager(), R.id.flDynamic, dynamicId);
     }
 
     @OnClick({R.id.tvTitleBar, R.id.ivRightBar, R.id.tvRightBar})

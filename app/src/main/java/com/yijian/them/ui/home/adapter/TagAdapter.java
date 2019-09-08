@@ -61,6 +61,14 @@ public class TagAdapter extends BaseAdapter {
 
     public void setDataBeans(List<GroupMoudle.DataBean> dataBeans) {
         this.dataBeans.addAll(dataBeans);
+        notifyDataSetChanged();
+    }
+
+    public void clear() {
+        if (dataBeans!=null){
+            dataBeans.clear();
+            notifyDataSetChanged();
+        }
     }
 
     static class ViewHolder {

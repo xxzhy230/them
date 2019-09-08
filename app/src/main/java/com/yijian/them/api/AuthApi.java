@@ -90,6 +90,7 @@ public interface AuthApi {
                                                          @Query("sex") String sex,
                                                          @Query("phone") String phone,
                                                          @Query("password") String password);
+
     /**
      * 获取用户信息
      *
@@ -166,7 +167,7 @@ public interface AuthApi {
     /**
      * 获取小队信息
      */
-    @GET("team/nearby")
+    @GET("v2/team/nearby")
     Observable<JsonResult<List<TeamMoudle.DataBean>>> getTeamList(@Query("cityCode") String cityCode,
                                                                   @Query("latitude") String latitude,
                                                                   @Query("longitude") String longitude,
@@ -206,6 +207,14 @@ public interface AuthApi {
      */
     @GET("dynamic/recommended")
     Observable<JsonResult<List<HomeMoudle.DataBean>>> recommended(@Query("page") int page);
+
+    /**
+     * 获取推荐动态
+     */
+    @GET("dynamic/newest")
+    Observable<JsonResult<List<HomeMoudle.DataBean>>> dynamicNew(@Query("page") int page);
+
+
 
     /**
      * 获取推荐动态
@@ -280,12 +289,6 @@ public interface AuthApi {
                                                     @Query("localName") String localName,
                                                     @Query("tagId") String tagId,
                                                     @Query("tagName") String tagName);
-
-    /**
-     * 获取小队列表
-     */
-    @GET("team/")
-    Observable<JsonResult<String>> team();
 
     /**
      * 获取小队列表
@@ -376,8 +379,13 @@ public interface AuthApi {
     /**
      * 获取小队信息
      */
-    @GET("team/{teamId}")
+    @GET("v2/team/{teamId}")
     Observable<JsonResult<TeamInfoMoudle.DataBean>> teamInfo(@Path("teamId") String teamId);
+    /**
+     * 我参与的小队
+     */
+    @GET("v2/team/")
+    Observable<JsonResult<List<TeamMoudle.DataBean>>> teamList();
 
     /**
      * 获取随机话题
@@ -393,6 +401,7 @@ public interface AuthApi {
 
     /**
      * 获取关注人动态
+     *
      * @param page
      * @return
      */
@@ -401,6 +410,7 @@ public interface AuthApi {
 
     /**
      * 查询单条标签
+     *
      * @param tagId
      * @return
      */
@@ -409,6 +419,7 @@ public interface AuthApi {
 
     /**
      * 查询单条标签
+     *
      * @param tagId
      * @param page
      * @param type
@@ -430,6 +441,7 @@ public interface AuthApi {
 
     /**
      * 获取标签下的群聊
+     *
      * @param tagId
      * @return
      */
@@ -438,11 +450,33 @@ public interface AuthApi {
 
     /**
      * 举报标签
+     *
      * @return
      */
     @POST("tagReport")
     Observable<JsonResult<String>> tagReport(@Body Map<String, String> params);
 
+    /**
+     * 创建标签
+     *
+     * @return
+     */
+    @Multipart
+    @POST("tag")
+    Observable<JsonResult<String>> tag(@Part MultipartBody.Part[] parts,
+                                       @Query("tagName") String tagName,
+                                       @Query("tagDesc") String tagDesc,
+                                       @Query("topicId") String topicId);
 
+    /**
+     * 获取话题列表
+     */
+    @GET("tag/following")
+    Observable<JsonResult<List<GroupMoudle.DataBean>>> followList(@Query("page") String page);
+    /**
+     * 关键字搜索
+     */
+    @POST("search")
+    Observable<JsonResult<List<GroupMoudle.DataBean>>> search(@Body Map<String, String> params);
 
 }

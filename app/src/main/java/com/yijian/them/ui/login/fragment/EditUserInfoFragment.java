@@ -226,6 +226,90 @@ public class EditUserInfoFragment extends BasicFragment {
                     }
                 }));
     }
+    /**
+     * 生日
+     */
+    private void pickBirth() {
+        View outerView1 = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_birthday_select, null);
+        //年滚轮
+        final WheelView wv1 = (WheelView) outerView1.findViewById(R.id.wv1);
+        //月滚轮
+        final WheelView wv2 = (WheelView) outerView1.findViewById(R.id.wv2);
+        //日滚轮
+        final WheelView wv3 = (WheelView) outerView1.findViewById(R.id.wv3);
+        Calendar ca = Calendar.getInstance();
+        ca.setTime(new Date());
+        wv1.setItems(Times.yearList(30), Times.getYear(50, 2020));
+        wv2.setItems(Times.monthList(), 0);
+        wv3.setItems(Times.dayList("2020", "01"), 0);
+        wv1.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int selectedIndex, String item) {
+                String yearItem = wv1.getSelectedItem();
+                String monthItem = wv2.getSelectedItem();
+                yearItem = yearItem.substring(0, yearItem.length() - 1);
+                monthItem = monthItem.substring(0, monthItem.length() - 1);
+                wv2.setItems(Times.monthList(), monthIndex);
+                wv3.setItems(Times.dayList(yearItem, monthItem), 0);
+            }
+        });
+        wv2.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(int index, String item) {
+                String yearItem = wv1.getSelectedItem();
+                String monthItem = wv2.getSelectedItem();
+                yearItem = yearItem.substring(0, yearItem.length() - 1);
+                monthItem = monthItem.substring(0, monthItem.length() - 1);
+                monthIndex = index;
+                wv3.setItems(Times.dayList(yearItem, monthItem), 0);
+            }
+        });
+        wv3.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int selectedIndex, String item) {
+            }
+        });
+        TextView tv_ok = (TextView) outerView1.findViewById(R.id.tv_ok);
+        TextView tv_cancel = (TextView) outerView1.findViewById(R.id.tv_cancel);
+        //点击确定
+        tv_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                bottomDialog.dismiss();
+                String mSelectDate = wv1.getSelectedItem();
+                String mSelectHour = wv2.getSelectedItem();
+                String mSelectMin = wv3.getSelectedItem();
+                mSelectDate = mSelectDate.substring(0, mSelectDate.length() - 1);
+                mSelectHour = mSelectHour.substring(0, mSelectHour.length() - 1);
+                mSelectMin = mSelectMin.substring(0, mSelectMin.length() - 1);
+                birthday = mSelectDate + "-" + mSelectHour + "-" + mSelectMin;
+                tvBirth.setText(birthday);
+                String nick = etNick.getText().toString().trim();
+                if (!TextUtils.isEmpty(nick) && headFile != null &&
+                        !TextUtils.isEmpty(sex) && !TextUtils.isEmpty(birthday)) {
+                    tvLogin.setBackgroundResource(R.drawable.shape_3b7aff_25_bg);
+                    tvLogin.setTextColor(getResources().getColor(R.color.white));
+                }
+            }
+        });
+        //点击取消
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                bottomDialog.dismiss();
+            }
+        });
+        //防止弹出两个窗口
+        if (bottomDialog != null && bottomDialog.isShowing()) {
+            return;
+        }
+
+        bottomDialog = new BottomDialog(getActivity(), R.style.ActionSheetDialogStyle);
+        //将布局设置给Dialog
+        bottomDialog.setContentView(outerView1);
+        bottomDialog.show();//显示对话框
+    }
 
     /**
      * 从相册选择
@@ -326,90 +410,6 @@ public class EditUserInfoFragment extends BasicFragment {
         }
     }
 
-    /**
-     * 生日
-     */
-    private void pickBirth() {
-        View outerView1 = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_birthday_select, null);
-        //年滚轮
-        final WheelView wv1 = (WheelView) outerView1.findViewById(R.id.wv1);
-        //月滚轮
-        final WheelView wv2 = (WheelView) outerView1.findViewById(R.id.wv2);
-        //日滚轮
-        final WheelView wv3 = (WheelView) outerView1.findViewById(R.id.wv3);
-        Calendar ca = Calendar.getInstance();
-        ca.setTime(new Date());
-        wv1.setItems(Times.yearList(30), Times.getYear(50, 2020));
-        wv2.setItems(Times.monthList(), 0);
-        wv3.setItems(Times.dayList("2020", "01"), 0);
-        wv1.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(int selectedIndex, String item) {
-                String yearItem = wv1.getSelectedItem();
-                String monthItem = wv2.getSelectedItem();
-                yearItem = yearItem.substring(0, yearItem.length() - 1);
-                monthItem = monthItem.substring(0, monthItem.length() - 1);
-                wv2.setItems(Times.monthList(), monthIndex);
-                wv3.setItems(Times.dayList(yearItem, monthItem), 0);
-            }
-        });
-        wv2.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(int index, String item) {
-                String yearItem = wv1.getSelectedItem();
-                String monthItem = wv2.getSelectedItem();
-                yearItem = yearItem.substring(0, yearItem.length() - 1);
-                monthItem = monthItem.substring(0, monthItem.length() - 1);
-                monthIndex = index;
-                wv3.setItems(Times.dayList(yearItem, monthItem), 0);
-            }
-        });
-        wv3.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(int selectedIndex, String item) {
-            }
-        });
-        TextView tv_ok = (TextView) outerView1.findViewById(R.id.tv_ok);
-        TextView tv_cancel = (TextView) outerView1.findViewById(R.id.tv_cancel);
-        //点击确定
-        tv_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                bottomDialog.dismiss();
-                String mSelectDate = wv1.getSelectedItem();
-                String mSelectHour = wv2.getSelectedItem();
-                String mSelectMin = wv3.getSelectedItem();
-                mSelectDate = mSelectDate.substring(0, mSelectDate.length() - 1);
-                mSelectHour = mSelectHour.substring(0, mSelectHour.length() - 1);
-                mSelectMin = mSelectMin.substring(0, mSelectMin.length() - 1);
-                birthday = mSelectDate + "-" + mSelectHour + "-" + mSelectMin;
-                tvBirth.setText(birthday);
-                String nick = etNick.getText().toString().trim();
-                if (!TextUtils.isEmpty(nick) && headFile != null &&
-                        !TextUtils.isEmpty(sex) && !TextUtils.isEmpty(birthday)) {
-                    tvLogin.setBackgroundResource(R.drawable.shape_3b7aff_25_bg);
-                    tvLogin.setTextColor(getResources().getColor(R.color.white));
-                }
-            }
-        });
-        //点击取消
-        tv_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                bottomDialog.dismiss();
-            }
-        });
-        //防止弹出两个窗口
-        if (bottomDialog != null && bottomDialog.isShowing()) {
-            return;
-        }
-
-        bottomDialog = new BottomDialog(getActivity(), R.style.ActionSheetDialogStyle);
-        //将布局设置给Dialog
-        bottomDialog.setContentView(outerView1);
-        bottomDialog.show();//显示对话框
-    }
 
     /**
      * @param requestCode  申请码

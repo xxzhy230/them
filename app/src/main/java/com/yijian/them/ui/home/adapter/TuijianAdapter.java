@@ -2,6 +2,7 @@ package com.yijian.them.ui.home.adapter;
 
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -226,9 +227,12 @@ public class TuijianAdapter extends BaseAdapter {
                 TIMGroupManager.getInstance().getSelfInfo(groupId, new TIMValueCallBack<TIMGroupSelfInfo>() {
                     @Override
                     public void onError(int i, String s) {
+                        Log.d("群组",s);
                         if (s.equals("no permission")) {
                             GroupDialog dialog = new GroupDialog(parent.getContext(), dataBean.getGroupId(), dataBean.getGroupName());
                             dialog.show();
+                        } else if (s.equals("this group does not exist")) {
+                            ToastUtils.toastCenter(parent.getContext(), "群组已解散");
                         }
                     }
 

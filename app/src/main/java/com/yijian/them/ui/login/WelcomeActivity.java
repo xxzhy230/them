@@ -1,11 +1,15 @@
 package com.yijian.them.ui.login;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.tencent.imsdk.TIMCallBack;
+import com.tencent.imsdk.TIMManager;
 import com.yijian.them.R;
 import com.yijian.them.common.App;
+import com.yijian.them.common.Config;
 import com.yijian.them.utils.JumpUtils;
 import com.yijian.them.utils.SignCheck;
 import com.yqjr.utils.Utils;
@@ -42,7 +46,6 @@ public class WelcomeActivity extends BaseActivity {
                     initActivity();
                 }
             }, 2000);
-
         } else {
             finish();
         }
@@ -70,14 +73,36 @@ public class WelcomeActivity extends BaseActivity {
         String token = SPUtils.getToken();
         // 如果是第一次启动，则先进入登录
         if (!TextUtils.isEmpty(token)) {
-            JumpUtils.jumpMainActivity(this);
-            finish();
+            String loginUser = TIMManager.getInstance().getLoginUser();
+
+            if (TextUtils.isEmpty(loginUser)) {
+                messageLogin();
+            } else {
+                JumpUtils.jumpMainActivity(this);
+                finish();
+            }
+
         } else {
             JumpUtils.jumpSplashActivity(this);
             finish();
         }
     }
 
+    private void messageLogin() {
+        TIMManager.getInstance().login(SPUtils.getInt(Config.USERID) + "", SPUtils.getString(Config.USERSIGN), new TIMCallBack() {
+            @Override
+            public void onError(int i, String s) {
+                Log.d("IM登录 Error: ", s);
+            }
+
+            @Override
+            public void onSuccess() {
+                Log.d("IM登录 : ", "Success");
+                JumpUtils.jumpMainActivity(WelcomeActivity.this);
+                finish();
+            }
+        });
+    }
 
     private long waitTime = 2000;
     private long touchTime = 0;

@@ -10,6 +10,7 @@ import com.yijian.them.ui.home.fragment.AddressFragment;
 import com.yijian.them.ui.home.fragment.CommentFragment;
 import com.yijian.them.ui.home.fragment.CommentReplyFragment;
 import com.yijian.them.ui.home.fragment.CreatGroupFragment;
+import com.yijian.them.ui.home.fragment.CreatTagFragment;
 import com.yijian.them.ui.home.fragment.GroupFragment;
 import com.yijian.them.ui.home.fragment.HotTopicFragment;
 import com.yijian.them.ui.home.fragment.HotTopicInfoFragment;
@@ -36,6 +37,7 @@ import com.yijian.them.ui.mine.fragment.UserInfoFragment;
 import com.yijian.them.ui.mine.fragment.VersionFragment;
 import com.yijian.them.ui.mine.fragment.ZanFragment;
 import com.yijian.them.ui.team.TeamFragment;
+import com.yijian.them.ui.team.TeamListFragment;
 
 public class Fragments {
     private static Fragments fragments;
@@ -78,6 +80,8 @@ public class Fragments {
     private CommentReplyFragment commentReplyFragment;
     private SearchFragment searchFragment;
     private HotTopicInfoFragment hotTopicInfoFragment;
+    private CreatTagFragment creatTagFragment;
+    private TeamListFragment teamListFragment;
 
 
     public static Fragments init() {
@@ -376,17 +380,32 @@ public class Fragments {
                 }
                 fragmentTransaction.replace(frameLayout, searchFragment);
                 break;
-//            case 10://话题详情
-//                if (hotTopicInfoFragment == null) {
-//                    hotTopicInfoFragment = new HotTopicInfoFragment();
-//                }
-//                hotTopicInfoFragment.setTagId(dynamicId);
-//                fragmentTransaction.replace(frameLayout, hotTopicInfoFragment);
-//                break;
+            case 10://创建话题
+                if (creatTagFragment == null) {
+                    creatTagFragment = new CreatTagFragment();
+                }
+                fragmentTransaction.replace(frameLayout, creatTagFragment);
+                break;
+
 
         }
         fragmentTransaction.commit();
     }
+
+
+    public void commitTeam(int type, FragmentManager fragmentManager, int frameLayout, String teamId) {
+        fragmentTransaction = fragmentManager.beginTransaction();
+        switch (type) {
+            case 1://参与小队列表
+                if (teamListFragment == null) {
+                    teamListFragment = new TeamListFragment();
+                }
+                fragmentTransaction.replace(frameLayout, teamListFragment);
+                break;
+        }
+        fragmentTransaction.commit();
+    }
+
 
     private void hintMain() {
         if (homeFragment != null) {

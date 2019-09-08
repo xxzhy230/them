@@ -169,6 +169,7 @@ public class SendDynamicFragment extends BasicFragment {
                 JumpUtils.jumpDynamicActivity(this, 3, "", "");
                 break;
             case R.id.tvHot:
+                SPUtils.putInt(Config.TOPICTYPE, 0);
                 JumpUtils.jumpDynamicActivity(this, 4, "选择话题", "");
                 break;
             case R.id.tvGroup:

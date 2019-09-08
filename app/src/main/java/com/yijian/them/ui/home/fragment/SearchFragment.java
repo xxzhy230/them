@@ -1,13 +1,17 @@
 package com.yijian.them.ui.home.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,6 +20,7 @@ import com.yijian.them.R;
 import com.yijian.them.api.AuthApi;
 import com.yijian.them.basic.BasicActivity;
 import com.yijian.them.basic.BasicFragment;
+import com.yijian.them.utils.JumpUtils;
 import com.yijian.them.utils.dialog.AlertUtils;
 import com.yijian.them.utils.http.CallBack;
 import com.yijian.them.utils.http.Http;
@@ -67,6 +72,7 @@ public class SearchFragment extends BasicFragment {
                 etSearch.setText(item);
                 etSearch.setSelection(item.length());
                 ivClear.setVisibility(View.VISIBLE);
+                JumpUtils.jumpSearchActivity(getActivity(), item);
                 return false;
             }
         });
@@ -88,6 +94,18 @@ public class SearchFragment extends BasicFragment {
                 } else {
                     ivClear.setVisibility(View.INVISIBLE);
                 }
+            }
+        });
+        etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                String searchKey = etSearch.getText().toString().trim();
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(etSearch.getWindowToken(), 0);
+                    JumpUtils.jumpSearchActivity(getActivity(), searchKey);
+                }
+                return true;
             }
         });
     }
