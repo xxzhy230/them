@@ -37,6 +37,7 @@ import com.yijian.them.utils.http.Http;
 import com.yijian.them.utils.http.JsonResult;
 import com.yijian.them.utils.location.LocationUtil;
 import com.yijian.them.utils.picasso.PicassoRoundTransform;
+import com.yqjr.utils.spUtils.SPUtils;
 import com.yqjr.utils.utils.ToastUtils;
 
 import java.io.File;
@@ -208,12 +209,13 @@ public class CreatTeamFragment extends BasicFragment {
         part[0] = MultipartBody.Part.createFormData("teamImgs", headFile.getName(), fileBody);
         Http.http.createApi(AuthApi.class).creatTeam(cityCode, latitude + "", longitude + "",
                 cityName, teamContent, teamName, height, width, part)
-                .compose(context.<JsonResult<String>>bindToLifecycle())
-                .compose(context.<JsonResult<String>>applySchedulers())
-                .subscribe(context.newSubscriber(new CallBack<String>() {
+                .compose(context.<JsonResult<Object>>bindToLifecycle())
+                .compose(context.<JsonResult<Object>>applySchedulers())
+                .subscribe(context.newSubscriber(new CallBack<Object>() {
                     @Override
-                    public void success(String response, int code) {
+                    public void success(Object response, int code) {
                         ToastUtils.toastCenter(getActivity(), "创建成功");
+                        SPUtils.putInt(Config.CREATTEAM,1);
                         getActivity().finish();
                     }
 

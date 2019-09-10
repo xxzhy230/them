@@ -42,9 +42,9 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.TeamViewHolder
         final TeamMoudle.DataBean dataBean = mList.get(position);
         String teamName = dataBean.getTeamName();
         holder.tvTeamTitle.setText(teamName);
-        double distance = dataBean.getDistance();
-        holder.tvTeamAddress.setText("距离你:" + distance);
-        holder.tvTeamNum.setText("参与人数:");
+        String distance = dataBean.getDistance();
+        holder.tvTeamAddress.setText("距离你:" + (Double.parseDouble(distance) * 1000) +"Km");
+
         double teamImgHeight = dataBean.getTeamImgHeight();
         double teamImgWidth = dataBean.getTeamImgWidth();
         //图片宽高比
@@ -62,7 +62,6 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.TeamViewHolder
             height = (int) (width * teamImgHeight / teamImgWidth);
         }
 
-
         ViewGroup.LayoutParams layoutParams = holder.rlTeam.getLayoutParams();
         layoutParams.height = height;
         holder.rlTeam.setLayoutParams(layoutParams);
@@ -72,6 +71,7 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.TeamViewHolder
             Picasso.with(mContext).load(s).into(holder.ivTeamBg);
         }
         List<TeamMoudle.DataBean.MembersBean> members = dataBean.getMembers();
+        holder.tvTeamNum.setText("参与人数:" + members.size());
         if (members != null && members.size() > 0) {
             TeamMoudle.DataBean.MembersBean membersBean = members.get(0);
             String realImg = membersBean.getRealImg();
@@ -86,7 +86,7 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.TeamViewHolder
                 holder.llSex.setBackgroundResource(R.drawable.shape_sex_woman_bg);
                 holder.ivSex.setImageResource(R.mipmap.register_icon_woman_selected);
             }
-            holder.tvTeamAge.setText("19");
+            holder.tvTeamAge.setText(com.yijian.them.utils.StringUtils.getAge(membersBean.getBirthday()));
             holder.rlTeam.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

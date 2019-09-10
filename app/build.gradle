@@ -66,10 +66,9 @@ dependencies {
     api 'com.squareup.retrofit2:converter-gson:+'
     api 'com.github.hqpay:utils:2.1.11'
     api 'com.trello:rxlifecycle-components:0.6.1'
-
-//    预览视频PictureSelector.create(MainActivity.this).externalPictureVideo(video_path);
     //    预览视频PictureSelector.create(MainActivity.this).externalPictureVideo(video_path);
-//    PictureSelector.create(MainActivity.this).themeStyle(themeId).openExternalPreview(position, selectList);
+    //    预览视频PictureSelector.create(MainActivity.this).externalPictureVideo(video_path);
+    //    PictureSelector.create(MainActivity.this).themeStyle(themeId).openExternalPreview(position, selectList);
     api 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'
     implementation files('libs/AMap3DMap_6.9.2_AMapNavi_6.9.0_AMapSearch_6.9.2_AMapLocation_4.7.0_20190710.jar')
     //权限
@@ -83,4 +82,6 @@ dependencies {
     implementation 'com.gcssloop.widget:rclayout:1.8.1'
     implementation 'com.hyman:flowlayout-lib:1.1.2'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.3'
+    implementation files('libs/jcore-android-2.1.4.jar')
+    implementation files('libs/jpush-android-3.3.4.jar')
 }

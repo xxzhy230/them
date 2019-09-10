@@ -58,7 +58,7 @@ public class TeamMoudle {
         private String chatgroupId;
         private String createAt;
         private double createBy;
-        private double distance;
+        private String distance;
         private double latitude;
         private double longitude;
         private String teamDesc;
@@ -93,11 +93,11 @@ public class TeamMoudle {
             this.createBy = createBy;
         }
 
-        public double getDistance() {
+        public String getDistance() {
             return distance;
         }
 
-        public void setDistance(double distance) {
+        public void setDistance(String distance) {
             this.distance = distance;
         }
 

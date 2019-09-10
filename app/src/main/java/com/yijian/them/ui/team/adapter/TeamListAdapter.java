@@ -78,8 +78,8 @@ public class TeamListAdapter extends BaseAdapter {
         String teamDesc = dataBean.getTeamDesc();
         holder.tvTeamDesc.setText(teamDesc);
         holder.tvTeamName.setText(teamName);
-        double distance = dataBean.getDistance();
-        holder.tvDis.setText("距离你:" + distance + "Km");
+        String distance = dataBean.getDistance();
+        holder.tvDis.setText("距离你:" + (Double.parseDouble(distance) * 1000) + "Km");
         List<String> teamImgUrls = dataBean.getTeamImgUrls();
         if (teamImgUrls != null && teamImgUrls.size() > 0) {
             String s = teamImgUrls.get(0);

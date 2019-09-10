@@ -112,6 +112,7 @@ public class HotTopicInfoActivity extends BasicActivity implements OnRefreshList
     private boolean follow;
     private String tagHeat;
     private TopicGroupAdapter topicGroupAdapter;
+    private String tagName;
 
     @Override
     public void initData() {
@@ -300,7 +301,7 @@ public class HotTopicInfoActivity extends BasicActivity implements OnRefreshList
                 int code = dataMoudle.getCode();
                 if (code == 200) {
                     DataMoudle.DataBean data = dataMoudle.getData();
-                    String tagName = data.getTagName();
+                    tagName = data.getTagName();
                     tvTagName.setText(tagName);
                     String tagDesc = data.getTagDesc();
                     tvTagContent.setText(tagDesc);
@@ -367,7 +368,7 @@ public class HotTopicInfoActivity extends BasicActivity implements OnRefreshList
     }
 
 
-    @OnClick({R.id.ivBack, R.id.tvCreat, R.id.tvFollow})
+    @OnClick({R.id.ivBack, R.id.tvCreat, R.id.tvFollow, R.id.ivSendDynamic})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ivBack:
@@ -387,6 +388,12 @@ public class HotTopicInfoActivity extends BasicActivity implements OnRefreshList
                 if (!follow) {
                     followedTag();
                 }
+                break;
+            case R.id.ivSendDynamic:
+                SPUtils.putInt(Config.TOPICSENDDYNAMIC, 1);
+                SPUtils.putString(Config.TAGID, topicId);
+                SPUtils.putString(Config.TAGNAME, tagName);
+                JumpUtils.jumpDynamicActivity(this, 2, "", "");
                 break;
         }
     }

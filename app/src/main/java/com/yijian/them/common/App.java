@@ -28,6 +28,8 @@ import com.yqjr.utils.Utils;
 
 import java.util.List;
 
+import cn.jpush.android.api.JPushInterface;
+
 public class App extends Application {
     public static LocationUtil locationUtil;
     public static int mWidth;
@@ -55,6 +57,13 @@ public class App extends Application {
         //初始化即时通信UI
         initIMUI();
         initIM();
+        //初始化极光
+        initJpush();
+    }
+
+    private void initJpush() {
+        JPushInterface.setDebugMode(true); 	// 设置开启日志,发布时请关闭日志
+        JPushInterface.init(this);
     }
 
     private void initIM() {

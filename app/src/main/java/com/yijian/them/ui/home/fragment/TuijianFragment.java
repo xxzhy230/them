@@ -123,7 +123,7 @@ public class TuijianFragment extends BasicFragment implements OnRefreshListener,
                         @Override
                         public void onClick(int type) {
                             if (type == 1) {
-                                JumpUtils.jumpReportActivity(getActivity(), dataBean.getDynamicId() + "",0,"","");
+                                JumpUtils.jumpReportActivity(getActivity(), dataBean.getDynamicId() + "", 0, "", "");
                             } else if (type == 2) {
                                 blackDynamic(dataBean);
                             } else {
@@ -134,6 +134,21 @@ public class TuijianFragment extends BasicFragment implements OnRefreshListener,
                 }
             }
         });
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        int type = SPUtils.getInt(Config.SENDDYNAMIC);
+        if (type == 1) {
+            page = 1;
+            if (adapter != null) {
+                adapter.clear();
+            }
+            recommended();
+            SPUtils.putInt(Config.SENDDYNAMIC, 0);
+        }
 
     }
 
@@ -196,6 +211,7 @@ public class TuijianFragment extends BasicFragment implements OnRefreshListener,
                     }
                 }));
     }
+
     /**
      * 删除动态
      *
@@ -271,6 +287,9 @@ public class TuijianFragment extends BasicFragment implements OnRefreshListener,
                     public void success(List<HomeMoudle.DataBean> response, int code) {
                         AlertUtils.dismissProgress();
                         Log.d("获取推荐信息: ", response + "");
+                        if (page == 1){
+                            adapter.clear();
+                        }
                         if (code == 10001) {
                             adapter.setData(response);
                             page++;

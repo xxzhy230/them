@@ -14,13 +14,10 @@
     <ImageView
         android:id="@+id/ivDel"
         android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_height="30dp"
         android:layout_marginLeft="60dp"
-        android:layout_marginTop="5dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
         android:src="@mipmap/icon_delete"
         android:visibility="gone" />
 </RelativeLayout>

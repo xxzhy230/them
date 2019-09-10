@@ -77,6 +77,8 @@ public class TeamFragment extends BasicFragment implements OnRefreshListener, On
 
     @Override
     public void onClickEvent() {
+        srlLayout.setOnLoadMoreListener(this);
+        srlLayout.setOnRefreshListener(this);
         sbRadius.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             //停止触摸
             public void onStopTrackingTouch(SeekBar seekBar) {
@@ -117,7 +119,6 @@ public class TeamFragment extends BasicFragment implements OnRefreshListener, On
             //拖动过程中
             public void onProgressChanged(SeekBar seekBar, int progress,
                                           boolean fromUser) {
-                System.out.println("滑动 : " + progress);
                 if (progress <= 10 && progress > 0) {
                     tvRadius.setText("距离20Km");
                 } else if (progress < 20 && progress > 10) {
@@ -151,25 +152,35 @@ public class TeamFragment extends BasicFragment implements OnRefreshListener, On
         rvTeam.setItemAnimator(null);
         teamAdapter = new TeamAdapter(getActivity());
         rvTeam.setAdapter(teamAdapter);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         locationUtil = new LocationUtil(getActivity());
         locationUtil.onceLocation(true);
         locationUtil.setOnLocationListener(new LocationUtil.OnLocationListener() {
             @Override
             public void onLocation(double latitude, double longitude, String cityCode) {
                 page = 1;
-                if (teamAdapter != null) {
-                    teamAdapter.clear();
-                }
                 getTeam(cityCode, StringUtils.double6String(latitude), StringUtils.double6String(longitude) + "", radius);
             }
         });
         locationUtil.startLocation();
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        int creatTeam = SPUtils.getInt(Config.CREATTEAM);
+        if (creatTeam == 1) {
+            locationUtil = new LocationUtil(getActivity());
+            locationUtil.onceLocation(true);
+            locationUtil.setOnLocationListener(new LocationUtil.OnLocationListener() {
+                @Override
+                public void onLocation(double latitude, double longitude, String cityCode) {
+                    page = 1;
+                    getTeam(cityCode, StringUtils.double6String(latitude), StringUtils.double6String(longitude) + "", radius);
+                }
+            });
+            locationUtil.startLocation();
+            SPUtils.putInt(Config.CREATTEAM, 0);
+        }
     }
 
     private void getTeam(String cityCode, String latitude, String longitude, String radius) {
@@ -180,6 +191,9 @@ public class TeamFragment extends BasicFragment implements OnRefreshListener, On
                     @Override
                     public void success(List<TeamMoudle.DataBean> response, int code) {
                         Log.d("获取小队: ", response + "");
+                        if (page==1){
+                            teamAdapter.clear();
+                        }
                         if (code == 10001) {
                             teamAdapter.setData(response);
                             page++;
@@ -225,7 +239,7 @@ public class TeamFragment extends BasicFragment implements OnRefreshListener, On
             @Override
             public void onLocation(double latitude, double longitude, String cityCode) {
                 page = 1;
-                getTeam(cityCode, latitude + "", longitude + "", radius);
+                getTeam(cityCode, StringUtils.double6String(latitude),  StringUtils.double6String(longitude), radius);
             }
         });
         locationUtil.startLocation();
@@ -239,7 +253,7 @@ public class TeamFragment extends BasicFragment implements OnRefreshListener, On
         locationUtil.setOnLocationListener(new LocationUtil.OnLocationListener() {
             @Override
             public void onLocation(double latitude, double longitude, String cityCode) {
-                getTeam(cityCode, latitude + "", longitude + "", radius);
+                getTeam(cityCode,  StringUtils.double6String(latitude),  StringUtils.double6String(longitude), radius);
             }
         });
         locationUtil.startLocation();

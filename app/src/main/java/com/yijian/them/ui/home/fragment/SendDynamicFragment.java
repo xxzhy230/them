@@ -32,6 +32,7 @@ import com.yijian.them.ui.home.adapter.ImageAdapter;
 import com.yijian.them.ui.login.DataMoudle;
 import com.yijian.them.utils.FileUtil;
 import com.yijian.them.utils.JumpUtils;
+import com.yijian.them.utils.StringUtils;
 import com.yijian.them.utils.dialog.AlertUtils;
 import com.yijian.them.utils.http.CallBack;
 import com.yijian.them.utils.http.Http;
@@ -102,6 +103,15 @@ public class SendDynamicFragment extends BasicFragment {
 
     @Override
     protected void initView(Bundle bundle) {
+        int topicSendDynamic = SPUtils.getInt(Config.TOPICSENDDYNAMIC);
+        if (topicSendDynamic == 1) {
+            tagId = SPUtils.getString(Config.TAGID);
+            tagName = SPUtils.getString(Config.TAGNAME);
+            tvHot.setText(tagName);
+            tvHot.setClickable(false);
+            tvHot.setEnabled(false);
+        }
+
         etContent.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -147,8 +157,6 @@ public class SendDynamicFragment extends BasicFragment {
                 imageAdapter.notifyDataSetChanged();
             }
         });
-
-
     }
 
 
@@ -185,13 +193,16 @@ public class SendDynamicFragment extends BasicFragment {
         AlertUtils.showProgress(false, getActivity());
         AuthApi api = Http.http.createApi(AuthApi.class);
         Observable<JsonResult<String>> jsonResultObservable = null;
+        if (mList.size() ==1){
+            type=0;
+        }
         if (type == 2) {
             File file = new File(videoPath);
             RequestBody fileBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
             MultipartBody.Part part = MultipartBody.Part.createFormData("video", file.getName(), fileBody);
             jsonResultObservable = api.sendDynamicVideo(part, cityCode, content, groupId, groupName,
-                    latitude + "", longitude + "", localName, tagId, tagName);
-        } else {
+                    StringUtils.double6String(latitude), StringUtils.double6String(longitude), localName, tagId, tagName);
+        } else if (type == 1) {
             MultipartBody.Part[] part = new MultipartBody.Part[selectNum];
             for (int i = 0; i < mList.size(); i++) {
                 String s = mList.get(i);
@@ -202,7 +213,10 @@ public class SendDynamicFragment extends BasicFragment {
                 }
             }
             jsonResultObservable = api.sendDynamic(part, cityCode, content, groupId, groupName,
-                    latitude + "", longitude + "", localName, tagId, tagName);
+                    StringUtils.double6String(latitude), StringUtils.double6String(longitude), localName, tagId, tagName);
+        } else {
+            jsonResultObservable = api.sendDynamic(cityCode, content, groupId, groupName,
+                    StringUtils.double6String(latitude), StringUtils.double6String(longitude), localName, tagId, tagName);
         }
         jsonResultObservable
                 .compose(context.<JsonResult<String>>bindToLifecycle())
@@ -213,6 +227,7 @@ public class SendDynamicFragment extends BasicFragment {
                         Log.d("发送动态: ", response + "");
                         if (code == 200) {
                             ToastUtils.toastCenter(getActivity(), "发送成功");
+                            SPUtils.putInt(Config.SENDDYNAMIC, 1);
                             getActivity().finish();
                         }
                     }
@@ -326,5 +341,13 @@ public class SendDynamicFragment extends BasicFragment {
                 ToastUtils.toastCenter(getActivity(), "请开启读写权限");
             }
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        SPUtils.putString(Config.TAGNAME, null);
+        SPUtils.putString(Config.TAGID, null);
+        SPUtils.putInt(Config.TOPICSENDDYNAMIC, 0);
     }
 }

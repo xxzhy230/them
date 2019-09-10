@@ -246,7 +246,7 @@ public interface AuthApi {
 
 
     /**
-     * 发送动态
+     * 发送动态有图片
      *
      * @return
      */
@@ -262,18 +262,24 @@ public interface AuthApi {
                                                @Query("localName") String localName,
                                                @Query("tagId") String tagId,
                                                @Query("tagName") String tagName);
-
     /**
-     * 发送动态
+     * 发送动态无图片
      *
      * @return
      */
-    @Multipart
     @POST("dynamic")
-    Observable<JsonResult<String>> sendDynamic();
+    Observable<JsonResult<String>> sendDynamic(@Query("cityCode") String cityCode,
+                                               @Query("content") String content,
+                                               @Query("groupId") String groupId,
+                                               @Query("groupName") String groupName,
+                                               @Query("latitude") String latitude,
+                                               @Query("longitude") String longitude,
+                                               @Query("localName") String localName,
+                                               @Query("tagId") String tagId,
+                                               @Query("tagName") String tagName);
 
     /**
-     * 发送动态
+     * 发送动态有视频
      *
      * @return
      */
@@ -401,7 +407,7 @@ public interface AuthApi {
      */
     @Multipart
     @POST("v2/team/")
-    Observable<JsonResult<String>> creatTeam(@Query("cityCode") String cityCode,
+    Observable<JsonResult<Object>> creatTeam(@Query("cityCode") String cityCode,
                                              @Query("latitude") String latitude,
                                              @Query("longitude") String longitude,
                                              @Query("localName") String localName,

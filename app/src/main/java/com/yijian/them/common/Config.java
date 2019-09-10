@@ -39,6 +39,9 @@ public class Config {
     public static final String SEARCHKEY = "SEARCHKEY";
     public static final String TEAMTYPE = "TEAMTYPE";
     public static final String TEAMTITLE = "TEAMTITLE";
+    public static final String CREATTEAM = "CREATTEAM";
+    public static final String SENDDYNAMIC="SENDDYNAMIC";
+    public static final String TOPICSENDDYNAMIC="TOPICSENDDYNAMIC";
     public static GroupMoudle.DataBean dataBean;
 
 }
