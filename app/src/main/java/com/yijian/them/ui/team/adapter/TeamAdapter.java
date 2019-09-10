@@ -106,6 +106,13 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.TeamViewHolder
         return mList.size();
     }
 
+    public void clear() {
+        if (mList != null) {
+            mList.clear();
+            notifyDataSetChanged();
+        }
+    }
+
     static class TeamViewHolder extends RecyclerView.ViewHolder {
         ImageView ivTeamBg;
         ImageView ivTeamTopBg;

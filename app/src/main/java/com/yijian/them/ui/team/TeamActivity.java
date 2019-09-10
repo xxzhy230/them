@@ -17,8 +17,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class TeamActivity extends BasicActivity {
-    @BindView(R.id.v_include_bar)
-    View v_include_bar;
     @BindView(R.id.tvTitleBar)
     TextView tvTitleBar;
     @BindView(R.id.ivRightBar)
@@ -54,10 +52,6 @@ public class TeamActivity extends BasicActivity {
                 || messageType == 9
                 || messageType == 10) {
             llTitleBar.setVisibility(View.GONE);
-        }
-        if (messageType == 5) {
-            tvRightBar.setVisibility(View.VISIBLE);
-            tvRightBar.setText("创建群");
         }
         Fragments.init().commitTeam(messageType, getSupportFragmentManager(), R.id.flDynamic, dynamicId);
     }

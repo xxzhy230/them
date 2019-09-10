@@ -18,6 +18,19 @@ public class LocationUtil implements AMapLocationListener {
     private AMapLocationClientOption mLocationOption = null;
     private OnLocationListener onLocationListener;
     private OnLocationAddressListener onLocationAddressListener;
+    private static LocationUtil locationUtil;
+
+//    public static LocationUtil getLocationUtil(Context mContext) {
+//        if (locationUtil == null) {
+//            locationUtil = new LocationUtil();
+//            locationUtil.init(mContext);
+//        }
+//        return locationUtil;
+//    }
+
+    public LocationUtil(Context mContext) {
+        init(mContext);
+    }
 
     public void setOnLocationAddressListener(OnLocationAddressListener onLocationAddressListener) {
         this.onLocationAddressListener = onLocationAddressListener;
@@ -65,7 +78,7 @@ public class LocationUtil implements AMapLocationListener {
                     String address = amapLocation.getAddress();
                     String poiName = amapLocation.getPoiName();
                     String aoiName = amapLocation.getAoiName();
-                    onLocationAddressListener.onLocation(latitude, longitude, cityCode,aoiName,address);
+                    onLocationAddressListener.onLocation(latitude, longitude, cityCode, aoiName, address);
                 }
             } else {
                 //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
@@ -91,6 +104,6 @@ public class LocationUtil implements AMapLocationListener {
     }
 
     public interface OnLocationAddressListener {
-        void onLocation(double latitude, double longitude, String cityCode,String name,String address);
+        void onLocation(double latitude, double longitude, String cityCode, String name, String address);
     }
 }

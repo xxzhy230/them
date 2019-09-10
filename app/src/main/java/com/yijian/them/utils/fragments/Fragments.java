@@ -36,6 +36,7 @@ import com.yijian.them.ui.mine.fragment.SettingFragment;
 import com.yijian.them.ui.mine.fragment.UserInfoFragment;
 import com.yijian.them.ui.mine.fragment.VersionFragment;
 import com.yijian.them.ui.mine.fragment.ZanFragment;
+import com.yijian.them.ui.team.CreatTeamFragment;
 import com.yijian.them.ui.team.TeamFragment;
 import com.yijian.them.ui.team.TeamListFragment;
 
@@ -82,6 +83,7 @@ public class Fragments {
     private HotTopicInfoFragment hotTopicInfoFragment;
     private CreatTagFragment creatTagFragment;
     private TeamListFragment teamListFragment;
+    private CreatTeamFragment creatTeamFragment;
 
 
     public static Fragments init() {
@@ -402,6 +404,12 @@ public class Fragments {
                 }
                 fragmentTransaction.replace(frameLayout, teamListFragment);
                 break;
+            case 2://常见小队
+                if (creatTeamFragment == null) {
+                    creatTeamFragment = new CreatTeamFragment();
+                }
+                fragmentTransaction.replace(frameLayout, creatTeamFragment);
+
         }
         fragmentTransaction.commit();
     }

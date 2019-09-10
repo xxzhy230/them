@@ -22,6 +22,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -215,7 +216,6 @@ public interface AuthApi {
     Observable<JsonResult<List<HomeMoudle.DataBean>>> dynamicNew(@Query("page") int page);
 
 
-
     /**
      * 获取推荐动态
      */
@@ -381,11 +381,35 @@ public interface AuthApi {
      */
     @GET("v2/team/{teamId}")
     Observable<JsonResult<TeamInfoMoudle.DataBean>> teamInfo(@Path("teamId") String teamId);
+
+    /**
+     * 加入或退出小队
+     * 0表示退出小队，1表示加入小队
+     */
+    @PUT("v2/team/{teamId}")
+    Observable<JsonResult<String>> teamOutOrAdd(@Path("teamId") String teamId,
+                                                @Query("type") String type);
+
     /**
      * 我参与的小队
      */
     @GET("v2/team/")
     Observable<JsonResult<List<TeamMoudle.DataBean>>> teamList();
+
+    /**
+     * 我参与的小队
+     */
+    @Multipart
+    @POST("v2/team/")
+    Observable<JsonResult<String>> creatTeam(@Query("cityCode") String cityCode,
+                                             @Query("latitude") String latitude,
+                                             @Query("longitude") String longitude,
+                                             @Query("localName") String localName,
+                                             @Query("teamDesc") String teamDesc,
+                                             @Query("teamName") String teamName,
+                                             @Query("teamImgHeight") int teamImgHeight,
+                                             @Query("teamImgWidth") int teamImgWidth,
+                                             @Part MultipartBody.Part[] parts);
 
     /**
      * 获取随机话题
@@ -473,6 +497,7 @@ public interface AuthApi {
      */
     @GET("tag/following")
     Observable<JsonResult<List<GroupMoudle.DataBean>>> followList(@Query("page") String page);
+
     /**
      * 关键字搜索
      */

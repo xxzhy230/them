@@ -190,7 +190,7 @@ public class TeamMoudle {
             private String nickName;
             private String realImg;
             private String sign;
-            private double userId;
+            private int userId;
 
             public String getBirthday() {
                 return birthday;
@@ -240,11 +240,11 @@ public class TeamMoudle {
                 this.sign = sign;
             }
 
-            public double getUserId() {
+            public int getUserId() {
                 return userId;
             }
 
-            public void setUserId(double userId) {
+            public void setUserId(int userId) {
                 this.userId = userId;
             }
         }

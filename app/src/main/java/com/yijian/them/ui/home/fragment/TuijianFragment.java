@@ -69,7 +69,11 @@ public class TuijianFragment extends BasicFragment implements OnRefreshListener,
 
     @Override
     public void onClickEvent() {
-
+        page = 1;
+        if (adapter != null) {
+            adapter.clear();
+        }
+        recommended();
     }
 
     @Override
@@ -132,15 +136,7 @@ public class TuijianFragment extends BasicFragment implements OnRefreshListener,
         });
 
     }
-    @Override
-    public void onResume() {
-        super.onResume();
-        page = 1;
-        if (adapter != null) {
-            adapter.clear();
-        }
-        recommended();
-    }
+
     /**
      * 加入黑名单
      *

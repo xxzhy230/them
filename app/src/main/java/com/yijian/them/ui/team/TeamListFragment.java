@@ -9,6 +9,7 @@ import com.yijian.them.R;
 import com.yijian.them.api.AuthApi;
 import com.yijian.them.basic.BasicActivity;
 import com.yijian.them.basic.BasicFragment;
+import com.yijian.them.ui.team.adapter.TeamListAdapter;
 import com.yijian.them.utils.http.CallBack;
 import com.yijian.them.utils.http.Http;
 import com.yijian.them.utils.http.JsonResult;
@@ -22,10 +23,41 @@ import butterknife.ButterKnife;
 public class TeamListFragment extends BasicFragment {
     @BindView(R.id.lvTeamList)
     ListView lvTeamList;
+    private TeamListAdapter teamListAdapter;
 
     @Override
     protected void onClickEvent() {
+        teamListAdapter = new TeamListAdapter(getActivity());
+        lvTeamList.setAdapter(teamListAdapter);
         teamList();
+        teamListAdapter.setOnTeamOutListener(new TeamListAdapter.OnTeamOutListener() {
+            @Override
+            public void onTeamOut(TeamMoudle.DataBean dataBean) {
+                teamOut(dataBean);
+            }
+        });
+    }
+
+    private void teamOut(final TeamMoudle.DataBean dataBean) {
+        String teamId = dataBean.getTeamId();
+        Http.http.createApi(AuthApi.class).teamOutOrAdd(teamId, "0")
+                .compose(context.<JsonResult<String>>bindToLifecycle())
+                .compose(context.<JsonResult<String>>applySchedulers())
+                .subscribe(context.newSubscriber(new CallBack<String>() {
+                    @Override
+                    public void success(String response, int code) {
+                        Log.d("获取小队: ", response + "");
+                        if (code == 200) {
+                            ToastUtils.toastCenter(getActivity(), "退出成功");
+                            teamListAdapter.remove(dataBean);
+                        }
+                    }
+
+                    @Override
+                    public void fail(String errorMessage, int status) {
+                        ToastUtils.toastCenter(getActivity(), errorMessage + "");
+                    }
+                }));
     }
 
     @Override
@@ -37,8 +69,7 @@ public class TeamListFragment extends BasicFragment {
 
     @Override
     protected void initView(Bundle bundle) {
-        context = (BasicActivity)getActivity();
-
+        context = (BasicActivity) getActivity();
     }
 
     private void teamList() {
@@ -48,22 +79,9 @@ public class TeamListFragment extends BasicFragment {
                 .subscribe(context.newSubscriber(new CallBack<List<TeamMoudle.DataBean>>() {
                     @Override
                     public void success(List<TeamMoudle.DataBean> response, int code) {
-//                        if (code == 10001) {
-//                            teamAdapter.setData(response);
-//                            page++;
-//                        } else if (code == 10000) {
-//                            srlLayout.finishLoadMoreWithNoMoreData();
-//                            if (page == 1) {
-//                                llDefault.setVisibility(View.VISIBLE);
-//                                ivDefault.setImageResource(R.mipmap.default_dynamic);
-//                                tvDefault.setText("暂无小队信息，快加入小队吧");
-//                            }
-//                        } else if (code == 50002) {
-//                            llDefault.setVisibility(View.VISIBLE);
-//                            ivDefault.setImageResource(R.mipmap.default_load);
-//                            tvDefault.setText("哎呀！加载失败");
-//                        }
-
+                        if (response != null && response.size() > 0) {
+                            teamListAdapter.setData(response);
+                        }
                     }
 
                     @Override

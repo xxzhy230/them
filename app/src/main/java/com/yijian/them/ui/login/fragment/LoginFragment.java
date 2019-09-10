@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.squareup.picasso.Picasso;
 import com.tencent.imsdk.TIMCallBack;
 import com.tencent.imsdk.TIMManager;
 import com.yijian.them.R;
@@ -81,16 +82,18 @@ public class LoginFragment extends BasicFragment {
                 .compose(context.<JsonResult<DataMoudle.DataBean>>applySchedulers())
                 .subscribe(context.newSubscriber(new CallBack<DataMoudle.DataBean>() {
                     @Override
-                    public void success(DataMoudle.DataBean response,int code) {
+                    public void success(DataMoudle.DataBean response, int code) {
                         Log.d("登录: ", response.getToken() + "");
                         if (response != null) {
                             String token = response.getToken();
                             String userSign = response.getUserSign();
+                            int userId = response.getUserId();
+                            SPUtils.putInt(Config.USERID, userId);
                             SPUtils.putToken(token);
-                            SPUtils.putString(Config.LOGINPHONE,phone);
+                            SPUtils.putString(Config.LOGINPHONE, phone);
                             SPUtils.putString(Config.USERSIGN, userSign);
+                            getUserInfo();
 
-                            messageLogin();
                         }
                     }
 
@@ -101,19 +104,54 @@ public class LoginFragment extends BasicFragment {
                 }));
     }
 
-    private void messageLogin(){
-    TIMManager.getInstance().login(SPUtils.getInt(Config.USERID) + "", SPUtils.getString(Config.USERSIGN), new TIMCallBack() {
-        @Override
-        public void onError(int i, String s) {
-            Log.d("IM登录 Error: ", s);
-        }
+    private void messageLogin() {
+        TIMManager.getInstance().login(SPUtils.getInt(Config.USERID) + "", SPUtils.getString(Config.USERSIGN), new TIMCallBack() {
+            @Override
+            public void onError(int i, String s) {
 
-        @Override
-        public void onSuccess() {
-            Log.d("IM登录 : ", "Success");
-            JumpUtils.jumpMainActivity(getActivity());
-            getActivity().finish();
-        }
-    });
-}
+                Log.d("IM登录 Error: ", s);
+            }
+
+            @Override
+            public void onSuccess() {
+                Log.d("IM登录 : ", "Success");
+                JumpUtils.jumpMainActivity(getActivity());
+                getActivity().finish();
+            }
+        });
+    }
+
+
+    private void getUserInfo() {
+        Http.http.createApi(AuthApi.class).getUser()
+                .compose(context.<JsonResult<DataMoudle.DataBean>>bindToLifecycle())
+                .compose(context.<JsonResult<DataMoudle.DataBean>>applySchedulers())
+                .subscribe(context.newSubscriber(new CallBack<DataMoudle.DataBean>() {
+                    @Override
+                    public void success(DataMoudle.DataBean response,int code) {
+                        Log.d("获取用户信息: ", response + "");
+                        String birthday = response.getBirthday();
+                        String gender = response.getGender();
+                        String nickName = response.getNickName();
+                        int userId = response.getUserId();
+                        String regn = response.getRegn();
+                        String realImg = response.getRealImg();
+                        String sign = response.getSign();
+
+                        SPUtils.putString(Config.BIRTHDAY, birthday);
+                        SPUtils.putString(Config.GENDER, gender);
+                        SPUtils.putString(Config.NICKNAME, nickName);
+                        SPUtils.putInt(Config.USERID, userId);
+                        SPUtils.putString(Config.REGN, regn);
+                        SPUtils.putString(Config.REALIMG, realImg);
+                        SPUtils.putString(Config.SIGN, sign);
+                        messageLogin();
+                    }
+
+                    @Override
+                    public void fail(String errorMessage, int status) {
+                        ToastUtils.toastCenter(getActivity(), errorMessage + "");
+                    }
+                }));
+    }
 }

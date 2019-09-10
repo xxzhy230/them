@@ -66,6 +66,7 @@ public class TeamFragment extends BasicFragment implements OnRefreshListener, On
     int progress = 0;
     private int page = 1;
     private TeamAdapter teamAdapter;
+    private LocationUtil locationUtil;
 
     @Override
     protected View getResourceView() {
@@ -76,8 +77,6 @@ public class TeamFragment extends BasicFragment implements OnRefreshListener, On
 
     @Override
     public void onClickEvent() {
-
-
         sbRadius.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             //停止触摸
             public void onStopTrackingTouch(SeekBar seekBar) {
@@ -152,15 +151,24 @@ public class TeamFragment extends BasicFragment implements OnRefreshListener, On
         rvTeam.setItemAnimator(null);
         teamAdapter = new TeamAdapter(getActivity());
         rvTeam.setAdapter(teamAdapter);
-        App.locationUtil.onceLocation(true);
-        App.locationUtil.startLocation();
-        App.locationUtil.setOnLocationListener(new LocationUtil.OnLocationListener() {
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        locationUtil = new LocationUtil(getActivity());
+        locationUtil.onceLocation(true);
+        locationUtil.setOnLocationListener(new LocationUtil.OnLocationListener() {
             @Override
             public void onLocation(double latitude, double longitude, String cityCode) {
-                getTeam(cityCode, latitude + "", longitude + "", radius);
+                page = 1;
+                if (teamAdapter != null) {
+                    teamAdapter.clear();
+                }
+                getTeam(cityCode, StringUtils.double6String(latitude), StringUtils.double6String(longitude) + "", radius);
             }
         });
-
+        locationUtil.startLocation();
 
     }
 
@@ -205,35 +213,36 @@ public class TeamFragment extends BasicFragment implements OnRefreshListener, On
                 JumpUtils.jumpTeamActivity(getActivity(), 1, "我参与的小队", "");
                 break;
             case R.id.ivAdd:
+                JumpUtils.jumpTeamActivity(getActivity(), 2, "我参与的小队", "");
                 break;
         }
     }
 
     @Override
     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-        System.out.println("----------------");
-        page = 1;
-        App.locationUtil.onceLocation(true);
-        App.locationUtil.startLocation();
-        App.locationUtil.setOnLocationListener(new LocationUtil.OnLocationListener() {
+        locationUtil.onceLocation(true);
+        locationUtil.setOnLocationListener(new LocationUtil.OnLocationListener() {
             @Override
             public void onLocation(double latitude, double longitude, String cityCode) {
+                page = 1;
                 getTeam(cityCode, latitude + "", longitude + "", radius);
             }
         });
+        locationUtil.startLocation();
+
         refreshLayout.finishRefresh();
     }
 
     @Override
     public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-        App.locationUtil.onceLocation(true);
-        App.locationUtil.startLocation();
-        App.locationUtil.setOnLocationListener(new LocationUtil.OnLocationListener() {
+        locationUtil.onceLocation(true);
+        locationUtil.setOnLocationListener(new LocationUtil.OnLocationListener() {
             @Override
             public void onLocation(double latitude, double longitude, String cityCode) {
                 getTeam(cityCode, latitude + "", longitude + "", radius);
             }
         });
+        locationUtil.startLocation();
         refreshLayout.finishLoadMore();
     }
 }

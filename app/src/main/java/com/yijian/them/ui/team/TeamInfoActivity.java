@@ -88,15 +88,18 @@ public class TeamInfoActivity extends BasicActivity {
                         if (!TextUtils.isEmpty(teamImgUrl)) {
                             Picasso.with(TeamInfoActivity.this).load(teamImgUrl).into(ivImage);
                         }
-
-                        tvTeamNum.setText(members.size() + "/" + dataBean.getTeamMember().replace(",", ""));
+                        tvTeamNum.setText(members.size() + "/8");
                         String teamDesc = dataBean.getTeamDesc();
                         tvTeamContent.setText(teamDesc);
-                        String teamStatus = dataBean.getTeamStatus();
-                        if ("0".equals(teamStatus)) {
-                            tvAddTeam.setVisibility(View.VISIBLE);
-                        } else {
-                            tvAddTeam.setVisibility(View.GONE);
+                        String teamMember = dataBean.getTeamMember();
+                        String[] split = teamMember.split(",");
+                        for (int i = 0; i < split.length; i++) {
+                            if (split[i].equals(SPUtils.getInt(Config.USERID) + "")) {
+                                tvAddTeam.setVisibility(View.GONE);
+                                break;
+                            } else {
+                                tvAddTeam.setVisibility(View.VISIBLE);
+                            }
                         }
                         if (members != null && members.size() > 0) {
                             TeamMembersAdapter adapter = new TeamMembersAdapter(members);

@@ -82,4 +82,5 @@ dependencies {
     implementation 'com.github.SheHuan:NiceImageView:1.0.5'
     implementation 'com.gcssloop.widget:rclayout:1.8.1'
     implementation 'com.hyman:flowlayout-lib:1.1.2'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.3'
 }

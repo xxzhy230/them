@@ -34,7 +34,7 @@ public class App extends Application {
     public static int mHeight;
     public static Context mContext;
     public static Handler mHandler;
-    public static final int SDKAPPID = 1400235098;
+    public static final int SDKAPPID = 1400251746;
 
     @Override
     public void onCreate() {
@@ -50,7 +50,7 @@ public class App extends Application {
         //接口请求初始化
         Http.initHttp(this);
         //初始化定位
-        locationUtil = new LocationUtil();
+        locationUtil = new LocationUtil(this);
         locationUtil.init(this);
         //初始化即时通信UI
         initIMUI();
