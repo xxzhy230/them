@@ -30,6 +30,7 @@ import com.yijian.them.basic.BasicFragment;
 import com.yijian.them.common.App;
 import com.yijian.them.common.Config;
 import com.yijian.them.utils.JumpUtils;
+import com.yijian.them.utils.dialog.AlertUtils;
 import com.yijian.them.utils.dialog.DialogOnitem;
 import com.yijian.them.utils.dialog.SealectImageDialog;
 import com.yijian.them.utils.http.CallBack;
@@ -50,6 +51,7 @@ import butterknife.Unbinder;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import rx.Observable;
 
 public class CreatTeamFragment extends BasicFragment {
 
@@ -69,8 +71,12 @@ public class CreatTeamFragment extends BasicFragment {
     EditText etTeamContent;
     @BindView(R.id.tvLocation)
     TextView tvLocation;
+    @BindView(R.id.tvTeamTitle)
+    TextView tvTeamTitle;
+
     private String[] reportArr = new String[]{"从手机相册选择", "拍照"};
     private File headFile;
+    private String teamId;
 
     @Override
     protected void onClickEvent() {
@@ -87,6 +93,11 @@ public class CreatTeamFragment extends BasicFragment {
     @Override
     protected void initView(Bundle bundle) {
         context = (BasicActivity) getActivity();
+        if (!TextUtils.isEmpty(teamId)) {
+            etTeamName.setText(SPUtils.getString(Config.TEAMTITLE));
+            etTeamContent.setText(SPUtils.getString(Config.TEAMDESC));
+            tvTeamTitle.setText("编辑小队");
+        }
         etTeamContent.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -101,11 +112,20 @@ public class CreatTeamFragment extends BasicFragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(s)) {
-                    if (headFile != null && !TextUtils.isEmpty(etTeamName.getText().toString())) {
-                        tvCreaat.setBackgroundResource(R.drawable.shape_3b7aff_5_bg);
+                    if (TextUtils.isEmpty(teamId)) {
+                        if (headFile != null && !TextUtils.isEmpty(etTeamName.getText().toString())) {
+                            tvCreaat.setBackgroundResource(R.drawable.shape_3b7aff_5_bg);
+                        } else {
+                            tvCreaat.setBackgroundResource(R.drawable.shape_gray_5_bg);
+                        }
                     } else {
-                        tvCreaat.setBackgroundResource(R.drawable.shape_gray_5_bg);
+                        if (!TextUtils.isEmpty(etTeamName.getText().toString())) {
+                            tvCreaat.setBackgroundResource(R.drawable.shape_3b7aff_5_bg);
+                        } else {
+                            tvCreaat.setBackgroundResource(R.drawable.shape_gray_5_bg);
+                        }
                     }
+
                 } else {
                     tvCreaat.setBackgroundResource(R.drawable.shape_gray_5_bg);
                 }
@@ -125,11 +145,20 @@ public class CreatTeamFragment extends BasicFragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(s)) {
-                    if (headFile != null && !TextUtils.isEmpty(etTeamContent.getText().toString())) {
-                        tvCreaat.setBackgroundResource(R.drawable.shape_3b7aff_5_bg);
+                    if (TextUtils.isEmpty(teamId)) {
+                        if (headFile != null && !TextUtils.isEmpty(etTeamContent.getText().toString())) {
+                            tvCreaat.setBackgroundResource(R.drawable.shape_3b7aff_5_bg);
+                        } else {
+                            tvCreaat.setBackgroundResource(R.drawable.shape_gray_5_bg);
+                        }
                     } else {
-                        tvCreaat.setBackgroundResource(R.drawable.shape_gray_5_bg);
+                        if (!TextUtils.isEmpty(etTeamContent.getText().toString())) {
+                            tvCreaat.setBackgroundResource(R.drawable.shape_3b7aff_5_bg);
+                        } else {
+                            tvCreaat.setBackgroundResource(R.drawable.shape_gray_5_bg);
+                        }
                     }
+
                 } else {
                     tvCreaat.setBackgroundResource(R.drawable.shape_gray_5_bg);
                 }
@@ -144,10 +173,13 @@ public class CreatTeamFragment extends BasicFragment {
                 getActivity().finish();
                 break;
             case R.id.tvCreaat:
-                if (headFile == null) {
-                    ToastUtils.toastCenter(getActivity(), "请选择图片");
-                    return;
+                if (TextUtils.isEmpty(teamId)) {
+                    if (headFile == null) {
+                        ToastUtils.toastCenter(getActivity(), "请选择图片");
+                        return;
+                    }
                 }
+
                 final String teamName = etTeamName.getText().toString().trim();
                 if (TextUtils.isEmpty(teamName)) {
                     ToastUtils.toastCenter(getActivity(), "请输入小队名称");
@@ -158,23 +190,22 @@ public class CreatTeamFragment extends BasicFragment {
                     ToastUtils.toastCenter(getActivity(), "请输入小队描述");
                     return;
                 }
-//                if (tagContent.length() < 5) {
-//                    ToastUtils.toastCenter(getActivity(), "话题标签描述不能低于5个字");
-//                    return;
-//                }
-//                if (TextUtils.isEmpty(topicId)) {
-//                    ToastUtils.toastCenter(getActivity(), "请选择话题标签");
-//                    return;
-//                }
-                LocationUtil locationUtil = new LocationUtil(getActivity());
-                locationUtil.onceLocation(true);
-                locationUtil.setOnLocationAddressListener(new LocationUtil.OnLocationAddressListener() {
-                    @Override
-                    public void onLocation(double latitude, double longitude, String cityCode, String name, String address) {
-                        creatTeam(teamName, teamContent, latitude, longitude, cityCode, name);
-                    }
-                });
-                locationUtil.startLocation();
+                AlertUtils.showProgress(false, getActivity());
+                if (TextUtils.isEmpty(teamId)) {
+                    LocationUtil locationUtil = new LocationUtil(getActivity());
+                    locationUtil.onceLocation(true);
+                    locationUtil.setOnLocationAddressListener(new LocationUtil.OnLocationAddressListener() {
+
+                        @Override
+                        public void onLocation(double latitude, double longitude, String cityCode, String name, String address) {
+                            creatTeam(teamName, teamContent, latitude, longitude, cityCode, name);
+                        }
+                    });
+                    locationUtil.startLocation();
+                } else {
+                    editTeam(teamName, teamContent);
+                }
+
 
                 break;
             case R.id.ivImage:
@@ -198,6 +229,54 @@ public class CreatTeamFragment extends BasicFragment {
         }
     }
 
+    /**
+     * 编辑小队信息
+     *
+     * @param teamName
+     * @param teamContent
+     */
+    private void editTeam(String teamName, String teamContent) {
+        AuthApi api = Http.http.createApi(AuthApi.class);
+        Observable<JsonResult<String>> jsonResultObservable;
+        if (headFile == null) {
+            jsonResultObservable = api.editTeam(teamId,teamName, teamContent);
+        } else {
+            Bitmap bitmap = BitmapFactory.decodeFile(headFile.getPath());
+            int height = bitmap.getHeight();
+            int width = bitmap.getWidth();
+            MultipartBody.Part[] part = new MultipartBody.Part[1];
+            RequestBody fileBody = RequestBody.create(MediaType.parse("multipart/form-data"), headFile);
+            part[0] = MultipartBody.Part.createFormData("teamImgs", headFile.getName(), fileBody);
+            jsonResultObservable = api.editTeam(teamId,part, teamName, teamContent, height, width);
+        }
+
+        jsonResultObservable.compose(context.<JsonResult<String>>bindToLifecycle())
+                .compose(context.<JsonResult<String>>applySchedulers())
+                .subscribe(context.newSubscriber(new CallBack<String>() {
+                    @Override
+                    public void success(String response, int code) {
+                        ToastUtils.toastCenter(getActivity(), "修改成功");
+                        SPUtils.putInt(Config.CREATTEAM, 1);
+                        getActivity().finish();
+                    }
+
+                    @Override
+                    public void fail(String errorMessage, int status) {
+                        ToastUtils.toastCenter(getActivity(), errorMessage + "");
+                    }
+                }));
+    }
+
+    /**
+     * 创建小队
+     *
+     * @param teamName
+     * @param teamContent
+     * @param latitude
+     * @param longitude
+     * @param cityCode
+     * @param cityName
+     */
     private void creatTeam(String teamName, String teamContent, double latitude, double longitude, String cityCode, String cityName) {
         Bitmap bitmap = BitmapFactory.decodeFile(headFile.getPath());
         int height = bitmap.getHeight();
@@ -215,7 +294,7 @@ public class CreatTeamFragment extends BasicFragment {
                     @Override
                     public void success(Object response, int code) {
                         ToastUtils.toastCenter(getActivity(), "创建成功");
-                        SPUtils.putInt(Config.CREATTEAM,1);
+                        SPUtils.putInt(Config.CREATTEAM, 1);
                         getActivity().finish();
                     }
 
@@ -347,4 +426,7 @@ public class CreatTeamFragment extends BasicFragment {
     }
 
 
+    public void setTeamId(String teamId) {
+        this.teamId = teamId;
+    }
 }

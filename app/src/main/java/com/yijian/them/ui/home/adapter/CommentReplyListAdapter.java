@@ -9,10 +9,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.yijian.them.R;
-import com.yijian.them.common.Config;
-import com.yijian.them.ui.home.GroupMoudle;
-import com.yijian.them.ui.home.ReplyListMoudle;
-import com.yijian.them.utils.JumpUtils;
+import com.yijian.them.ui.home.HomeMoudle;
 import com.yijian.them.utils.Times;
 import com.yijian.them.view.CircleImageView;
 import com.yijian.them.view.MyListView;
@@ -25,7 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class CommentReplyListAdapter extends BaseAdapter {
-    private List<GroupMoudle.DataBean> dataBeans = new ArrayList<>();
+    private List<HomeMoudle.DataBean> dataBeans = new ArrayList<>();
 
     @Override
     public int getCount() {
@@ -33,7 +30,7 @@ public class CommentReplyListAdapter extends BaseAdapter {
     }
 
     @Override
-    public GroupMoudle.DataBean getItem(int position) {
+    public HomeMoudle.DataBean getItem(int position) {
         return dataBeans.get(position);
     }
 
@@ -52,7 +49,7 @@ public class CommentReplyListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        GroupMoudle.DataBean dataBean = dataBeans.get(position);
+        HomeMoudle.DataBean dataBean = dataBeans.get(position);
         String content = dataBean.getContent();
         String fromAvatar = dataBean.getFromAvatar();
         String fromUname = dataBean.getFromUname();
@@ -86,12 +83,12 @@ public class CommentReplyListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void setData(List<GroupMoudle.DataBean> dataBeans) {
+    public void setData(List<HomeMoudle.DataBean> dataBeans) {
         this.dataBeans = dataBeans;
         notifyDataSetChanged();
     }
 
-    public void delComment(GroupMoudle.DataBean dataBean) {
+    public void delComment(HomeMoudle.DataBean dataBean) {
         dataBeans.remove(dataBean);
         notifyDataSetChanged();
     }

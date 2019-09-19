@@ -57,7 +57,7 @@ public class CodeFragment extends BasicFragment {
 
     @Override
     protected View getResourceView() {
-        rootView = View.inflate(getActivity(), R.layout.fragment_regist, null);
+        rootView = View.inflate(getActivity(), R.layout.fragment_code, null);
         return rootView;
     }
 
@@ -123,30 +123,35 @@ public class CodeFragment extends BasicFragment {
 
     private void getCode(String phone) {
         Http.http.createApi(AuthApi.class).getCode(phone)
-                .enqueue(new Callback<DataMoudle>() {
+                .compose(context.<JsonResult<String>>bindToLifecycle())
+                .compose(context.<JsonResult<String>>applySchedulers())
+                .subscribe(context.newSubscriber(new CallBack<String>() {
                     @Override
-                    public void onResponse(Call<DataMoudle> call, Response<DataMoudle> response) {
-                        AlertUtils.dismissProgress();
-                        CountDownUtil countDownUtil = new CountDownUtil(btCode, 60, 1);
-                        countDownUtil.start();
-                        btCode.setEnabled(false);
-                        if (type == 0) {
-                            etCode.setText(response.body().getData().getCode());
-                            ToastUtils.toastCenter(getActivity(), "获取验证码成功");
-                        } else if (type == 1) {
-                            type = 2;
-                            llCode.setVisibility(View.VISIBLE);
-                            btNext.setText("验证");
+                    public void success(String response,int code) {
+                        Log.d("校验验证码: ", response + "");
+                        if (code == 200){
+                            CountDownUtil countDownUtil = new CountDownUtil(btCode, 60, 1);
+                            countDownUtil.start();
+                            btCode.setEnabled(false);
+                            if (type == 0) {
+                                ToastUtils.toastCenter(getActivity(), "获取验证码成功");
+                            } else if (type == 1) {
+                                type = 2;
+                                llCode.setVisibility(View.VISIBLE);
+                                btNext.setText("验证");
+                            }
+
                         }
 
                     }
 
                     @Override
-                    public void onFailure(Call<DataMoudle> call, Throwable t) {
+                    public void fail(String errorMessage, int status) {
                         btCode.setEnabled(true);
                         AlertUtils.dismissProgress();
                     }
-                });
+                }));
+
     }
 
 }

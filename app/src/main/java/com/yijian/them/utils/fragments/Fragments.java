@@ -13,14 +13,17 @@ import com.yijian.them.ui.home.fragment.CreatGroupFragment;
 import com.yijian.them.ui.home.fragment.CreatTagFragment;
 import com.yijian.them.ui.home.fragment.GroupFragment;
 import com.yijian.them.ui.home.fragment.HotTopicFragment;
-import com.yijian.them.ui.home.fragment.HotTopicInfoFragment;
 import com.yijian.them.ui.home.fragment.SearchFragment;
 import com.yijian.them.ui.home.fragment.SendDynamicFragment;
 import com.yijian.them.ui.login.fragment.EditUserInfoFragment;
 import com.yijian.them.ui.login.fragment.LoginFragment;
 import com.yijian.them.ui.login.fragment.RegistFragment;
 import com.yijian.them.ui.message.ChatFragment;
+import com.yijian.them.ui.message.DynamicMessageFragment;
+import com.yijian.them.ui.message.GroupInfoFragment;
 import com.yijian.them.ui.message.MessageFragment;
+import com.yijian.them.ui.message.SystemMessageFragment;
+import com.yijian.them.ui.message.TeamMessageFragment;
 import com.yijian.them.ui.mine.MineFragment;
 import com.yijian.them.ui.mine.fragment.AboutFragment;
 import com.yijian.them.ui.mine.fragment.ChangePhoneFragment;
@@ -71,6 +74,7 @@ public class Fragments {
 
 
     private ChatFragment chartFragment;
+    private GroupInfoFragment groupInfoFragment;
     private SendDynamicFragment sendDynamicFragment;
     private AddressFragment addressFragment;
 
@@ -80,11 +84,13 @@ public class Fragments {
     private CommentFragment commentFragment;
     private CommentReplyFragment commentReplyFragment;
     private SearchFragment searchFragment;
-    private HotTopicInfoFragment hotTopicInfoFragment;
     private CreatTagFragment creatTagFragment;
     private TeamListFragment teamListFragment;
     private CreatTeamFragment creatTeamFragment;
 
+    private SystemMessageFragment systemMessageFragment;
+    private DynamicMessageFragment dynamicMessageFragment;
+private TeamMessageFragment teamMessageFragment;
 
     public static Fragments init() {
         if (fragments == null) {
@@ -318,7 +324,31 @@ public class Fragments {
                 chartFragment.setChatInfo(chatInfo);
                 fragmentTransaction.replace(frameLayout, chartFragment);
                 break;
-
+            case 1://群设置
+                if (groupInfoFragment == null) {
+                    groupInfoFragment = new GroupInfoFragment();
+                }
+                groupInfoFragment.setChatInfo(chatInfo);
+                fragmentTransaction.replace(frameLayout, groupInfoFragment);
+                break;
+            case 2://系统消息
+                if (systemMessageFragment == null) {
+                    systemMessageFragment = new SystemMessageFragment();
+                }
+                fragmentTransaction.replace(frameLayout, systemMessageFragment);
+                break;
+            case 3://评论和赞消息
+                if (dynamicMessageFragment == null) {
+                    dynamicMessageFragment = new DynamicMessageFragment();
+                }
+                fragmentTransaction.replace(frameLayout, dynamicMessageFragment);
+                break;
+            case 4://小队消息
+                if (teamMessageFragment == null) {
+                    teamMessageFragment = new TeamMessageFragment();
+                }
+                fragmentTransaction.replace(frameLayout, teamMessageFragment);
+                break;
         }
         fragmentTransaction.commit();
     }
@@ -404,10 +434,11 @@ public class Fragments {
                 }
                 fragmentTransaction.replace(frameLayout, teamListFragment);
                 break;
-            case 2://常见小队
+            case 2://创建小队
                 if (creatTeamFragment == null) {
                     creatTeamFragment = new CreatTeamFragment();
                 }
+                creatTeamFragment.setTeamId(teamId);
                 fragmentTransaction.replace(frameLayout, creatTeamFragment);
 
         }

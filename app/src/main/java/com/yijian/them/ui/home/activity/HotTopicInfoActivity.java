@@ -27,11 +27,8 @@ import com.yijian.them.R;
 import com.yijian.them.api.AuthApi;
 import com.yijian.them.basic.BasicActivity;
 import com.yijian.them.common.Config;
-import com.yijian.them.ui.home.GroupMoudle;
 import com.yijian.them.ui.home.HomeMoudle;
-import com.yijian.them.ui.home.adapter.GroupAdapter;
 import com.yijian.them.ui.home.adapter.HotTopicAdapter;
-import com.yijian.them.ui.home.adapter.TagAdapter;
 import com.yijian.them.ui.home.adapter.TopicGroupAdapter;
 import com.yijian.them.ui.home.adapter.TuijianAdapter;
 import com.yijian.them.ui.login.DataMoudle;
@@ -403,11 +400,11 @@ public class HotTopicInfoActivity extends BasicActivity implements OnRefreshList
      */
     private void followedTag() {
         Http.http.createApi(AuthApi.class).followedTag(topicId)
-                .compose(this.<JsonResult<GroupMoudle.DataBean>>bindToLifecycle())
-                .compose(this.<JsonResult<GroupMoudle.DataBean>>applySchedulers())
-                .subscribe(this.newSubscriber(new CallBack<GroupMoudle.DataBean>() {
+                .compose(this.<JsonResult<HomeMoudle.DataBean>>bindToLifecycle())
+                .compose(this.<JsonResult<HomeMoudle.DataBean>>applySchedulers())
+                .subscribe(this.newSubscriber(new CallBack<HomeMoudle.DataBean>() {
                     @Override
-                    public void success(GroupMoudle.DataBean response, int code) {
+                    public void success(HomeMoudle.DataBean response, int code) {
                         AlertUtils.dismissProgress();
                         Log.d("关注: ", response + "");
                         follow = response.isFollow();

@@ -1,6 +1,7 @@
 package com.yijian.them.utils.location;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.amap.api.location.AMapLocation;
@@ -18,15 +19,7 @@ public class LocationUtil implements AMapLocationListener {
     private AMapLocationClientOption mLocationOption = null;
     private OnLocationListener onLocationListener;
     private OnLocationAddressListener onLocationAddressListener;
-    private static LocationUtil locationUtil;
 
-//    public static LocationUtil getLocationUtil(Context mContext) {
-//        if (locationUtil == null) {
-//            locationUtil = new LocationUtil();
-//            locationUtil.init(mContext);
-//        }
-//        return locationUtil;
-//    }
 
     public LocationUtil(Context mContext) {
         init(mContext);
@@ -42,15 +35,15 @@ public class LocationUtil implements AMapLocationListener {
 
     public void init(Context mContext) {
         mlocationClient = new AMapLocationClient(mContext);
-//初始化定位参数
+        //初始化定位参数
         mLocationOption = new AMapLocationClientOption();
-//设置定位监听
+        //设置定位监听
         mlocationClient.setLocationListener(this);
-//设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
+        //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-//设置定位间隔,单位毫秒,默认为2000ms
-//        mLocationOption.setInterval(2000);
-//设置定位参数
+        //设置定位间隔,单位毫秒,默认为2000ms
+        //mLocationOption.setInterval(2000);
+        //设置定位参数
         mlocationClient.setLocationOption(mLocationOption);
     }
 
@@ -72,13 +65,16 @@ public class LocationUtil implements AMapLocationListener {
                         + amapLocation.getCityCode());
 
                 if (onLocationListener != null) {
-                    onLocationListener.onLocation(latitude, longitude, cityCode);
+                    if (!TextUtils.isEmpty(cityCode)) {
+                        onLocationListener.onLocation(latitude, longitude, cityCode);
+                    }
                 }
                 if (onLocationAddressListener != null) {
                     String address = amapLocation.getAddress();
-                    String poiName = amapLocation.getPoiName();
                     String aoiName = amapLocation.getAoiName();
-                    onLocationAddressListener.onLocation(latitude, longitude, cityCode, aoiName, address);
+                    if (!TextUtils.isEmpty(cityCode)) {
+                        onLocationAddressListener.onLocation(latitude, longitude, cityCode, aoiName, address);
+                    }
                 }
             } else {
                 //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。

@@ -6,7 +6,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.yijian.them.R;
-import com.yijian.them.ui.home.GroupMoudle;
+import com.yijian.them.ui.home.HomeMoudle;
 
 import java.util.List;
 
@@ -14,10 +14,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class HotTopicListAdapter extends BaseAdapter {
-    private List<GroupMoudle.DataBean> dataBeans;
+    private List<HomeMoudle.DataBean> dataBeans;
     private int selectPosition = 0;
 
-    public HotTopicListAdapter(List<GroupMoudle.DataBean> dataBeans) {
+    public HotTopicListAdapter(List<HomeMoudle.DataBean> dataBeans) {
         this.dataBeans = dataBeans;
     }
 
@@ -27,7 +27,7 @@ public class HotTopicListAdapter extends BaseAdapter {
     }
 
     @Override
-    public GroupMoudle.DataBean getItem(int position) {
+    public HomeMoudle.DataBean getItem(int position) {
         return dataBeans.get(position);
     }
 
@@ -46,7 +46,7 @@ public class HotTopicListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        GroupMoudle.DataBean dataBean = dataBeans.get(position);
+        HomeMoudle.DataBean dataBean = dataBeans.get(position);
         holder.tvHotTopicTitle.setText(dataBean.getTopicName());
         return convertView;
     }

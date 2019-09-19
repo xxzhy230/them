@@ -55,14 +55,15 @@ public class SearchActivity extends BasicActivity {
     TextView tvDynamic;
     @BindView(R.id.tvUser)
     TextView tvUser;
-    @BindView(R.id.nsvpHome)
+    @BindView(R.id.vpHome)
     ViewPager vpHome;
     private List<Fragment> fragments = new ArrayList<>();
     private SearchDynamicFragment searchDynamicFragment = new SearchDynamicFragment();
     private SearchTagFragment searchTagFragment = new SearchTagFragment();
     private SearchUserFragment searchUserFragment = new SearchUserFragment();
-    private int page = 1;
+    private int page = 0;
     private int type = 0;
+    private String searchKey;
 
     @Override
     public int initView() {
@@ -76,7 +77,9 @@ public class SearchActivity extends BasicActivity {
         HomeAdapter homeAdapter = new HomeAdapter(getSupportFragmentManager(), fragments);
         vpHome.setCurrentItem(0);
         vpHome.setAdapter(homeAdapter);
-        String searchKey = getIntent().getStringExtra(Config.SEARCHKEY);
+        searchKey = getIntent().getStringExtra(Config.SEARCHKEY);
+        etSearch.setText(searchKey);
+        etSearch.setSelection(searchKey.length());
         searchKey(searchKey, type);
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -101,11 +104,11 @@ public class SearchActivity extends BasicActivity {
         etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                String searchKey = etSearch.getText().toString().trim();
+                searchKey = etSearch.getText().toString().trim();
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(etSearch.getWindowToken(), 0);
-                    page = 1;
+                    page = 0;
                     searchKey(searchKey, type);
                 }
                 return true;
@@ -119,8 +122,10 @@ public class SearchActivity extends BasicActivity {
 
             @Override
             public void onPageSelected(int i) {
-                showTextState(1);
-                type = 1;
+                showTextState(i);
+                type = i;
+                page = 0;
+                searchKey(searchKey, type);
             }
 
             @Override
@@ -197,12 +202,12 @@ public class SearchActivity extends BasicActivity {
     }
 
 
-    private void searchKey(String key, int type) {
+    private void searchKey(String key, final int type) {
         AlertUtils.showProgress(false, this);
         Map map = new HashMap();
         map.put("key", key);
         map.put("page", page);
-        map.put("type", type+1);
+        map.put("type", type);
         Http.http.createApi(AuthApi.class).search(map)
                 .compose(this.<JsonResult<List<HomeMoudle.DataBean>>>bindToLifecycle())
                 .compose(this.<JsonResult<List<HomeMoudle.DataBean>>>applySchedulers())
@@ -211,21 +216,13 @@ public class SearchActivity extends BasicActivity {
                     public void success(List<HomeMoudle.DataBean> response, int code) {
                         AlertUtils.dismissProgress();
                         Log.d("搜索: ", response + "");
-//                        if (code == 10001) {
-//                            adapter.setData(response);
-//                            page++;
-//                        } else if (code == 10000) {
-//                            srlLayout.finishLoadMoreWithNoMoreData();
-//                            if (page == 1) {
-//                                llDefault.setVisibility(View.VISIBLE);
-//                                ivDefault.setImageResource(R.mipmap.default_dynamic);
-//                                tvDefault.setText("暂无动态，快发个动态吧");
-//                            }
-//                        } else if (code == 50002) {
-//                            llDefault.setVisibility(View.VISIBLE);
-//                            ivDefault.setImageResource(R.mipmap.default_load);
-//                            tvDefault.setText("哎呀！加载失败");
-//                        }
+                        if (type == 0) {
+                            searchTagFragment.setData(response);
+                        } else if (type == 1) {
+                            searchDynamicFragment.setData(response);
+                        } else {
+                            searchUserFragment.setData(response);
+                        }
                     }
 
                     @Override

@@ -2,6 +2,7 @@ package com.yijian.them.ui.team.adapter;
 
 import android.content.Context;
 import android.media.Image;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,6 +80,9 @@ public class TeamListAdapter extends BaseAdapter {
         holder.tvTeamDesc.setText(teamDesc);
         holder.tvTeamName.setText(teamName);
         String distance = dataBean.getDistance();
+        if (TextUtils.isEmpty(distance)) {
+            distance = "0";
+        }
         holder.tvDis.setText("距离你:" + (Double.parseDouble(distance) * 1000) + "Km");
         List<String> teamImgUrls = dataBean.getTeamImgUrls();
         if (teamImgUrls != null && teamImgUrls.size() > 0) {
@@ -114,9 +118,9 @@ public class TeamListAdapter extends BaseAdapter {
                     TeamMoudle.DataBean dataBean = mList.get(position);
                     ChatInfo chatInfo = new ChatInfo();
                     chatInfo.setType(TIMConversationType.Group);
-                    chatInfo.setId(dataBean.getTeamId());
+                    chatInfo.setId(dataBean.getChatgroupId());
                     chatInfo.setChatName(dataBean.getTeamName());
-                    JumpUtils.jumpMessageActivity(mContext, 1, chatInfo);
+                    JumpUtils.jumpMessageActivity(mContext, 0, chatInfo);
                 }
             });
             convertView.setOnClickListener(new View.OnClickListener() {

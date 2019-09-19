@@ -22,7 +22,6 @@ import com.yijian.them.api.AuthApi;
 import com.yijian.them.basic.BasicActivity;
 import com.yijian.them.basic.BasicFragment;
 import com.yijian.them.common.Config;
-import com.yijian.them.ui.home.GroupMoudle;
 import com.yijian.them.ui.home.HomeMoudle;
 import com.yijian.them.ui.home.adapter.CommentListAdapter;
 import com.yijian.them.ui.home.adapter.ImageAdapter;
@@ -407,11 +406,11 @@ public class CommentFragment extends BasicFragment {
      */
     private void comment() {
         Http.http.createApi(AuthApi.class).comment(dynamicId + "")
-                .compose(context.<JsonResult<List<GroupMoudle.DataBean>>>bindToLifecycle())
-                .compose(context.<JsonResult<List<GroupMoudle.DataBean>>>applySchedulers())
-                .subscribe(context.newSubscriber(new CallBack<List<GroupMoudle.DataBean>>() {
+                .compose(context.<JsonResult<List<HomeMoudle.DataBean>>>bindToLifecycle())
+                .compose(context.<JsonResult<List<HomeMoudle.DataBean>>>applySchedulers())
+                .subscribe(context.newSubscriber(new CallBack<List<HomeMoudle.DataBean>>() {
                     @Override
-                    public void success(List<GroupMoudle.DataBean> dataBeans, int code) {
+                    public void success(List<HomeMoudle.DataBean> dataBeans, int code) {
                         AlertUtils.dismissProgress();
                         if (dataBeans != null && dataBeans.size() > 0) {
                             mlvComment.setVisibility(View.VISIBLE);

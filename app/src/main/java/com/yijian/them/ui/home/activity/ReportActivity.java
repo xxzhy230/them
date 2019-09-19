@@ -51,6 +51,7 @@ public class ReportActivity extends BasicActivity {
     private String reportedId;
     private String commentId;
     private String tagId;
+    private String teamId;
 
     @Override
     public int initView() {
@@ -69,6 +70,8 @@ public class ReportActivity extends BasicActivity {
             dynamicId = getIntent().getStringExtra(Config.DYNAMICID);
         } else if (reportType == 2) {
             tagId = getIntent().getStringExtra(Config.DYNAMICID);
+        }else if (reportType == 3){
+            teamId = getIntent().getStringExtra(Config.DYNAMICID);
         }
     }
 
@@ -123,10 +126,39 @@ public class ReportActivity extends BasicActivity {
                     commentReport(reason + "," + content);
                 } else if (reportType == 2){
                     tagReport(reason + "," + content);
+                }else if (reportType == 3){
+//                    teamId
+                    teamReport(reason + "," + content);
                 }
 
                 break;
         }
+    }
+
+    private void teamReport(String reason) {
+        AlertUtils.showProgress(false, this);
+        Map map = new HashMap();
+        map.put("teamId", teamId);
+        map.put("reason", reason);
+        map.put("reportBy", SPUtils.getInt(Config.USERID) + "");
+        map.put("reportedId", reportedId);
+        Http.http.createApi(AuthApi.class).teamReport(map)
+                .compose(this.<JsonResult<String>>bindToLifecycle())
+                .compose(this.<JsonResult<String>>applySchedulers())
+                .subscribe(this.newSubscriber(new CallBack<String>() {
+                    @Override
+                    public void success(String response, int code) {
+                        AlertUtils.dismissProgress();
+                        ToastUtils.toastCenter(ReportActivity.this, "举报成功");
+                        finish();
+                    }
+
+                    @Override
+                    public void fail(String errorMessage, int status) {
+                        AlertUtils.dismissProgress();
+                        ToastUtils.toastCenter(ReportActivity.this, errorMessage + "");
+                    }
+                }));
     }
 
     private void commentReport(String reason) {
@@ -136,7 +168,6 @@ public class ReportActivity extends BasicActivity {
         map.put("reason", reason);
         map.put("reportBy", SPUtils.getInt(Config.USERID) + "");
         map.put("reportedId", reportedId);
-
         Http.http.createApi(AuthApi.class).commentReport(map)
                 .compose(this.<JsonResult<String>>bindToLifecycle())
                 .compose(this.<JsonResult<String>>applySchedulers())
@@ -180,9 +211,7 @@ public class ReportActivity extends BasicActivity {
     private void tagReport(String reason) {
         AlertUtils.showProgress(false, this);
         Map map = new HashMap();
-        map.put("commentId", commentId);
         map.put("reason", reason);
-        map.put("reportBy", SPUtils.getInt(Config.USERID) + "");
         map.put("tagId", Integer.parseInt(tagId));
 
         Http.http.createApi(AuthApi.class).tagReport(map)

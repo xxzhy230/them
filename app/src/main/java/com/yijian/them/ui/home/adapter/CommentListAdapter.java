@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.yijian.them.R;
 import com.yijian.them.common.Config;
-import com.yijian.them.ui.home.GroupMoudle;
+import com.yijian.them.ui.home.HomeMoudle;
 import com.yijian.them.ui.home.ReplyListMoudle;
 import com.yijian.them.utils.JumpUtils;
 import com.yijian.them.utils.Times;
@@ -24,7 +24,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class CommentListAdapter extends BaseAdapter {
-    private List<GroupMoudle.DataBean> dataBeans = new ArrayList<>();
+    private List<HomeMoudle.DataBean> dataBeans = new ArrayList<>();
 
     @Override
     public int getCount() {
@@ -51,7 +51,7 @@ public class CommentListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        GroupMoudle.DataBean dataBean = dataBeans.get(position);
+        HomeMoudle.DataBean dataBean = dataBeans.get(position);
         String content = dataBean.getContent();
         String fromAvatar = dataBean.getFromAvatar();
         String fromUname = dataBean.getFromUname();
@@ -77,8 +77,8 @@ public class CommentListAdapter extends BaseAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GroupMoudle.DataBean dataBean = dataBeans.get(position);
-                String dynamicId = dataBean.getDynamicId();
+                HomeMoudle.DataBean dataBean = dataBeans.get(position);
+                String dynamicId = dataBean.getDynamicId()+"";
                 Config.dataBean = dataBean;
                 JumpUtils.jumpDynamicActivity(parent.getContext(),8,"",dynamicId);
 
@@ -87,7 +87,7 @@ public class CommentListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void setData(List<GroupMoudle.DataBean> dataBeans) {
+    public void setData(List<HomeMoudle.DataBean> dataBeans) {
         this.dataBeans = dataBeans;
         notifyDataSetChanged();
     }

@@ -81,6 +81,7 @@ public class App extends Application {
                     public void onForceOffline() {
                         //被其他终端踢下线
                         Log.i("zhy", "onForceOffline");
+
                     }
 
                     @Override
@@ -136,6 +137,7 @@ public class App extends Application {
     }
 
     private void initIMUI() {
+
         // 配置 Config，请按需配置
         TUIKitConfigs configs = TUIKit.getConfigs();
         configs.setSdkConfig(new TIMSdkConfig(SDKAPPID));

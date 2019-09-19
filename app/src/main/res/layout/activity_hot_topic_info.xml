@@ -52,7 +52,7 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
-                        android:background="#bb3B7AFF"
+                        android:background="#ee284460"
                         android:scaleType="fitXY" />
                 </RelativeLayout>
 

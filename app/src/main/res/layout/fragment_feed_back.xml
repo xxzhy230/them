@@ -16,6 +16,7 @@
         android:textColor="@color/color_FF333333"
         android:textSize="14dp" />
     <ImageView
+        android:scaleType="centerCrop"
         android:id="@+id/ivAddImage"
         android:layout_marginLeft="15dp"
         android:layout_width="83dp"

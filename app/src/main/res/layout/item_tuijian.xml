@@ -148,11 +148,9 @@
 
                 <TextView
                     android:id="@+id/tvPLNum"
-                    android:layout_width="wrap_content"
+                    android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="60dp"
-                    android:layout_weight="1"
                     android:drawableLeft="@mipmap/home_pl"
                     android:drawablePadding="5dp"
                     android:text="评论"
@@ -161,7 +159,7 @@
 
                 <TextView
                     android:id="@+id/tvZanNum"
-                    android:layout_width="wrap_content"
+                    android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@mipmap/home_zan"
                     android:drawablePadding="5dp"

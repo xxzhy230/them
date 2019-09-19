@@ -22,7 +22,6 @@ import com.yijian.them.api.AuthApi;
 import com.yijian.them.basic.BasicActivity;
 import com.yijian.them.basic.BasicFragment;
 import com.yijian.them.common.Config;
-import com.yijian.them.ui.home.GroupMoudle;
 import com.yijian.them.ui.home.HomeMoudle;
 import com.yijian.them.ui.home.adapter.RandomTagAdapter;
 import com.yijian.them.ui.home.adapter.TuijianAdapter;
@@ -139,7 +138,7 @@ public class GuanzhuFragment extends BasicFragment implements OnRefreshListener,
         gvTag.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                GroupMoudle.DataBean item = randomTagAdapter.getItem(position);
+                HomeMoudle.DataBean item = randomTagAdapter.getItem(position);
                 String tagDesc = item.getTagDesc();
                 String tagName = item.getTagName();
                 String tagId = item.getTagId();
@@ -172,11 +171,11 @@ public class GuanzhuFragment extends BasicFragment implements OnRefreshListener,
 
     private void random() {
         Http.http.createApi(AuthApi.class).random()
-                .compose(context.<JsonResult<List<GroupMoudle.DataBean>>>bindToLifecycle())
-                .compose(context.<JsonResult<List<GroupMoudle.DataBean>>>applySchedulers())
-                .subscribe(context.newSubscriber(new CallBack<List<GroupMoudle.DataBean>>() {
+                .compose(context.<JsonResult<List<HomeMoudle.DataBean>>>bindToLifecycle())
+                .compose(context.<JsonResult<List<HomeMoudle.DataBean>>>applySchedulers())
+                .subscribe(context.newSubscriber(new CallBack<List<HomeMoudle.DataBean>>() {
                     @Override
-                    public void success(List<GroupMoudle.DataBean> dataBeans, int code) {
+                    public void success(List<HomeMoudle.DataBean> dataBeans, int code) {
                         AlertUtils.dismissProgress();
                         randomTagAdapter = new RandomTagAdapter(dataBeans);
                         gvTag.setAdapter(randomTagAdapter);

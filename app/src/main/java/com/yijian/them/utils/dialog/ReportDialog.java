@@ -30,6 +30,11 @@ public class ReportDialog extends BaseDialog {
         setCanceledOnTouchOutside(true);
         View view = View.inflate(getContext(), R.layout.dialog_report, null);
         LinearLayout llReport = view.findViewById(R.id.llReport);
+        LinearLayout llEditInfo = view.findViewById(R.id.llEditInfo);
+        if (type == 2) {
+            llEditInfo.setVisibility(View.VISIBLE);
+            llReport.setVisibility(View.GONE);
+        }
         llReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,6 +47,15 @@ public class ReportDialog extends BaseDialog {
                 dismiss();
                 if (onClicklistener != null) {
                     onClicklistener.onClick(1);
+                }
+            }
+        });
+        llEditInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+                if (onClicklistener != null) {
+                    onClicklistener.onClick(2);
                 }
             }
         });

@@ -11,7 +11,7 @@ import butterknife.ButterKnife;
 public class VersionFragment extends BasicFragment {
     @Override
     protected View getResourceView() {
-        View rootView = View.inflate(getActivity(), R.layout.fragment_team, null);
+        View rootView = View.inflate(getActivity(), R.layout.fragment_about, null);
         ButterKnife.bind(this, rootView);
         return rootView;
     }

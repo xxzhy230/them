@@ -3,9 +3,8 @@ package com.yijian.them.ui.home.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,7 +20,8 @@ import com.yijian.them.api.AuthApi;
 import com.yijian.them.basic.BasicActivity;
 import com.yijian.them.basic.BasicFragment;
 import com.yijian.them.common.Config;
-import com.yijian.them.ui.home.GroupMoudle;
+import com.yijian.them.ui.home.HomeMoudle;
+import com.yijian.them.ui.home.activity.HotTopicInfoActivity;
 import com.yijian.them.ui.home.adapter.HotTopicAdapter;
 import com.yijian.them.ui.home.adapter.TagAdapter;
 import com.yijian.them.utils.JumpUtils;
@@ -37,7 +37,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 /**
  * 话题
@@ -61,7 +60,7 @@ public class HotTopicFragment extends BasicFragment implements OnRefreshListener
     TextView tvCreat;
 
     private HotTopicAdapter hotTopicAdapter;
-    private String topicId;
+    private String topicId="";
     private int page = 1;
     private TagAdapter adapter;
     private String topicName;
@@ -102,7 +101,7 @@ public class HotTopicFragment extends BasicFragment implements OnRefreshListener
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectPosition = position;
                 if (hotTopicAdapter != null) {
-                    GroupMoudle.DataBean item = hotTopicAdapter.getItem(position);
+                    HomeMoudle.DataBean item = hotTopicAdapter.getItem(position);
                     topicName = item.getTopicName();
                     if (topicId.equals(item.getTopicId())) {
                         return;
@@ -125,7 +124,7 @@ public class HotTopicFragment extends BasicFragment implements OnRefreshListener
         lvTopicContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                GroupMoudle.DataBean item = adapter.getItem(position);
+                HomeMoudle.DataBean item = adapter.getItem(position);
                 if (topicType == 0) {
                     Intent intent = new Intent();
                     intent.putExtra(Config.TOPICID, topicId);
@@ -140,16 +139,23 @@ public class HotTopicFragment extends BasicFragment implements OnRefreshListener
 
             }
         });
+        adapter.setOnOffFollowedListener(new TagAdapter.OnOffFollowedListener() {
+            @Override
+            public void offFollowed(HomeMoudle.DataBean dataBean) {
+                AlertUtils.showProgress(false,getActivity());
+                followedTag(dataBean);
+            }
+        });
 
     }
 
     private void followList() {
         Http.http.createApi(AuthApi.class).followList(page + "")
-                .compose(context.<JsonResult<List<GroupMoudle.DataBean>>>bindToLifecycle())
-                .compose(context.<JsonResult<List<GroupMoudle.DataBean>>>applySchedulers())
-                .subscribe(context.newSubscriber(new CallBack<List<GroupMoudle.DataBean>>() {
+                .compose(context.<JsonResult<List<HomeMoudle.DataBean>>>bindToLifecycle())
+                .compose(context.<JsonResult<List<HomeMoudle.DataBean>>>applySchedulers())
+                .subscribe(context.newSubscriber(new CallBack<List<HomeMoudle.DataBean>>() {
                     @Override
-                    public void success(List<GroupMoudle.DataBean> dataBeans, int code) {
+                    public void success(List<HomeMoudle.DataBean> dataBeans, int code) {
                         if (code == 10000) {
                             if (page == 1) {
                                 llDefault.setVisibility(View.VISIBLE);
@@ -160,7 +166,7 @@ public class HotTopicFragment extends BasicFragment implements OnRefreshListener
                         } else if (code == 10001) {
                             llDefault.setVisibility(View.GONE);
                             page++;
-                            adapter.setDataBeans(dataBeans);
+                            adapter.setDataBeans(dataBeans,1);
                         }
                     }
 
@@ -175,11 +181,11 @@ public class HotTopicFragment extends BasicFragment implements OnRefreshListener
     private void topic() {
         AlertUtils.showProgress(false, getActivity());
         Http.http.createApi(AuthApi.class).topic()
-                .compose(context.<JsonResult<List<GroupMoudle.DataBean>>>bindToLifecycle())
-                .compose(context.<JsonResult<List<GroupMoudle.DataBean>>>applySchedulers())
-                .subscribe(context.newSubscriber(new CallBack<List<GroupMoudle.DataBean>>() {
+                .compose(context.<JsonResult<List<HomeMoudle.DataBean>>>bindToLifecycle())
+                .compose(context.<JsonResult<List<HomeMoudle.DataBean>>>applySchedulers())
+                .subscribe(context.newSubscriber(new CallBack<List<HomeMoudle.DataBean>>() {
                     @Override
-                    public void success(List<GroupMoudle.DataBean> dataBeans, int code) {
+                    public void success(List<HomeMoudle.DataBean> dataBeans, int code) {
                         if (dataBeans != null && dataBeans.size() > 0) {
                             hotTopicAdapter = new HotTopicAdapter(dataBeans);
                             lvTopicTitle.setAdapter(hotTopicAdapter);
@@ -199,11 +205,11 @@ public class HotTopicFragment extends BasicFragment implements OnRefreshListener
 
     private void tag() {
         Http.http.createApi(AuthApi.class).tag(page + "", topicId)
-                .compose(context.<JsonResult<List<GroupMoudle.DataBean>>>bindToLifecycle())
-                .compose(context.<JsonResult<List<GroupMoudle.DataBean>>>applySchedulers())
-                .subscribe(context.newSubscriber(new CallBack<List<GroupMoudle.DataBean>>() {
+                .compose(context.<JsonResult<List<HomeMoudle.DataBean>>>bindToLifecycle())
+                .compose(context.<JsonResult<List<HomeMoudle.DataBean>>>applySchedulers())
+                .subscribe(context.newSubscriber(new CallBack<List<HomeMoudle.DataBean>>() {
                     @Override
-                    public void success(List<GroupMoudle.DataBean> dataBeans, int code) {
+                    public void success(List<HomeMoudle.DataBean> dataBeans, int code) {
                         if (code == 10000) {
                             if (page == 1) {
                                 llDefault.setVisibility(View.VISIBLE);
@@ -214,7 +220,7 @@ public class HotTopicFragment extends BasicFragment implements OnRefreshListener
                         } else if (code == 10001) {
                             llDefault.setVisibility(View.GONE);
                             page++;
-                            adapter.setDataBeans(dataBeans);
+                            adapter.setDataBeans(dataBeans, 0);
                         }
                     }
 
@@ -262,5 +268,33 @@ public class HotTopicFragment extends BasicFragment implements OnRefreshListener
         refreshLayout.finishLoadMore();
     }
 
+    /**
+     * 关注tag
+     * @param dataBean
+     */
+    private void followedTag(final HomeMoudle.DataBean dataBean) {
+        String topicId = dataBean.getTagId();
+        Http.http.createApi(AuthApi.class).followedTag(topicId)
+                .compose(context.<JsonResult<HomeMoudle.DataBean>>bindToLifecycle())
+                .compose(context.<JsonResult<HomeMoudle.DataBean>>applySchedulers())
+                .subscribe(context.newSubscriber(new CallBack<HomeMoudle.DataBean>() {
+                    @Override
+                    public void success(HomeMoudle.DataBean response, int code) {
+                        AlertUtils.dismissProgress();
+                        Log.d("取消关注: ", response + "");
+//                        if (follow) {
+//                            tvFollow.setText(tagHeat + "人已参与");
+//                        } else {
+//                            tvFollow.setText("一起参与吧" + tagHeat + "人已参与");
+//                        }
+                        adapter.remove(dataBean);
+                    }
 
+                    @Override
+                    public void fail(String errorMessage, int status) {
+                        AlertUtils.dismissProgress();
+                        ToastUtils.toastCenter(getActivity(), errorMessage + "");
+                    }
+                }));
+    }
 }

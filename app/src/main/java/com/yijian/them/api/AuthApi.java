@@ -1,7 +1,6 @@
 package com.yijian.them.api;
 
 
-import com.yijian.them.ui.home.GroupMoudle;
 import com.yijian.them.ui.home.HomeMoudle;
 import com.yijian.them.ui.login.DataMoudle;
 import com.yijian.them.ui.team.TeamMoudle;
@@ -56,7 +55,7 @@ public interface AuthApi {
      * @return
      */
     @GET("app/sendMsgCode")
-    Call<DataMoudle> getCode(@Query("phone") String phone);
+    Observable<JsonResult<String>> getCode(@Query("phone") String phone);
 
     /**
      * 登录后发送验证码到绑定的手机号码
@@ -175,6 +174,7 @@ public interface AuthApi {
                                                                   @Query("page") String page,
                                                                   @Query("radius") String radius);
 
+
     /**
      * 反馈信息
      *
@@ -262,6 +262,7 @@ public interface AuthApi {
                                                @Query("localName") String localName,
                                                @Query("tagId") String tagId,
                                                @Query("tagName") String tagName);
+
     /**
      * 发送动态无图片
      *
@@ -297,27 +298,16 @@ public interface AuthApi {
                                                     @Query("tagName") String tagName);
 
     /**
-     * 获取小队列表
-     */
-    @POST("team/v2")
-    Observable<JsonResult<String>> creatTeam(@Query("cityCode") String cityCode,
-                                             @Query("teamName") String content,
-                                             @Query("teamDesc") String groupId,
-                                             @Query("latitude") String latitude,
-                                             @Query("longitude") String longitude,
-                                             @Query("localName") String localName);
-
-    /**
      * 获取话题列表
      */
     @GET("topic")
-    Observable<JsonResult<List<GroupMoudle.DataBean>>> topic();
+    Observable<JsonResult<List<HomeMoudle.DataBean>>> topic();
 
     /**
      * 获取话题列表
      */
     @GET("tag")
-    Observable<JsonResult<List<GroupMoudle.DataBean>>> tag(@Query("page") String page,
+    Observable<JsonResult<List<HomeMoudle.DataBean>>> tag(@Query("page") String page,
                                                            @Query("topicId") String topicId);
 
     /**
@@ -330,7 +320,7 @@ public interface AuthApi {
      * 获取评论
      */
     @GET("v2/comment")
-    Observable<JsonResult<List<GroupMoudle.DataBean>>> comment(@Query("dynamicId") String dynamicId);
+    Observable<JsonResult<List<HomeMoudle.DataBean>>> comment(@Query("dynamicId") String dynamicId);
 
     /**
      * 发送评论
@@ -368,7 +358,7 @@ public interface AuthApi {
      * 获取回复列表
      */
     @GET("v2/comment/{commentId}/reply")
-    Observable<JsonResult<List<GroupMoudle.DataBean>>> reportList(@Path("commentId") String commentId);
+    Observable<JsonResult<List<HomeMoudle.DataBean>>> reportList(@Path("commentId") String commentId);
 
     /**
      * 删除评论
@@ -395,6 +385,13 @@ public interface AuthApi {
     @PUT("v2/team/{teamId}")
     Observable<JsonResult<String>> teamOutOrAdd(@Path("teamId") String teamId,
                                                 @Query("type") String type);
+    /**
+     * 删除小队
+     *
+     * @return
+     */
+    @DELETE("v2/team/{teamId}")
+    Observable<JsonResult<String>> delTeam(@Path("teamId") String teamId);
 
     /**
      * 我参与的小队
@@ -403,7 +400,7 @@ public interface AuthApi {
     Observable<JsonResult<List<TeamMoudle.DataBean>>> teamList();
 
     /**
-     * 我参与的小队
+     * 创建小队
      */
     @Multipart
     @POST("v2/team/")
@@ -418,13 +415,39 @@ public interface AuthApi {
                                              @Part MultipartBody.Part[] parts);
 
     /**
-     * 获取随机话题
+     * 举报小队
      */
-    @GET("tag/random")
-    Observable<JsonResult<List<GroupMoudle.DataBean>>> random();
+    @POST("teamReport/")
+    Observable<JsonResult<String>> teamReport(@Body Map<String, String> params);
+
+    /**
+     * 编辑小队信息
+     */
+    @Multipart
+    @POST("v2/team/{teamId}")
+    Observable<JsonResult<String>> editTeam(@Path("teamId") String teamId,
+                                            @Part MultipartBody.Part[] parts,
+                                            @Query("teamName") String teamName,
+                                            @Query("teamDesc") String teamDesc,
+                                            @Query("teamImgHeight") int teamImgHeight,
+                                            @Query("teamImgWidth") int teamImgWidth);
+
+    /**
+     * 编辑小队信息
+     */
+    @POST("v2/team/{teamId}")
+    Observable<JsonResult<String>> editTeam(@Path("teamId") String teamId,
+                                            @Query("teamName") String teamName,
+                                            @Query("teamDesc") String teamDesc);
 
     /**
      * 获取随机话题
+     */
+    @GET("tag/random")
+    Observable<JsonResult<List<HomeMoudle.DataBean>>> random();
+
+    /**
+     * 获取热门话题
      */
     @GET("search/hot")
     Observable<JsonResult<List<String>>> hot();
@@ -445,7 +468,7 @@ public interface AuthApi {
      * @return
      */
     @GET("tag/{tagId}")
-    Observable<JsonResult<GroupMoudle.DataBean>> tagInfo(@Path("tagId") String tagId);
+    Observable<JsonResult<HomeMoudle.DataBean>> tagInfo(@Path("tagId") String tagId);
 
     /**
      * 查询单条标签
@@ -476,7 +499,7 @@ public interface AuthApi {
      * @return
      */
     @POST("tag/{tagId}")
-    Observable<JsonResult<GroupMoudle.DataBean>> followedTag(@Path("tagId") String tagId);
+    Observable<JsonResult<HomeMoudle.DataBean>> followedTag(@Path("tagId") String tagId);
 
     /**
      * 举报标签
@@ -502,12 +525,23 @@ public interface AuthApi {
      * 获取话题列表
      */
     @GET("tag/following")
-    Observable<JsonResult<List<GroupMoudle.DataBean>>> followList(@Query("page") String page);
+    Observable<JsonResult<List<HomeMoudle.DataBean>>> followList(@Query("page") String page);
 
     /**
      * 关键字搜索
      */
     @POST("search")
-    Observable<JsonResult<List<GroupMoudle.DataBean>>> search(@Body Map<String, String> params);
+    Observable<JsonResult<List<HomeMoudle.DataBean>>> search(@Body Map<String, String> params);
 
+    /**
+     * 修改群组头像
+     */
+    @Multipart
+    @POST("group/")
+    Observable<JsonResult<Object>> groupHead(@Body Map<String, String> params);
+    /**
+     * 系统消息
+     */
+    @GET("announcement")
+    Observable<JsonResult<List<HomeMoudle.DataBean>>> systemMessage();
 }

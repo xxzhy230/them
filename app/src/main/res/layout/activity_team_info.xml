@@ -18,6 +18,7 @@
             android:layout_centerVertical="true"
             android:paddingLeft="15dp"
             android:paddingTop="10dp"
+
             android:paddingRight="15dp"
             android:paddingBottom="10dp"
             android:src="@mipmap/navi_back" />
@@ -60,9 +61,10 @@
             android:orientation="vertical">
 
             <ImageView
+                android:scaleType="centerCrop"
                 android:id="@+id/ivImage"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="300dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -190,6 +192,7 @@
         android:paddingRight="30dp"
         android:paddingBottom="10dp"
         android:text="申请加入"
+        android:visibility="invisible"
         android:textColor="@color/white"
         android:textSize="16dp" />
 </LinearLayout>

@@ -7,12 +7,13 @@
     <include layout="@layout/include_default" />
 
     <ListView
-        android:id="@+id/lvSearchTag"
+        android:id="@+id/lvSystem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
         android:divider="@android:color/transparent"
         android:dividerHeight="10dp"
-        android:scrollbars="none"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp" />
+        android:scrollbars="none" />
 </LinearLayout>

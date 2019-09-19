@@ -1,5 +1,8 @@
 package com.yijian.them.ui.team.moudle;
 
+import com.tencent.imsdk.TIMGroupMemberInfo;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class TeamInfoMoudle {
@@ -288,6 +291,15 @@ public class TeamInfoMoudle {
             public void setUserId(int userId) {
                 this.userId = userId;
             }
+
+//            public void changeData(List<TIMGroupMemberInfo> timGroupMemberInfos) {
+//                List<MembersBean> mList = new ArrayList();
+//                for (int i = 0; i < timGroupMemberInfos.size(); i++) {
+//                    MembersBean membersBean = new MembersBean();
+//                    TIMGroupMemberInfo timGroupMemberInfo = timGroupMemberInfos.get(i);
+//                    membersBean.setRealImg(timGroupMemberInfo.);
+//                }
+//            }
         }
     }
 }

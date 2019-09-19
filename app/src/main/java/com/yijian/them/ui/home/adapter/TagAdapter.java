@@ -9,8 +9,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.yijian.them.R;
-import com.yijian.them.ui.home.GroupMoudle;
-import com.yijian.them.utils.picasso.PicassoRoundTransform;
+import com.yijian.them.ui.home.HomeMoudle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +18,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class TagAdapter extends BaseAdapter {
-    private List<GroupMoudle.DataBean> dataBeans = new ArrayList<>();
+    private List<HomeMoudle.DataBean> dataBeans = new ArrayList<>();
+    private int type = 0;
+    private OnOffFollowedListener onOffFollowedListener;
+
+    public void setOnOffFollowedListener(OnOffFollowedListener onOffFollowedListener) {
+        this.onOffFollowedListener = onOffFollowedListener;
+    }
 
     @Override
     public int getCount() {
@@ -27,7 +32,7 @@ public class TagAdapter extends BaseAdapter {
     }
 
     @Override
-    public GroupMoudle.DataBean getItem(int position) {
+    public HomeMoudle.DataBean getItem(int position) {
         return dataBeans.get(position);
     }
 
@@ -37,7 +42,7 @@ public class TagAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
             convertView = View.inflate(parent.getContext(), R.layout.item_tag, null);
@@ -46,29 +51,48 @@ public class TagAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        GroupMoudle.DataBean dataBean = dataBeans.get(position);
+        final HomeMoudle.DataBean dataBean = dataBeans.get(position);
         String tagName = dataBean.getTagName();
         holder.tvTagName.setText(tagName);
         String tagHeat = dataBean.getTagHeat();
         holder.tvTagContent.setText(tagHeat + "人已参加");
         String tagUrl = dataBean.getTagUrl();
         if (!TextUtils.isEmpty(tagUrl)) {
-            Picasso.with(parent.getContext()).load(tagUrl).transform(new PicassoRoundTransform())
-                    .into(holder.ivImageHead);
+            Picasso.with(parent.getContext()).load(tagUrl).into(holder.ivImageHead);
         }
+        if (type == 1) {
+            holder.tvAddOrDel.setVisibility(View.VISIBLE);
+        } else {
+            holder.tvAddOrDel.setVisibility(View.GONE);
+        }
+        holder.tvAddOrDel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HomeMoudle.DataBean dataBean = dataBeans.get(position);
+                if (onOffFollowedListener != null) {
+                    onOffFollowedListener.offFollowed(dataBean);
+                }
+            }
+        });
         return convertView;
     }
 
-    public void setDataBeans(List<GroupMoudle.DataBean> dataBeans) {
+    public void setDataBeans(List<HomeMoudle.DataBean> dataBeans, int type) {
         this.dataBeans.addAll(dataBeans);
+        this.type = type;
         notifyDataSetChanged();
     }
 
     public void clear() {
-        if (dataBeans!=null){
+        if (dataBeans != null) {
             dataBeans.clear();
             notifyDataSetChanged();
         }
+    }
+
+    public void remove(HomeMoudle.DataBean dataBean) {
+        dataBeans.remove(dataBean);
+        notifyDataSetChanged();
     }
 
     static class ViewHolder {
@@ -78,9 +102,16 @@ public class TagAdapter extends BaseAdapter {
         TextView tvTagName;
         @BindView(R.id.tvTagContent)
         TextView tvTagContent;
+        @BindView(R.id.tvAddOrDel)
+        TextView tvAddOrDel;
+
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
+    }
+
+    public interface OnOffFollowedListener {
+        void offFollowed(HomeMoudle.DataBean dataBean);
     }
 }

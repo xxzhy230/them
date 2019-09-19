@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
 import com.yijian.them.R;
+import com.yijian.them.basic.BasicActivity;
 import com.yijian.them.common.Config;
 import com.yijian.them.utils.StatusBarUtils;
 import com.yijian.them.utils.fragments.Fragments;
@@ -21,12 +22,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MessageActivity extends AppCompatActivity {
+public class MessageActivity extends BasicActivity {
     @BindView(R.id.v_include_bar)
     View vIncludeBar;
     @BindView(R.id.rlTitleBar)
     RelativeLayout rlTitleBar;
-
     @BindView(R.id.tvTitleBar)
     TextView tvTitleBar;
     @BindView(R.id.ivRightBar)
@@ -38,24 +38,23 @@ public class MessageActivity extends AppCompatActivity {
 
     private int messageType;
 
+
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        StatusBarUtils.setStatusBarColor(MessageActivity.this,R.color.color_FFFEFEFE);
-        setContentView(R.layout.activity_message);
-        ButterKnife.bind(this);
-        initData();
+    public int initView() {
+        StatusBarUtils.setStatusBarColor(MessageActivity.this, R.color.color_FFFEFEFE);
+        return R.layout.activity_message;
     }
 
-
+    @Override
     public void initData() {
-        messageType = getIntent().getIntExtra(Config.MINETYPE, 0);
+        ButterKnife.bind(this);
+        messageType = getIntent().getIntExtra(Config.MESSAGETYPE, 0);
         String title = getIntent().getStringExtra(Config.MINETITLE);
         ChatInfo chatInfo = (ChatInfo) getIntent().getSerializableExtra(Config.CHATINFO);
         tvTitleBar.setText(title);
         vIncludeBar.setVisibility(View.GONE);
         rlTitleBar.setVisibility(View.GONE);
-        Fragments.init().commitMessage(messageType, getSupportFragmentManager(), R.id.flMessage,chatInfo);
+        Fragments.init().commitMessage(messageType, getSupportFragmentManager(), R.id.flMessage, chatInfo);
 
     }
 

@@ -22,12 +22,8 @@ import com.yijian.them.api.AuthApi;
 import com.yijian.them.basic.BasicActivity;
 import com.yijian.them.basic.BasicFragment;
 import com.yijian.them.common.Config;
-import com.yijian.them.ui.home.GroupMoudle;
 import com.yijian.them.ui.home.HomeMoudle;
-import com.yijian.them.ui.home.adapter.CommentListAdapter;
 import com.yijian.them.ui.home.adapter.CommentReplyListAdapter;
-import com.yijian.them.ui.home.adapter.ImageAdapter;
-import com.yijian.them.ui.login.DataMoudle;
 import com.yijian.them.utils.JumpUtils;
 import com.yijian.them.utils.SoftKeyBoardListener;
 import com.yijian.them.utils.StringUtils;
@@ -78,7 +74,7 @@ public class CommentReplyFragment extends BasicFragment {
 
     private String dynamicId;
     private CommentReplyListAdapter adapter;
-    private GroupMoudle.DataBean dataBean;
+    private HomeMoudle.DataBean dataBean;
     private String toUid;
     private String toUname;
     private String commentId;
@@ -149,7 +145,7 @@ public class CommentReplyFragment extends BasicFragment {
         mlvComment.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                final GroupMoudle.DataBean item = adapter.getItem(position);
+                final HomeMoudle.DataBean item = adapter.getItem(position);
                 String fromUid = item.getFromUid();
                 if ((SPUtils.getInt(Config.USERID) + "").equals(fromUid)) {
                     DynamicDialog dynamicDialog = new DynamicDialog(getActivity(), 1);
@@ -178,7 +174,7 @@ public class CommentReplyFragment extends BasicFragment {
         mlvComment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final GroupMoudle.DataBean item = adapter.getItem(position);
+                final HomeMoudle.DataBean item = adapter.getItem(position);
                 etComment.setHint("回复 " + item.getFromUname());
                 toUid = item.getFromUid();
                 toUname = item.getFromUname();
@@ -224,7 +220,7 @@ public class CommentReplyFragment extends BasicFragment {
     /**
      * 删除评论
      */
-    private void delComment(final GroupMoudle.DataBean dataBean) {
+    private void delComment(final HomeMoudle.DataBean dataBean) {
         Http.http.createApi(AuthApi.class).delComment(dataBean.getCommentId())
                 .compose(context.<JsonResult<String>>bindToLifecycle())
                 .compose(context.<JsonResult<String>>applySchedulers())
@@ -255,11 +251,11 @@ public class CommentReplyFragment extends BasicFragment {
      */
     private void reportList() {
         Http.http.createApi(AuthApi.class).reportList(dataBean.getCommentId() + "")
-                .compose(context.<JsonResult<List<GroupMoudle.DataBean>>>bindToLifecycle())
-                .compose(context.<JsonResult<List<GroupMoudle.DataBean>>>applySchedulers())
-                .subscribe(context.newSubscriber(new CallBack<List<GroupMoudle.DataBean>>() {
+                .compose(context.<JsonResult<List<HomeMoudle.DataBean>>>bindToLifecycle())
+                .compose(context.<JsonResult<List<HomeMoudle.DataBean>>>applySchedulers())
+                .subscribe(context.newSubscriber(new CallBack<List<HomeMoudle.DataBean>>() {
                     @Override
-                    public void success(List<GroupMoudle.DataBean> dataBeans, int code) {
+                    public void success(List<HomeMoudle.DataBean> dataBeans, int code) {
                         AlertUtils.dismissProgress();
                         adapter.setData(dataBeans);
                     }

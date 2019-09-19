@@ -51,7 +51,7 @@
             android:name=".ui.message.MessageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/message"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
+            android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".ui.mine.activity.AboutActivity"

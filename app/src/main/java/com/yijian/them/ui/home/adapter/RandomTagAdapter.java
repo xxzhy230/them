@@ -6,7 +6,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.yijian.them.R;
-import com.yijian.them.ui.home.GroupMoudle;
+import com.yijian.them.ui.home.HomeMoudle;
 
 import java.util.List;
 
@@ -14,9 +14,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class RandomTagAdapter extends BaseAdapter {
-    private List<GroupMoudle.DataBean> dataBeans;
+    private List<HomeMoudle.DataBean> dataBeans;
 
-    public RandomTagAdapter(List<GroupMoudle.DataBean> dataBeans) {
+    public RandomTagAdapter(List<HomeMoudle.DataBean> dataBeans) {
         this.dataBeans = dataBeans;
     }
 
@@ -26,7 +26,7 @@ public class RandomTagAdapter extends BaseAdapter {
     }
 
     @Override
-    public GroupMoudle.DataBean getItem(int position) {
+    public HomeMoudle.DataBean getItem(int position) {
         return dataBeans.get(position);
     }
 
@@ -45,7 +45,7 @@ public class RandomTagAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        GroupMoudle.DataBean dataBean = dataBeans.get(position);
+        HomeMoudle.DataBean dataBean = dataBeans.get(position);
         String tagName = dataBean.getTagName();
         holder.tvTagname.setText(tagName);
         return convertView;

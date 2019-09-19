@@ -10,22 +10,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.yijian.them.R;
 import com.yijian.them.api.AuthApi;
 import com.yijian.them.basic.BasicActivity;
 import com.yijian.them.common.Config;
-import com.yijian.them.ui.home.GroupMoudle;
-import com.yijian.them.ui.home.adapter.HotTopicAdapter;
+import com.yijian.them.ui.home.HomeMoudle;
 import com.yijian.them.ui.home.adapter.HotTopicListAdapter;
-import com.yijian.them.ui.home.adapter.TagAdapter;
-import com.yijian.them.utils.JumpUtils;
 import com.yijian.them.utils.dialog.AlertUtils;
 import com.yijian.them.utils.http.CallBack;
 import com.yijian.them.utils.http.Http;
 import com.yijian.them.utils.http.JsonResult;
-import com.yqjr.utils.spUtils.SPUtils;
 import com.yqjr.utils.utils.ToastUtils;
 
 import java.util.List;
@@ -59,7 +53,7 @@ public class TagActivity extends BasicActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (hotTopicAdapter != null) {
-                    GroupMoudle.DataBean item = hotTopicAdapter.getItem(position);
+                    HomeMoudle.DataBean item = hotTopicAdapter.getItem(position);
                     topicName = item.getTopicName();
                     Intent intent = new Intent();
                     intent.putExtra(Config.TOPICNAME, topicName);
@@ -76,11 +70,11 @@ public class TagActivity extends BasicActivity {
     private void topic() {
         AlertUtils.showProgress(false, this);
         Http.http.createApi(AuthApi.class).topic()
-                .compose(this.<JsonResult<List<GroupMoudle.DataBean>>>bindToLifecycle())
-                .compose(this.<JsonResult<List<GroupMoudle.DataBean>>>applySchedulers())
-                .subscribe(this.newSubscriber(new CallBack<List<GroupMoudle.DataBean>>() {
+                .compose(this.<JsonResult<List<HomeMoudle.DataBean>>>bindToLifecycle())
+                .compose(this.<JsonResult<List<HomeMoudle.DataBean>>>applySchedulers())
+                .subscribe(this.newSubscriber(new CallBack<List<HomeMoudle.DataBean>>() {
                     @Override
-                    public void success(List<GroupMoudle.DataBean> dataBeans, int code) {
+                    public void success(List<HomeMoudle.DataBean> dataBeans, int code) {
                         if (dataBeans != null && dataBeans.size() > 0) {
                             dataBeans.remove(dataBeans.get(0));
                             hotTopicAdapter = new HotTopicListAdapter(dataBeans);

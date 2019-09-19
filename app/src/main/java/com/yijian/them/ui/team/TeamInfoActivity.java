@@ -1,6 +1,5 @@
 package com.yijian.them.ui.team;
 
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,19 +13,18 @@ import com.yijian.them.api.AuthApi;
 import com.yijian.them.basic.BasicActivity;
 import com.yijian.them.common.App;
 import com.yijian.them.common.Config;
-import com.yijian.them.ui.home.activity.ReportActivity;
 import com.yijian.them.ui.team.adapter.TeamMembersAdapter;
 import com.yijian.them.ui.team.moudle.TeamInfoMoudle;
+import com.yijian.them.utils.JumpUtils;
 import com.yijian.them.utils.dialog.AlertUtils;
+import com.yijian.them.utils.dialog.ReportDialog;
 import com.yijian.them.utils.http.CallBack;
 import com.yijian.them.utils.http.Http;
 import com.yijian.them.utils.http.JsonResult;
 import com.yqjr.utils.spUtils.SPUtils;
 import com.yqjr.utils.utils.ToastUtils;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,6 +49,10 @@ public class TeamInfoActivity extends BasicActivity {
     GridView gvTeamHead;
     @BindView(R.id.tvAddTeam)
     TextView tvAddTeam;
+    private String teamId;
+    private String teamName;
+    private String teamDesc;
+    private TeamInfoMoudle.DataBean.MembersBean membersBean;
 
     @Override
     public int initView() {
@@ -60,7 +62,13 @@ public class TeamInfoActivity extends BasicActivity {
     @Override
     public void initData() {
         ButterKnife.bind(this);
-        String teamId = getIntent().getStringExtra(Config.TEAMID);
+        teamId = getIntent().getStringExtra(Config.TEAMID);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         teamInfo(teamId);
     }
 
@@ -75,21 +83,20 @@ public class TeamInfoActivity extends BasicActivity {
                         AlertUtils.dismissProgress();
                         List<TeamInfoMoudle.DataBean.MembersBean> members = dataBean.getMembers();
                         String teamImgUrl = dataBean.getTeamImgUrl();
-                        String teamName = dataBean.getTeamName();
+                        teamName = dataBean.getTeamName();
                         int teamImgWidth = dataBean.getTeamImgWidth();
                         int teamImgHeight = dataBean.getTeamImgHeight();
-
                         tvTeamTitle.setText(teamName);
-                        double width = App.mWidth;
-                        double height = width * teamImgHeight / teamImgWidth;
-                        ViewGroup.LayoutParams layoutParams = ivImage.getLayoutParams();
-                        layoutParams.height = (int) height;
-                        ivImage.setLayoutParams(layoutParams);
+//                        double width = App.mWidth;
+//                        double height = width * teamImgHeight / teamImgWidth;
+//                        ViewGroup.LayoutParams layoutParams = ivImage.getLayoutParams();
+//                        layoutParams.height = (int) height;
+//                        ivImage.setLayoutParams(layoutParams);
                         if (!TextUtils.isEmpty(teamImgUrl)) {
                             Picasso.with(TeamInfoActivity.this).load(teamImgUrl).into(ivImage);
                         }
                         tvTeamNum.setText(members.size() + "/8");
-                        String teamDesc = dataBean.getTeamDesc();
+                        teamDesc = dataBean.getTeamDesc();
                         tvTeamContent.setText(teamDesc);
                         String teamMember = dataBean.getTeamMember();
                         String[] split = teamMember.split(",");
@@ -102,6 +109,7 @@ public class TeamInfoActivity extends BasicActivity {
                             }
                         }
                         if (members != null && members.size() > 0) {
+                            membersBean = members.get(0);
                             TeamMembersAdapter adapter = new TeamMembersAdapter(members);
                             gvTeamHead.setAdapter(adapter);
                         }
@@ -122,6 +130,34 @@ public class TeamInfoActivity extends BasicActivity {
             case R.id.ivBack:
                 break;
             case R.id.ivMore:
+                int userId = membersBean.getUserId();
+                if (userId == SPUtils.getInt(Config.USERID)) {
+                    ReportDialog dialog = new ReportDialog(this, 2);
+                    dialog.show();
+                    dialog.setOnClicklistener(new ReportDialog.OnClicklistener() {
+                        @Override
+                        public void onClick(int type) {
+                            if (type == 1) {//举报
+                                JumpUtils.jumpReportActivity(TeamInfoActivity.this, teamId, 3, "", "");
+                            } else if (type == 2) {//编辑
+                                SPUtils.putString(Config.TEAMTITLE, teamName);
+                                SPUtils.putString(Config.TEAMDESC, teamDesc);
+                                JumpUtils.jumpTeamActivity(TeamInfoActivity.this, 2, "", teamId);
+                            }
+                        }
+                    });
+                } else {
+                    ReportDialog dialog = new ReportDialog(this, 3);
+                    dialog.show();
+                    dialog.setOnClicklistener(new ReportDialog.OnClicklistener() {
+                        @Override
+                        public void onClick(int type) {
+                            if (type == 1) {//举报
+                                JumpUtils.jumpReportActivity(TeamInfoActivity.this, teamId, 3, "", "");
+                            }
+                        }
+                    });
+                }
                 break;
             case R.id.tvAddTeam:
                 break;

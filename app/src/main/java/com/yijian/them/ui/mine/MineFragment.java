@@ -178,7 +178,7 @@ public class MineFragment extends BasicFragment {
                 JumpUtils.jumpMineActivity(getActivity(), 1, "用户反馈");
                 break;
             case R.id.llVersionInfo:
-                JumpUtils.jumpMineActivity(getActivity(), 2, "版本更新");
+                JumpUtils.jumpMineActivity(getActivity(), 3, "版本信息");
                 break;
             case R.id.llAboutThem:
                 JumpUtils.jumpMineActivity(getActivity(), 3, "关于Them");

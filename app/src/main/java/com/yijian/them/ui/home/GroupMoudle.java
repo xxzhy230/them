@@ -176,7 +176,7 @@ public class GroupMoudle {
              */
 
             private String birthday;
-            private Object followed;
+            private boolean followed;
             private String gender;
             private String nickName;
             private String realImg;
@@ -191,11 +191,11 @@ public class GroupMoudle {
                 this.birthday = birthday;
             }
 
-            public Object getFollowed() {
+            public boolean getFollowed() {
                 return followed;
             }
 
-            public void setFollowed(Object followed) {
+            public void setFollowed(boolean followed) {
                 this.followed = followed;
             }
 

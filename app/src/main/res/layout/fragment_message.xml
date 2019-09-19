@@ -40,10 +40,10 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_marginRight="15dp"
             android:id="@+id/rlTeamMessage"
             android:layout_width="0dp"
             android:layout_height="113dp"
+            android:layout_marginRight="15dp"
             android:layout_weight="1">
 
             <TextView
@@ -70,10 +70,10 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_marginRight="10dp"
             android:id="@+id/rlPZ"
             android:layout_width="0dp"
             android:layout_height="113dp"
+            android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:gravity="right">
 
@@ -106,7 +106,9 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:background="#FFF7F7F7"/>
+        android:background="#FFF7F7F7" />
+
+    <include layout="@layout/include_default" />
 
     <com.tencent.qcloud.tim.uikit.modules.conversation.ConversationLayout
         android:id="@+id/conversation_layout"

@@ -71,8 +71,6 @@ public class RegistFragment extends BasicFragment {
                 btCode.setEnabled(false);
                 break;
             case R.id.btNext:
-//                JumpUtils.jumpLoginActivity(getActivity(),3,"1111111","");
-//                getActivity().finish();
                 //获取手机号码
                 String phone1 = etPhone.getText().toString().trim();
                 if (TextUtils.isEmpty(phone1)) {
@@ -117,19 +115,24 @@ public class RegistFragment extends BasicFragment {
 
     private void getCode(String phone) {
         Http.http.createApi(AuthApi.class).getCode(phone)
-                .enqueue(new Callback<DataMoudle>() {
+                .compose(context.<JsonResult<String>>bindToLifecycle())
+                .compose(context.<JsonResult<String>>applySchedulers())
+                .subscribe(context.newSubscriber(new CallBack<String>() {
                     @Override
-                    public void onResponse(Call<DataMoudle> call, Response<DataMoudle> response) {
-                        etCode.setText(response.body().getData().getCode());
-                        ToastUtils.toastCenter(getActivity(), "获取验证码成功");
-                        CountDownUtil countDownUtil = new CountDownUtil(btCode, 60, 1);
-                        countDownUtil.start();
+                    public void success(String response,int code) {
+                        if (code == 200){
+                            ToastUtils.toastCenter(getActivity(), "获取验证码成功");
+                            CountDownUtil countDownUtil = new CountDownUtil(btCode, 60, 1);
+                            countDownUtil.start();
+                        }
                     }
 
                     @Override
-                    public void onFailure(Call<DataMoudle> call, Throwable t) {
+                    public void fail(String errorMessage, int status) {
+                        ToastUtils.toastCenter(getActivity(), errorMessage + "");
                         btCode.setEnabled(true);
                     }
-                });
+                }));
+
     }
 }

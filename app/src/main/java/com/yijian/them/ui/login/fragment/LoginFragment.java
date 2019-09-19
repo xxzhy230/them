@@ -99,7 +99,6 @@ public class LoginFragment extends BasicFragment {
                             SPUtils.putString(Config.LOGINPHONE, phone);
                             SPUtils.putString(Config.USERSIGN, userSign);
                             getUserInfo();
-
                         }
                     }
 
@@ -115,7 +114,6 @@ public class LoginFragment extends BasicFragment {
         TIMManager.getInstance().login(SPUtils.getInt(Config.USERID) + "", SPUtils.getString(Config.USERSIGN), new TIMCallBack() {
             @Override
             public void onError(int i, String s) {
-
                 Log.d("IM登录 Error: ", s);
             }
 
@@ -165,8 +163,6 @@ public class LoginFragment extends BasicFragment {
 
     // 这是来自 JPush Example 的设置别名的 Activity 里的代码。一般 App 的设置的调用入口，在任何方便的地方调用都可以。
     private void setAlias(String alias) {
-
-
         // 调用 Handler 来异步设置别名
         mHandler.sendMessage(mHandler.obtainMessage(MSG_SET_ALIAS, alias));
     }

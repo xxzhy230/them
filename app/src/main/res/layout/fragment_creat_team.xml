@@ -20,6 +20,7 @@
             android:textSize="16dp" />
 
         <TextView
+            android:id="@+id/tvTeamTitle"
             android:layout_width="60dp"
             android:layout_height="45dp"
             android:layout_weight="1"

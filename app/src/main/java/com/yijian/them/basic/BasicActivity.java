@@ -116,7 +116,6 @@ public abstract class BasicActivity extends RxAppCompatActivity {
                 if (e instanceof HttpException) {
                     HttpException httpException = (HttpException) e;
                     ResponseBody body = httpException.response().errorBody();
-
                     try {
                         Log.d("返回数据 : ", body.string());
                         JsonResult result = JsonUtil.fromJson(body.string(), JsonResult.class);
@@ -124,7 +123,6 @@ public abstract class BasicActivity extends RxAppCompatActivity {
                             errorMessage = result.msg;
                             status = result.code;
                         }
-
                     } catch (IOException ioe) {
                         ioe.printStackTrace();
                     }

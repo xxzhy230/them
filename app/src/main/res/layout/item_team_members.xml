@@ -6,7 +6,7 @@
 
     <com.yijian.them.view.CircleImageView
         android:id="@+id/civTeamMember"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginRight="10dp" />
 </RelativeLayout>
