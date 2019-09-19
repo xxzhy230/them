@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.yijian.them.view.CircleImageView
+            android:id="@+id/civHeadImage"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@mipmap/message_notice" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="15dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvSystemTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="wo 赞了你的"
+                android:textColor="@color/color_FF333333"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/tvContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="1111111111"
+                android:textColor="@color/color_FF666666"
+                android:textSize="13dp" />
+            <TextView
+                android:id="@+id/tvTimeNew"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/color_FF999999"
+                android:textSize="12dp" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/ivDynamicImage"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/message_notice" />
+    </LinearLayout>
+
+    <com.yijian.them.view.MyListView
+        android:id="@+id/mlvComment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/shape_gray_5_bg"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="5dp" />
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/color_FF999999"
+        android:textSize="12dp" />
+
+
+</LinearLayout>

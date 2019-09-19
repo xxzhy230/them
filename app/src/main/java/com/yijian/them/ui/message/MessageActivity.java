@@ -51,9 +51,20 @@ public class MessageActivity extends BasicActivity {
         messageType = getIntent().getIntExtra(Config.MESSAGETYPE, 0);
         String title = getIntent().getStringExtra(Config.MINETITLE);
         ChatInfo chatInfo = (ChatInfo) getIntent().getSerializableExtra(Config.CHATINFO);
-        tvTitleBar.setText(title);
-        vIncludeBar.setVisibility(View.GONE);
-        rlTitleBar.setVisibility(View.GONE);
+        if (messageType == 4){
+            tvTitleBar.setText("小队信息");
+        }else if (messageType == 2){
+            tvTitleBar.setText("官方通知");
+        }else if (messageType == 3){
+            tvTitleBar.setText("评论与赞");
+        }else{
+            tvTitleBar.setText(title);
+        }
+
+        if (messageType == 1 || messageType == 0){
+            vIncludeBar.setVisibility(View.GONE);
+            rlTitleBar.setVisibility(View.GONE);
+        }
         Fragments.init().commitMessage(messageType, getSupportFragmentManager(), R.id.flMessage, chatInfo);
 
     }

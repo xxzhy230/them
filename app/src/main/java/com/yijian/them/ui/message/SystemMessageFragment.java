@@ -2,6 +2,7 @@ package com.yijian.them.ui.message;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -13,6 +14,7 @@ import com.yijian.them.basic.BasicActivity;
 import com.yijian.them.basic.BasicFragment;
 import com.yijian.them.ui.home.HomeMoudle;
 import com.yijian.them.ui.message.adapter.SystemMessageAdapter;
+import com.yijian.them.utils.JumpUtils;
 import com.yijian.them.utils.http.CallBack;
 import com.yijian.them.utils.http.Http;
 import com.yijian.them.utils.http.JsonResult;
@@ -52,6 +54,15 @@ public class SystemMessageFragment extends BasicFragment {
         adapter = new SystemMessageAdapter();
         lvSystem.setAdapter(adapter);
         systemMessage();
+        lvSystem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                HomeMoudle.DataBean item = adapter.getItem(position);
+                String contentUrl = item.getContentUrl();
+                String title = item.getTitle();
+                JumpUtils.jumpWebActivity(getActivity(),title,contentUrl);
+            }
+        });
     }
 
     private void systemMessage() {

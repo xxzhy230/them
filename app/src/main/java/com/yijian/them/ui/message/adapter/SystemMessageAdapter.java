@@ -4,8 +4,10 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.yijian.them.R;
 import com.yijian.them.ui.home.HomeMoudle;
 import com.yijian.them.utils.Times;
@@ -26,8 +28,8 @@ public class SystemMessageAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
-        return null;
+    public HomeMoudle.DataBean getItem(int position) {
+        return mList.get(position);
     }
 
     @Override
@@ -42,19 +44,23 @@ public class SystemMessageAdapter extends BaseAdapter {
             convertView = View.inflate(parent.getContext(), R.layout.item_system_message, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
-        }else {
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
         HomeMoudle.DataBean dataBean = mList.get(position);
         String title = dataBean.getTitle();
         holder.tvSystemTitle.setText(title);
-        String createDte = dataBean.getCreateDte();
+        String createDte = dataBean.getCreateAt();
         try {
-            if (!TextUtils.isEmpty(createDte)){
+            if (!TextUtils.isEmpty(createDte)) {
                 holder.tvSystemTime.setText(Times.getTime(createDte));
             }
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+        String imgUrl = dataBean.getImgUrl();
+        if (!TextUtils.isEmpty(imgUrl)) {
+            Picasso.with(parent.getContext()).load(imgUrl).into(holder.ivImage);
         }
         return convertView;
     }
@@ -70,6 +76,9 @@ public class SystemMessageAdapter extends BaseAdapter {
         TextView tvSystemTitle;
         @BindView(R.id.tvSystemTime)
         TextView tvSystemTime;
+        @BindView(R.id.ivImage)
+        ImageView ivImage;
+
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);

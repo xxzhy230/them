@@ -3,14 +3,22 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal">
-
+    <com.gcssloop.widget.RCRelativeLayout
+        android:id="@+id/rcrlImage"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:round_corner="10dp">
     <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:scaleType="centerCrop"
+        android:id="@+id/ivImage"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:src="@mipmap/message_notice" />
-
+    </com.gcssloop.widget.RCRelativeLayout>
     <LinearLayout
+        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="15dp"
@@ -21,7 +29,6 @@
             android:id="@+id/tvSystemTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="1"
             android:textColor="@color/color_FF333333"
             android:textSize="16dp" />
 
@@ -30,7 +37,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="1"
             android:textColor="@color/color_FF999999"
             android:textSize="13dp" />
     </LinearLayout>

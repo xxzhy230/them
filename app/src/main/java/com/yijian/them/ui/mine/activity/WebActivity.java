@@ -1,16 +1,6 @@
 package com.yijian.them.ui.mine.activity;
 
-import android.content.Intent;
-import android.graphics.pdf.PdfRenderer;
-import android.net.Uri;
-import android.net.http.SslError;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.ParcelFileDescriptor;
-import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
-import android.view.View;
-import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;

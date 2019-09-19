@@ -616,5 +616,73 @@ public class HomeMoudle {
         public void setImgUrl(String imgUrl) {
             this.imgUrl = imgUrl;
         }
+
+        /**
+         * 评论点赞消息
+         */
+
+        private String commentContent;
+        private String dynamicImg;
+        private String pushAt;
+        private String replyContent;
+        private String toUid;
+        private String pushType;
+        private String pushId;
+
+        public String getCommentContent() {
+            return commentContent;
+        }
+
+        public void setCommentContent(String commentContent) {
+            this.commentContent = commentContent;
+        }
+
+        public String getDynamicImg() {
+            return dynamicImg;
+        }
+
+        public void setDynamicImg(String dynamicImg) {
+            this.dynamicImg = dynamicImg;
+        }
+
+        public String getPushAt() {
+            return pushAt;
+        }
+
+        public void setPushAt(String pushAt) {
+            this.pushAt = pushAt;
+        }
+
+        public String getReplyContent() {
+            return replyContent;
+        }
+
+        public void setReplyContent(String replyContent) {
+            this.replyContent = replyContent;
+        }
+
+        public String getToUid() {
+            return toUid;
+        }
+
+        public void setToUid(String toUid) {
+            this.toUid = toUid;
+        }
+
+        public String getPushType() {
+            return pushType;
+        }
+
+        public void setPushType(String pushType) {
+            this.pushType = pushType;
+        }
+
+        public String getPushId() {
+            return pushId;
+        }
+
+        public void setPushId(String pushId) {
+            this.pushId = pushId;
+        }
     }
 }

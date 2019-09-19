@@ -308,7 +308,7 @@ public interface AuthApi {
      */
     @GET("tag")
     Observable<JsonResult<List<HomeMoudle.DataBean>>> tag(@Query("page") String page,
-                                                           @Query("topicId") String topicId);
+                                                          @Query("topicId") String topicId);
 
     /**
      * 查看单条动态
@@ -385,6 +385,7 @@ public interface AuthApi {
     @PUT("v2/team/{teamId}")
     Observable<JsonResult<String>> teamOutOrAdd(@Path("teamId") String teamId,
                                                 @Query("type") String type);
+
     /**
      * 删除小队
      *
@@ -539,9 +540,15 @@ public interface AuthApi {
     @Multipart
     @POST("group/")
     Observable<JsonResult<Object>> groupHead(@Body Map<String, String> params);
+
     /**
      * 系统消息
      */
     @GET("announcement")
     Observable<JsonResult<List<HomeMoudle.DataBean>>> systemMessage();
+    /**
+     * 动态消息
+     */
+    @GET("push/dynamic")
+    Observable<JsonResult<List<HomeMoudle.DataBean>>> dynamicMessage();
 }
