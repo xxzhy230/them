@@ -51,7 +51,15 @@ public class DynamicMessageAdapter extends BaseAdapter {
         }
         HomeMoudle.DataBean dataBean = mList.get(position);
         String fromUname = dataBean.getFromUname();
-        holder.tvSystemTitle.setText(fromUname + " 赞了你的动态");
+        String pushType = dataBean.getPushType();
+        if ("2".equals(pushType)){
+            holder.tvSystemTitle.setText(fromUname + " 赞了你的动态");
+        }else if ("31".equals(pushType)){
+            holder.tvSystemTitle.setText(fromUname + " 评论你的动态");
+        }else if ("32".equals(pushType)){
+            holder.tvSystemTitle.setText(fromUname + " 回复你的动态");
+        }
+
         String commentContent = dataBean.getCommentContent();
         if (TextUtils.isEmpty(commentContent)) {
             holder.tvContent.setVisibility(View.GONE);

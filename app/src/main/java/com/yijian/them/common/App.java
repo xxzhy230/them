@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.imsdk.TIMConnListener;
 import com.tencent.imsdk.TIMConversation;
 import com.tencent.imsdk.TIMGroupEventListener;
@@ -59,6 +60,12 @@ public class App extends Application {
         initIM();
         //初始化极光
         initJpush();
+        //初始化bugly
+        initBugly();
+    }
+
+    private void initBugly() {
+        CrashReport.initCrashReport(getApplicationContext(), "348de53b1b", true);
     }
 
     private void initJpush() {
