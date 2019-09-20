@@ -2,9 +2,12 @@ package com.yijian.them.utils.dialog;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -14,16 +17,22 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+import com.xxzhy.okhttputils.callback.FileCallBack;
 import com.yijian.them.R;
 import com.yijian.them.utils.FileUtil;
 import com.yijian.them.view.FlyBanner;
+import com.yqjr.utils.service.OkHttp;
 import com.yqjr.utils.utils.ToastUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
+
+import okhttp3.Call;
 
 
 public class ImageDialog extends BaseDialog {
@@ -50,7 +59,7 @@ public class ImageDialog extends BaseDialog {
         ivImageSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               String url = urls.get(selectPosition);
+                String url = urls.get(selectPosition);
                 if (onSaveImageListener != null) {
                     onSaveImageListener.onSaveImage(url);
                 }
@@ -78,7 +87,7 @@ public class ImageDialog extends BaseDialog {
         window.setGravity(Gravity.CENTER);
         lp.width = WindowManager.LayoutParams.MATCH_PARENT; // 宽度
         lp.height = WindowManager.LayoutParams.MATCH_PARENT; // 高度
-        lp.y=0;
+        lp.y = 0;
         window.setAttributes(lp);
         try {
             Context context = getContext();
@@ -95,6 +104,7 @@ public class ImageDialog extends BaseDialog {
 
         }
     }
+
     /**
      * 保存图片
      */
@@ -115,37 +125,27 @@ public class ImageDialog extends BaseDialog {
     }
 
     private void downLoad(String url) {
-        //Target
-        Target target = new Target() {
-
+        String storePath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "them";
+        File appDir = new File(storePath);
+        if (!appDir.exists()) {
+            appDir.mkdir();
+        }
+        AlertUtils.showProgress(false,getContext());
+        OkHttp.get().url(url).build().execute(new FileCallBack(storePath, System.currentTimeMillis() + ".jpg") {
             @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                String imageName = System.currentTimeMillis() + ".png";
-
-                File dcimFile = FileUtil.getDCIMFile(FileUtil.PATH_PHOTOGRAPH, imageName);
-
-                FileOutputStream ostream = null;
-                try {
-                    ostream = new FileOutputStream(dcimFile);
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, ostream);
-                    ostream.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            public void onError(Call call, Exception e, int i) {
+                System.out.println(e.toString());
             }
 
             @Override
-            public void onBitmapFailed(Drawable errorDrawable) {
-                ToastUtils.toastCenter(getContext(), "下载图片失败");
+            public void onResponse(File file, int i) {
+                Uri uri = Uri.fromFile(file);
+                getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
+                AlertUtils.dismissProgress();
+                ToastUtils.toastCenter(getContext(),"保存完成");
             }
 
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-                ToastUtils.toastCenter(getContext(), "下载图片成功");
-
-            }
-        };
-        Picasso.with(getContext()).load(url).into(target);
+        });
     }
 
     public interface OnSaveImageListener {

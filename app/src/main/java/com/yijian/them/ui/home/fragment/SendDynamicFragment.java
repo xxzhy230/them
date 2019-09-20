@@ -261,7 +261,7 @@ public class SendDynamicFragment extends BasicFragment {
     }
 
     private void openAlbum() {
-        PictureSelectionModel pictureSelectionModel = PictureSelector.create(this).openGallery(PictureMimeType.ofAll());
+        PictureSelectionModel pictureSelectionModel = PictureSelector.create(this).openGallery(PictureMimeType.ofImage());
         pictureSelectionModel.compress(true);
         pictureSelectionModel.selectionMode(PictureConfig.SINGLE);
         pictureSelectionModel.isCamera(false).

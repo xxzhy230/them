@@ -25,6 +25,7 @@ android {
             abiFilters 'armeabi', 'arm64-v8a', 'armeabi-v7a'
         }
     }
+
     buildTypes {
         release {
             signingConfig signingConfigs.config
