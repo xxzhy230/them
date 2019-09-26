@@ -1,7 +1,11 @@
 package com.yijian.them.ui.home.fragment;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -53,7 +57,6 @@ public class NearbyFragment extends BasicFragment implements OnRefreshListener, 
     SmartRefreshLayout srlLayout;
     private int page = 1;
     private TuijianAdapter adapter;
-    private String loadUrl;
     private ImageDialog imageDialog;
 
     @Override
@@ -67,16 +70,46 @@ public class NearbyFragment extends BasicFragment implements OnRefreshListener, 
         return rootView;
     }
 
+    private final int FIND_LOCATION = 10001;
+
+    private void location() {
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                "android.permission.ACCESS_FINE_LOCATION")
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{"android.permission.ACCESS_FINE_LOCATION"},
+                    FIND_LOCATION);
+        } else {
+            getData();
+        }
+    }
 
     @Override
     protected void initView(Bundle bundle) {
         context = (BasicActivity) getActivity();
         adapter = new TuijianAdapter();
+        adapter.setType(1);
         lvHomeTuijian.setAdapter(adapter);
+        location();
+    }
+
+    private void getData() {
         App.locationUtil.onceLocation(true);
         App.locationUtil.startLocation();
+        App.locationUtil.setOnLocationListener(new LocationUtil.OnLocationListener() {
+            @Override
+            public void onLocation(double latitude, double longitude, String cityCode) {
+                if (TextUtils.isEmpty(cityCode)) {
+                    llDefault.setVisibility(View.VISIBLE);
+                    tvDefault.setText("请开启定位权限");
+                    ivDefault.setImageResource(R.mipmap.default_load);
+                } else {
+                    llDefault.setVisibility(View.GONE);
+                    nearby(cityCode, StringUtils.double6String(latitude), StringUtils.double6String(longitude));
+                }
+            }
+        });
         adapter.setOnLikeListener(new TuijianAdapter.OnLikeListener() {
-
             @Override
             public void like(HomeMoudle.DataBean dataBean) {
                 isLike(dataBean);
@@ -89,7 +122,6 @@ public class NearbyFragment extends BasicFragment implements OnRefreshListener, 
                 imageDialog.setOnSaveImageListener(new ImageDialog.OnSaveImageListener() {
                     @Override
                     public void onSaveImage(String url) {
-                        loadUrl = url;
                         imageDialog.saveImage(url);
                     }
                 });
@@ -127,12 +159,7 @@ public class NearbyFragment extends BasicFragment implements OnRefreshListener, 
     public void onResume() {
         super.onResume();
         page = 1;
-        App.locationUtil.setOnLocationListener(new LocationUtil.OnLocationListener() {
-            @Override
-            public void onLocation(double latitude, double longitude, String cityCode) {
-                nearby(cityCode, StringUtils.double6String(latitude), StringUtils.double6String(longitude));
-            }
-        });
+        getData();
     }
 
     private void nearby(String cityCode, String latitude, String longitude) {
@@ -260,5 +287,23 @@ public class NearbyFragment extends BasicFragment implements OnRefreshListener, 
                         ToastUtils.toastCenter(getActivity(), errorMessage + "");
                     }
                 }));
+    }
+
+
+    /**
+     * @param requestCode  申请码
+     * @param permissions  申请的权限
+     * @param grantResults 结果
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == FIND_LOCATION) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getData();
+            } else {
+                ToastUtils.toastCenter(getActivity(), "请开启定位权限");
+            }
+        }
     }
 }

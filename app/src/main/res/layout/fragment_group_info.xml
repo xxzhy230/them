@@ -19,13 +19,13 @@
             android:layout_centerVertical="true"
             android:paddingLeft="15dp"
             android:paddingTop="10dp"
-
             android:paddingRight="15dp"
             android:paddingBottom="10dp"
             android:src="@mipmap/navi_back" />
 
 
         <TextView
+            android:id="@+id/tvGroupTitle"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_centerInParent="true"
@@ -61,7 +61,7 @@
                     android:layout_height="wrap_content"
                     android:drawableRight="@mipmap/mine_icon_more"
                     android:drawablePadding="10dp"
-                    android:text="查看三名群成员"
+                    android:text="查看1名群成员"
                     android:textColor="@color/color_FF999999"
                     android:textSize="15dp" />
             </LinearLayout>

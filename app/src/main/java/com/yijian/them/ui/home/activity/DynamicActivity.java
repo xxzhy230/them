@@ -58,7 +58,7 @@ public class DynamicActivity extends BasicActivity {
         }
         if (messageType == 5) {
             tvRightBar.setVisibility(View.VISIBLE);
-            tvRightBar.setText("创建群");
+            tvRightBar.setText("创建");
         }
         Fragments.init().commitDynamic(messageType, getSupportFragmentManager(), R.id.flDynamic, dynamicId);
     }

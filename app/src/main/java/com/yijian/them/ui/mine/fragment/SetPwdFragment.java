@@ -17,6 +17,7 @@ import com.yijian.them.common.Config;
 import com.yijian.them.ui.login.DataMoudle;
 import com.yijian.them.utils.JumpUtils;
 import com.yijian.them.utils.dialog.AlertUtils;
+import com.yijian.them.utils.fragments.Fragments;
 import com.yijian.them.utils.http.CallBack;
 import com.yijian.them.utils.http.Http;
 import com.yijian.them.utils.http.JsonResult;
@@ -112,7 +113,6 @@ public class SetPwdFragment extends BasicFragment {
                 }else{
                     forget();
                 }
-
                 break;
             case R.id.tvForgetPwd:
                 AlertUtils.showProgress(false,getActivity());
@@ -144,7 +144,8 @@ public class SetPwdFragment extends BasicFragment {
                         ToastUtils.toastCenter(getActivity(), "修改成功");
                         AppManager.getAppManager().finishAllActivity();
                         SPUtils.getInstance().edit().clear().commit();
-                        JumpUtils.jumpLoginActivity(getActivity(),1,"","");
+                        JumpUtils.jumpLoginActivity(getActivity(),0,"","");
+                        Fragments.init().finish();
                     }
 
                     @Override

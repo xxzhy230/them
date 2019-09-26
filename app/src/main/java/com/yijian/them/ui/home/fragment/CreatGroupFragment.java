@@ -32,8 +32,6 @@ import butterknife.Unbinder;
  * 群
  */
 public class CreatGroupFragment extends BasicFragment {
-
-
     @BindView(R.id.etGroupName)
     EditText etGroupName;
     @BindView(R.id.etGroupContent)

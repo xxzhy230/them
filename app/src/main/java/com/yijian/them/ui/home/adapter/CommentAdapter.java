@@ -58,10 +58,9 @@ public class CommentAdapter extends BaseAdapter {
             holder.tvNickName1.setText(fromUname + ": ");
             holder.tvContent.setText(content);
         } else {
-            String str = "<font color='#999999'>" + fromUname + "</font>回复<font color='#999999'>@+" + replyListMoudle.getToUname() + "</font>:<font color='#333333'>" + content + "</font>";
+            String str = "<font color='#999999'>" + fromUname + "</font>回复<font color='#999999'>@" + replyListMoudle.getToUname() + "</font>:<font color='#333333'>" + content + "</font>";
             holder.tvContent.setText(Html.fromHtml(str));
         }
-
         if (replyList.size() > 2) {
             if (position == 1) {
                 holder.tvCommentNum.setVisibility(View.VISIBLE);

@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso;
 import com.yijian.them.R;
 import com.yijian.them.api.AuthApi;
 import com.yijian.them.ui.mine.moudel.Follwermoudel;
+import com.yijian.them.utils.JumpUtils;
 import com.yijian.them.view.CircleImageView;
 import com.yqjr.utils.service.OkHttp;
 import com.yqjr.utils.service.StringJsonCallBack;
@@ -99,6 +100,14 @@ public class FollwerAdapter extends BaseAdapter {
             public void onClick(View v) {
                 Follwermoudel.DataBean dataBean = data.get(position);
                 isfollow(parent.getContext(), dataBean);
+            }
+        });
+        holder.civHead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Follwermoudel.DataBean dataBean = data.get(position);
+                int userId = dataBean.getUserId();
+                JumpUtils.jumpUserInfoActivity(parent.getContext(),userId);
             }
         });
         return convertView;

@@ -71,16 +71,13 @@ public class MessageFragment extends BasicFragment implements ConversationManage
     protected void initView(Bundle bundle) {
         // 未读消息监视器
         ConversationManagerKit.getInstance().addUnreadWatcher(this);
-
         TitleBarLayout titleBar = conversationLayout.getTitleBar();
         titleBar.setVisibility(View.GONE);
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("消息列表刷新 ", "---------------");
         // 会话列表面板的默认 UI 和交互初始化
         conversationLayout.initDefault();
         adapter = conversationLayout.getConversationList().getAdapter();
@@ -103,7 +100,6 @@ public class MessageFragment extends BasicFragment implements ConversationManage
             }
             SPUtils.putString(Config.DELTEAMCHAT, null);
         }
-
         if (itemCount == 0) {
             llDefault.setVisibility(View.VISIBLE);
             tvDefault.setText("暂无消息");
@@ -122,14 +118,14 @@ public class MessageFragment extends BasicFragment implements ConversationManage
                 JumpUtils.jumpMessageActivity(getActivity(), 0, chatInfo);
             }
         });
-        conversationLayout.getConversationList().setOnItemLongClickListener(new ConversationListLayout.OnItemLongClickListener() {
-            @Override
-            public void OnItemLongClick(View view, int i, ConversationInfo conversationInfo) {
-                String id = adapter.getItem(i).getId();
-                TIMManager.getInstance().deleteConversation(TIMConversationType.Group, id);
-                adapter.removeItem(i);
-            }
-        });
+//        conversationLayout.getConversationList().setOnItemLongClickListener(new ConversationListLayout.OnItemLongClickListener() {
+//            @Override
+//            public void OnItemLongClick(View view, int i, ConversationInfo conversationInfo) {
+//                String id = adapter.getItem(i).getId();
+//                TIMManager.getInstance().deleteConversation(TIMConversationType.Group, id);
+//                adapter.removeItem(i);
+//            }
+//        });
     }
 
     @OnClick({R.id.rlSystem, R.id.rlTeamMessage, R.id.rlPZ})
@@ -149,7 +145,6 @@ public class MessageFragment extends BasicFragment implements ConversationManage
 
     @Override
     public void updateUnread(int i) {
-        System.out.println("----------------" + i);
     }
 
     private void startChatActivity(ConversationInfo conversationInfo) {

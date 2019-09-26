@@ -187,7 +187,7 @@ public class LoginFragment extends BasicFragment {
                     logs = "Failed with errorCode = " + code;
                     Log.e("them", logs);
             }
-            ExampleUtil.showToast(logs, getActivity());
+//            ExampleUtil.showToast(logs, getActivity());
         }
     };
     private static final int MSG_SET_ALIAS = 1001;

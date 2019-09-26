@@ -60,17 +60,29 @@ public class TagAdapter extends BaseAdapter {
         if (!TextUtils.isEmpty(tagUrl)) {
             Picasso.with(parent.getContext()).load(tagUrl).into(holder.ivImageHead);
         }
+        boolean follow = dataBean.isFollow();
+
         if (type == 1) {
-            holder.tvAddOrDel.setVisibility(View.VISIBLE);
+            holder.tvAddOrDel.setText("已参与");
+            holder.tvAddOrDel.setBackgroundResource(R.drawable.shape_gray_25_bg);
+            holder.tvAddOrDel.setTextColor(parent.getContext().getResources().getColor(R.color.color_FF999999));
         } else {
-            holder.tvAddOrDel.setVisibility(View.GONE);
+            if (follow) {
+                holder.tvAddOrDel.setText("已参与");
+                holder.tvAddOrDel.setBackgroundResource(R.drawable.shape_gray_25_bg);
+                holder.tvAddOrDel.setTextColor(parent.getContext().getResources().getColor(R.color.color_FF999999));
+            } else {
+                holder.tvAddOrDel.setText("参与");
+                holder.tvAddOrDel.setBackgroundResource(R.drawable.shape_3b7aff_25_bg);
+                holder.tvAddOrDel.setTextColor(parent.getContext().getResources().getColor(R.color.white));
+            }
         }
         holder.tvAddOrDel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 HomeMoudle.DataBean dataBean = dataBeans.get(position);
                 if (onOffFollowedListener != null) {
-                    onOffFollowedListener.offFollowed(dataBean);
+                    onOffFollowedListener.offFollowed(dataBean,type);
                 }
             }
         });
@@ -112,6 +124,6 @@ public class TagAdapter extends BaseAdapter {
     }
 
     public interface OnOffFollowedListener {
-        void offFollowed(HomeMoudle.DataBean dataBean);
+        void offFollowed(HomeMoudle.DataBean dataBean, int type);
     }
 }

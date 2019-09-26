@@ -33,6 +33,7 @@ import com.yijian.them.common.Config;
 import com.yijian.them.ui.login.DataMoudle;
 import com.yijian.them.utils.JumpUtils;
 import com.yijian.them.utils.Times;
+import com.yijian.them.utils.dialog.AlertUtils;
 import com.yijian.them.utils.dialog.SealectImageDialog;
 import com.yijian.them.utils.dialog.DialogOnitem;
 import com.yijian.them.utils.http.CallBack;
@@ -175,24 +176,28 @@ public class EditUserInfoFragment extends BasicFragment {
                 pickBirth();
                 break;
             case R.id.tvLogin:
+                AlertUtils.showProgress(false, getActivity());
                 if (headFile == null) {
                     ToastUtils.toastCenter(getActivity(), "请选择头像");
+                    AlertUtils.dismissProgress();
                     return;
                 }
                 String nickName = etNick.getText().toString().trim();
                 if (TextUtils.isEmpty(nickName)) {
                     ToastUtils.toastCenter(getActivity(), "请输入昵称");
+                    AlertUtils.dismissProgress();
                     return;
                 }
                 if (TextUtils.isEmpty(sex)) {
                     ToastUtils.toastCenter(getActivity(), "请选择性别");
+                    AlertUtils.dismissProgress();
                     return;
                 }
                 if (TextUtils.isEmpty(birthday)) {
                     ToastUtils.toastCenter(getActivity(), "请选择生日");
+                    AlertUtils.dismissProgress();
                     return;
                 }
-
                 register(headFile, nickName, sex, birthday);
                 break;
         }
@@ -208,8 +213,9 @@ public class EditUserInfoFragment extends BasicFragment {
                 .compose(context.<JsonResult<DataMoudle.DataBean>>applySchedulers())
                 .subscribe(context.newSubscriber(new CallBack<DataMoudle.DataBean>() {
                     @Override
-                    public void success(DataMoudle.DataBean response,int code) {
+                    public void success(DataMoudle.DataBean response, int code) {
                         Log.d("注册: ", response + "");
+                        AlertUtils.dismissProgress();
                         if (response != null) {
                             String token = response.getToken();
                             String userSign = response.getUserSign();
@@ -226,6 +232,7 @@ public class EditUserInfoFragment extends BasicFragment {
                     }
                 }));
     }
+
     /**
      * 生日
      */

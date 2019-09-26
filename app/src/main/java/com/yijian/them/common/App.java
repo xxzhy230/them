@@ -1,9 +1,9 @@
 package com.yijian.them.common;
 
-import android.app.Application;
 import android.content.Context;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.multidex.MultiDexApplication;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
@@ -22,7 +22,6 @@ import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.config.CustomFaceConfig;
 import com.tencent.qcloud.tim.uikit.config.GeneralConfig;
 import com.tencent.qcloud.tim.uikit.config.TUIKitConfigs;
-import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yijian.them.utils.http.Http;
 import com.yijian.them.utils.location.LocationUtil;
 import com.yqjr.utils.Utils;
@@ -31,7 +30,7 @@ import java.util.List;
 
 import cn.jpush.android.api.JPushInterface;
 
-public class App extends Application {
+public class App extends MultiDexApplication {
     public static LocationUtil locationUtil;
     public static int mWidth;
     public static int mHeight;

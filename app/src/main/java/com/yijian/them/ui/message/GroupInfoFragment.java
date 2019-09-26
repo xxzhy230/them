@@ -166,6 +166,7 @@ public class GroupInfoFragment extends BasicFragment {
 
             @Override
             public void onSuccess(List<TIMGroupMemberInfo> timGroupMemberInfos) {
+                tvGroupNum.setText("查看" + timGroupMemberInfos.size() + "名群成员");
                 for (int i = 0; i < timGroupMemberInfos.size(); i++) {
                     TIMGroupMemberInfo timGroupMemberInfo = timGroupMemberInfos.get(i);
                     String userId = timGroupMemberInfo.getUser();

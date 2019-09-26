@@ -32,6 +32,7 @@ import com.yijian.them.utils.StringUtils;
 import com.yijian.them.utils.Times;
 import com.yijian.them.utils.dialog.AlertUtils;
 import com.yijian.them.utils.dialog.DynamicDialog;
+import com.yijian.them.utils.dialog.ImageDialog;
 import com.yijian.them.utils.http.CallBack;
 import com.yijian.them.utils.http.Http;
 import com.yijian.them.utils.http.JsonResult;
@@ -101,6 +102,7 @@ public class CommentFragment extends BasicFragment {
     private int userId;
     private CommentListAdapter adapter;
     private HomeMoudle.DataBean commentData;
+    private ImageDialog imageDialog;
 
     @Override
     protected void onClickEvent() {
@@ -122,7 +124,6 @@ public class CommentFragment extends BasicFragment {
             public void keyBoardShow(int height) {
                 StringUtils.setMargins(llComment, 0, 0, 0, height);
             }
-
             @Override
             public void keyBoardHide(int height) {
                 StringUtils.setMargins(llComment, 0, 0, 0, 0);
@@ -142,7 +143,6 @@ public class CommentFragment extends BasicFragment {
         msvComment.setOnScrollListener(new MyScrollView.OnScrollListener() {
             @Override
             public void onScroll(int scrollY) {
-                System.out.println("---------" + scrollY);
                 if (scrollY > 100) {
                     civHead.setVisibility(View.VISIBLE);
                     tvNickName.setVisibility(View.VISIBLE);
@@ -157,11 +157,14 @@ public class CommentFragment extends BasicFragment {
     }
 
 
-    @OnClick({R.id.ivBack, R.id.ivMore, R.id.tvZan, R.id.tvSend})
+    @OnClick({R.id.ivBack, R.id.ivMore, R.id.tvZan, R.id.tvSend,R.id.civHead1})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ivBack:
                 getActivity().finish();
+                break;
+            case R.id.civHead1:
+                JumpUtils.jumpUserInfoActivity(getContext(),userId);
                 break;
             case R.id.ivMore:
                 if (SPUtils.getInt(Config.USERID) == userId) {
@@ -257,11 +260,17 @@ public class CommentFragment extends BasicFragment {
                             }
                             ImageAdapter imageAdapter = new ImageAdapter(imgUrls, 1);
                             nsgvImage.setAdapter(imageAdapter);
-
                             imageAdapter.setOnSaveImageListener(new ImageAdapter.OnSaveImageListener() {
                                 @Override
                                 public void onSaveImage(List<String> urls) {
-//
+                                    imageDialog = new ImageDialog(getActivity(), urls);
+                                    imageDialog.show();
+                                    imageDialog.setOnSaveImageListener(new ImageDialog.OnSaveImageListener() {
+                                        @Override
+                                        public void onSaveImage(String url) {
+                                            imageDialog.saveImage(url);
+                                        }
+                                    });
                                 }
                             });
                         } else {

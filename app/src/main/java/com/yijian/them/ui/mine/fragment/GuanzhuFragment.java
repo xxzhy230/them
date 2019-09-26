@@ -4,14 +4,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.yijian.them.R;
 import com.yijian.them.api.AuthApi;
 import com.yijian.them.basic.BasicFragment;
-import com.yijian.them.ui.home.HomeMoudle;
-import com.yijian.them.ui.mine.activity.FollowerActivity;
 import com.yijian.them.ui.mine.adapter.FollwerAdapter;
 import com.yijian.them.ui.mine.moudel.Follwermoudel;
 import com.yqjr.utils.service.OkHttp;
@@ -28,6 +29,12 @@ import okhttp3.Call;
 public class GuanzhuFragment extends BasicFragment {
     @BindView(R.id.lvGuanzhuList)
     ListView lvGuanzhuList;
+    @BindView(R.id.ivDefault)
+    ImageView ivDefault;
+    @BindView(R.id.tvDefault)
+    TextView tvDefault;
+    @BindView(R.id.llDefault)
+    LinearLayout llDefault;
     private String userId;
     private FollwerAdapter adapter;
 
@@ -70,17 +77,22 @@ public class GuanzhuFragment extends BasicFragment {
             @Override
             public void onResponse(String s, int i) {
                 super.onResponse(s, i);
-                System.out.println("关注列表 : " + s);
                 Gson gson = new Gson();
                 Follwermoudel follwermoudel = gson.fromJson(s, Follwermoudel.class);
                 int code = follwermoudel.getCode();
-                if (code==200) {
+                if (code == 200) {
                     List<Follwermoudel.DataBean> data = follwermoudel.getData();
                     if (data != null && data.size() > 0) {
+                        llDefault.setVisibility(View.GONE);
                         adapter.setData(data);
+                    } else {
+                        ivDefault.setImageResource(R.mipmap.default_attention);
+                        tvDefault.setText("Ta没有关注任何人");
+                        llDefault.setVisibility(View.VISIBLE);
                     }
                 }
             }
         });
     }
+
 }

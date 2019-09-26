@@ -244,12 +244,18 @@ private TeamMessageFragment teamMessageFragment;
                 if (editFragment == null) {
                     setPwdFragment = new SetPwdFragment();
                 }
+                if (setPwdFragment==null){
+                    return;
+                }
                 setPwdFragment.setType(0);
                 fragmentTransaction.replace(frameLayout, setPwdFragment);
                 break;
             case 13://忘记密码
-                if (editFragment == null) {
+                if (setPwdFragment == null) {
                     setPwdFragment = new SetPwdFragment();
+                }
+                if (setPwdFragment==null){
+                    return;
                 }
                 setPwdFragment.setType(1);
                 fragmentTransaction.replace(frameLayout, setPwdFragment);

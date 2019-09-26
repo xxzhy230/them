@@ -155,7 +155,7 @@ public class EditInfoFragment extends BasicFragment {
                 JumpUtils.jumpMineActivity(getActivity(),10,"更改昵称");
                 break;
             case R.id.llSex:
-                getSex();
+//                getSex();
                 break;
             case R.id.llBirthday:
                 pickBirth();

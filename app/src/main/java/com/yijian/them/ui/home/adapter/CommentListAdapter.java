@@ -51,7 +51,7 @@ public class CommentListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        HomeMoudle.DataBean dataBean = dataBeans.get(position);
+        final HomeMoudle.DataBean dataBean = dataBeans.get(position);
         String content = dataBean.getContent();
         String fromAvatar = dataBean.getFromAvatar();
         String fromUname = dataBean.getFromUname();
@@ -82,6 +82,13 @@ public class CommentListAdapter extends BaseAdapter {
                 Config.dataBean = dataBean;
                 JumpUtils.jumpDynamicActivity(parent.getContext(),8,"",dynamicId);
 
+            }
+        });
+        holder.civHead1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String fromUid = dataBean.getFromUid();
+                JumpUtils.jumpUserInfoActivity(parent.getContext(),Integer.parseInt(fromUid));
             }
         });
         return convertView;

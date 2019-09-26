@@ -24,7 +24,17 @@ public class ImageAdapter extends BaseAdapter {
     private List<String> mlist = new ArrayList<>();
     private OnSaveImageListener onSaveImageListener;
     private int type = 1; // 1 动态列表  2 发送动态
+    private boolean isVideo;
     private OnAddImageListener onAddImageListener;
+    private OnPlayListener onPlayListener;
+
+    public void setOnPlayListener(OnPlayListener onPlayListener) {
+        this.onPlayListener = onPlayListener;
+    }
+
+    public void setVideo(boolean video) {
+        isVideo = video;
+    }
 
     public void setOnAddImageListener(OnAddImageListener onAddImageListener) {
         this.onAddImageListener = onAddImageListener;
@@ -76,23 +86,37 @@ public class ImageAdapter extends BaseAdapter {
             layoutParams.height = StringUtils.dp2px(parent.getContext(), 100);
             holder.ivImage.setLayoutParams(layoutParams);
         }
+        if (isVideo) {
+            holder.ivPlay.setVisibility(View.VISIBLE);
+        } else {
+            holder.ivPlay.setVisibility(View.GONE);
+        }
         String image = mlist.get(position);
         if (type == 1) {
             Picasso.with(parent.getContext()).load(image).into(holder.ivImage);
-            holder.ivImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (onSaveImageListener != null) {
-                        onSaveImageListener.onSaveImage(mlist);
+            if (!isVideo) {
+                holder.ivImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (onSaveImageListener != null) {
+                            onSaveImageListener.onSaveImage(mlist);
+                        }
                     }
-                }
-            });
+                });
+            }else {
+                holder.ivPlay.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (onPlayListener != null) {
+                            onPlayListener.onPlay();
+                        }
+                    }
+                });
+            }
         } else {
-
             if ("1".equals(image)) {
                 holder.ivDel.setVisibility(View.INVISIBLE);
                 Picasso.with(parent.getContext()).load(R.mipmap.self_add).into(holder.ivImage);
-//                holder.ivImage.setImageResource(R.mipmap.self_add);
             } else {
                 holder.ivDel.setVisibility(View.VISIBLE);
                 File file = new File(image);
@@ -121,7 +145,6 @@ public class ImageAdapter extends BaseAdapter {
                 }
             });
         }
-
         return convertView;
     }
 
@@ -135,6 +158,8 @@ public class ImageAdapter extends BaseAdapter {
         ImageView ivImage;
         @BindView(R.id.ivDel)
         ImageView ivDel;
+        @BindView(R.id.ivPlay)
+        ImageView ivPlay;
 
 
         ViewHolder(View view) {
@@ -150,5 +175,9 @@ public class ImageAdapter extends BaseAdapter {
         void onAddImage();
 
         void onDelImage(int position);
+    }
+
+    public interface OnPlayListener {
+        void onPlay();
     }
 }

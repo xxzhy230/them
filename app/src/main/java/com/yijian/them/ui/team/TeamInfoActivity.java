@@ -63,7 +63,6 @@ public class TeamInfoActivity extends BasicActivity {
     public void initData() {
         ButterKnife.bind(this);
         teamId = getIntent().getStringExtra(Config.TEAMID);
-
     }
 
     @Override
@@ -73,7 +72,6 @@ public class TeamInfoActivity extends BasicActivity {
     }
 
     private void teamInfo(String teamId) {
-
         Http.http.createApi(AuthApi.class).teamInfo(teamId)
                 .compose(this.<JsonResult<TeamInfoMoudle.DataBean>>bindToLifecycle())
                 .compose(this.<JsonResult<TeamInfoMoudle.DataBean>>applySchedulers())
@@ -84,14 +82,7 @@ public class TeamInfoActivity extends BasicActivity {
                         List<TeamInfoMoudle.DataBean.MembersBean> members = dataBean.getMembers();
                         String teamImgUrl = dataBean.getTeamImgUrl();
                         teamName = dataBean.getTeamName();
-                        int teamImgWidth = dataBean.getTeamImgWidth();
-                        int teamImgHeight = dataBean.getTeamImgHeight();
                         tvTeamTitle.setText(teamName);
-//                        double width = App.mWidth;
-//                        double height = width * teamImgHeight / teamImgWidth;
-//                        ViewGroup.LayoutParams layoutParams = ivImage.getLayoutParams();
-//                        layoutParams.height = (int) height;
-//                        ivImage.setLayoutParams(layoutParams);
                         if (!TextUtils.isEmpty(teamImgUrl)) {
                             Picasso.with(TeamInfoActivity.this).load(teamImgUrl).into(ivImage);
                         }
@@ -128,6 +119,7 @@ public class TeamInfoActivity extends BasicActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ivBack:
+                finish();
                 break;
             case R.id.ivMore:
                 int userId = membersBean.getUserId();
@@ -160,7 +152,29 @@ public class TeamInfoActivity extends BasicActivity {
                 }
                 break;
             case R.id.tvAddTeam:
+                AlertUtils.showProgress(false,this);
+                teamOutOrAdd();
                 break;
         }
+    }
+
+    private void teamOutOrAdd() {
+        Http.http.createApi(AuthApi.class).teamOutOrAdd(teamId, "1")
+                .compose(this.<JsonResult<String>>bindToLifecycle())
+                .compose(this.<JsonResult<String>>applySchedulers())
+                .subscribe(this.newSubscriber(new CallBack<String>() {
+                    @Override
+                    public void success(String str, int code) {
+                        AlertUtils.dismissProgress();
+                        AlertUtils.dismissProgress();
+                        teamInfo(teamId);
+                    }
+
+                    @Override
+                    public void fail(String errorMessage, int status) {
+                        AlertUtils.dismissProgress();
+                        ToastUtils.toastCenter(TeamInfoActivity.this, errorMessage + "");
+                    }
+                }));
     }
 }

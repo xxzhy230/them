@@ -1,7 +1,10 @@
 package com.yijian.them.ui.team;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -152,12 +155,29 @@ public class TeamFragment extends BasicFragment implements OnRefreshListener, On
         rvTeam.setItemAnimator(null);
         teamAdapter = new TeamAdapter(getActivity());
         rvTeam.setAdapter(teamAdapter);
+        location();
+    }
+
+    private final int FIND_LOCATION = 10001;
+    private void location() {
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                "android.permission.ACCESS_FINE_LOCATION")
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{"android.permission.ACCESS_FINE_LOCATION"},
+                    FIND_LOCATION);
+        } else {
+            page = 1;
+            getData();
+        }
+    }
+
+    private void getData() {
         locationUtil = new LocationUtil(getActivity());
         locationUtil.onceLocation(true);
         locationUtil.setOnLocationListener(new LocationUtil.OnLocationListener() {
             @Override
             public void onLocation(double latitude, double longitude, String cityCode) {
-                page = 1;
                 getTeam(cityCode, StringUtils.double6String(latitude), StringUtils.double6String(longitude) + "", radius);
             }
         });
@@ -169,16 +189,7 @@ public class TeamFragment extends BasicFragment implements OnRefreshListener, On
         super.onResume();
         int creatTeam = SPUtils.getInt(Config.CREATTEAM);
         if (creatTeam == 1) {
-            locationUtil = new LocationUtil(getActivity());
-            locationUtil.onceLocation(true);
-            locationUtil.setOnLocationListener(new LocationUtil.OnLocationListener() {
-                @Override
-                public void onLocation(double latitude, double longitude, String cityCode) {
-                    page = 1;
-                    getTeam(cityCode, StringUtils.double6String(latitude), StringUtils.double6String(longitude) + "", radius);
-                }
-            });
-            locationUtil.startLocation();
+            getData();
             SPUtils.putInt(Config.CREATTEAM, 0);
         }
     }
@@ -234,29 +245,32 @@ public class TeamFragment extends BasicFragment implements OnRefreshListener, On
 
     @Override
     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-        locationUtil.onceLocation(true);
-        locationUtil.setOnLocationListener(new LocationUtil.OnLocationListener() {
-            @Override
-            public void onLocation(double latitude, double longitude, String cityCode) {
-                page = 1;
-                getTeam(cityCode, StringUtils.double6String(latitude),  StringUtils.double6String(longitude), radius);
-            }
-        });
-        locationUtil.startLocation();
-
+        page = 1;
+        getData();
         refreshLayout.finishRefresh();
     }
 
     @Override
     public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-        locationUtil.onceLocation(true);
-        locationUtil.setOnLocationListener(new LocationUtil.OnLocationListener() {
-            @Override
-            public void onLocation(double latitude, double longitude, String cityCode) {
-                getTeam(cityCode,  StringUtils.double6String(latitude),  StringUtils.double6String(longitude), radius);
-            }
-        });
-        locationUtil.startLocation();
+        getData();
         refreshLayout.finishLoadMore();
+    }
+
+    /**
+     * @param requestCode  申请码
+     * @param permissions  申请的权限
+     * @param grantResults 结果
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == FIND_LOCATION) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                page = 1;
+                getData();
+            } else {
+                ToastUtils.toastCenter(getActivity(), "请开启定位权限");
+            }
+        }
     }
 }

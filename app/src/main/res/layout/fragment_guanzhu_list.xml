@@ -5,11 +5,13 @@
     android:background="@color/white"
     android:orientation="vertical">
 
+    <include layout="@layout/include_default" />
+
     <ListView
-        android:layout_marginTop="15dp"
         android:id="@+id/lvGuanzhuList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="15dp"
         android:divider="@android:color/transparent"
         android:dividerHeight="10dp"
         android:paddingLeft="15dp"

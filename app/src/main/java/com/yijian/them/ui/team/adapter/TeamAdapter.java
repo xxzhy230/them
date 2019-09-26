@@ -43,7 +43,9 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.TeamViewHolder
         String teamName = dataBean.getTeamName();
         holder.tvTeamTitle.setText(teamName);
         String distance = dataBean.getDistance();
-        holder.tvTeamAddress.setText("距离你:" + (Double.parseDouble(distance) * 1000) +"Km");
+
+        holder.tvTeamAddress.setText("距离你:" + com.yijian.them.utils.StringUtils.getDis(distance));
+
 
         double teamImgHeight = dataBean.getTeamImgHeight();
         double teamImgWidth = dataBean.getTeamImgWidth();

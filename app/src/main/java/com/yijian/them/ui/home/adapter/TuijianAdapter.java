@@ -1,5 +1,6 @@
 package com.yijian.them.ui.home.adapter;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.Log;
@@ -19,6 +20,7 @@ import com.tencent.imsdk.ext.group.TIMGroupSelfInfo;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
 import com.yijian.them.R;
 import com.yijian.them.ui.home.HomeMoudle;
+import com.yijian.them.ui.home.activity.PlayPickActivity;
 import com.yijian.them.utils.JumpUtils;
 import com.yijian.them.utils.Times;
 import com.yijian.them.utils.dialog.GroupDialog;
@@ -37,6 +39,11 @@ import butterknife.ButterKnife;
 public class TuijianAdapter extends BaseAdapter {
     private List<HomeMoudle.DataBean> mList = new ArrayList<>();
     private OnLikeListener onLikeListener;
+    private int type = 0;
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public TuijianAdapter(List<HomeMoudle.DataBean> mList) {
         this.mList = mList;
@@ -97,6 +104,12 @@ public class TuijianAdapter extends BaseAdapter {
                 holder.nsgvImage.setLayoutParams(layoutParams);
             }
             ImageAdapter imageAdapter = new ImageAdapter(imgUrls, 1);
+            final String videoUrl = dataBean.getVideoUrl();
+            if (TextUtils.isEmpty(videoUrl)){
+                imageAdapter.setVideo(false);
+            }else{
+                imageAdapter.setVideo(true);
+            }
 
             holder.nsgvImage.setAdapter(imageAdapter);
             imageAdapter.setOnSaveImageListener(new ImageAdapter.OnSaveImageListener() {
@@ -105,6 +118,17 @@ public class TuijianAdapter extends BaseAdapter {
                     if (onLikeListener != null) {
                         onLikeListener.svaeImage(urls);
                     }
+                }
+            });
+            imageAdapter.setOnPlayListener(new ImageAdapter.OnPlayListener() {
+                @Override
+                public void onPlay() {
+                    HomeMoudle.DataBean dataBean = mList.get(position);
+                    List<String> imgUrls = dataBean.getImgUrls();
+                    Intent intent = new Intent(parent.getContext(), PlayPickActivity.class);
+                    intent.putExtra("videoUrls",videoUrl);
+                    intent.putExtra("imageUrls",imgUrls.get(0));
+                    parent.getContext().startActivity(intent);
                 }
             });
         } else {
@@ -158,13 +182,18 @@ public class TuijianAdapter extends BaseAdapter {
             }
         }
         String localName = dataBean.getLocalName();
+        String distance = dataBean.getDistance();
+
         if (!TextUtils.isEmpty(localName)) {
             holder.llAddress.setVisibility(View.VISIBLE);
-            holder.tvAddress.setText(localName);
+            if (type == 1) {
+                holder.tvAddress.setText(localName + " " + com.yijian.them.utils.StringUtils.getDis(distance));
+            } else {
+                holder.tvAddress.setText(localName);
+            }
         } else {
             holder.llAddress.setVisibility(View.GONE);
         }
-
         String groupName = dataBean.getGroupName();
         final String groupId = dataBean.getGroupId();
         if (!TextUtils.isEmpty(groupName) && !TextUtils.isEmpty(groupId)) {
@@ -227,7 +256,6 @@ public class TuijianAdapter extends BaseAdapter {
                 TIMGroupManager.getInstance().getSelfInfo(groupId, new TIMValueCallBack<TIMGroupSelfInfo>() {
                     @Override
                     public void onError(int i, String s) {
-                        Log.d("群组",s);
                         if (s.equals("no permission")) {
                             GroupDialog dialog = new GroupDialog(parent.getContext(), dataBean.getGroupId(), dataBean.getGroupName());
                             dialog.show();

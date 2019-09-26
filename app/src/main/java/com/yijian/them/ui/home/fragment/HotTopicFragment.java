@@ -21,7 +21,6 @@ import com.yijian.them.basic.BasicActivity;
 import com.yijian.them.basic.BasicFragment;
 import com.yijian.them.common.Config;
 import com.yijian.them.ui.home.HomeMoudle;
-import com.yijian.them.ui.home.activity.HotTopicInfoActivity;
 import com.yijian.them.ui.home.adapter.HotTopicAdapter;
 import com.yijian.them.ui.home.adapter.TagAdapter;
 import com.yijian.them.utils.JumpUtils;
@@ -60,7 +59,7 @@ public class HotTopicFragment extends BasicFragment implements OnRefreshListener
     TextView tvCreat;
 
     private HotTopicAdapter hotTopicAdapter;
-    private String topicId="";
+    private String topicId = "";
     private int page = 1;
     private TagAdapter adapter;
     private String topicName;
@@ -141,9 +140,9 @@ public class HotTopicFragment extends BasicFragment implements OnRefreshListener
         });
         adapter.setOnOffFollowedListener(new TagAdapter.OnOffFollowedListener() {
             @Override
-            public void offFollowed(HomeMoudle.DataBean dataBean) {
-                AlertUtils.showProgress(false,getActivity());
-                followedTag(dataBean);
+            public void offFollowed(HomeMoudle.DataBean dataBean, int type) {
+                AlertUtils.showProgress(false, getActivity());
+                followedTag(dataBean, type);
             }
         });
 
@@ -166,7 +165,7 @@ public class HotTopicFragment extends BasicFragment implements OnRefreshListener
                         } else if (code == 10001) {
                             llDefault.setVisibility(View.GONE);
                             page++;
-                            adapter.setDataBeans(dataBeans,1);
+                            adapter.setDataBeans(dataBeans, 1);
                         }
                     }
 
@@ -270,9 +269,11 @@ public class HotTopicFragment extends BasicFragment implements OnRefreshListener
 
     /**
      * 关注tag
+     *
      * @param dataBean
+     * @param type
      */
-    private void followedTag(final HomeMoudle.DataBean dataBean) {
+    private void followedTag(final HomeMoudle.DataBean dataBean, final int type) {
         String topicId = dataBean.getTagId();
         Http.http.createApi(AuthApi.class).followedTag(topicId)
                 .compose(context.<JsonResult<HomeMoudle.DataBean>>bindToLifecycle())
@@ -282,12 +283,17 @@ public class HotTopicFragment extends BasicFragment implements OnRefreshListener
                     public void success(HomeMoudle.DataBean response, int code) {
                         AlertUtils.dismissProgress();
                         Log.d("取消关注: ", response + "");
-//                        if (follow) {
-//                            tvFollow.setText(tagHeat + "人已参与");
-//                        } else {
-//                            tvFollow.setText("一起参与吧" + tagHeat + "人已参与");
-//                        }
-                        adapter.remove(dataBean);
+                        if (type == 1) {
+                            adapter.remove(dataBean);
+                        } else {
+                            boolean follow = dataBean.isFollow();
+                            if (follow) {
+                                dataBean.setFollow(false);
+                            } else {
+                                dataBean.setFollow(true);
+                            }
+                            adapter.notifyDataSetChanged();
+                        }
                     }
 
                     @Override

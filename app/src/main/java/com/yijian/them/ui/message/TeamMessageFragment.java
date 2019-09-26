@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.yijian.them.R;
 import com.yijian.them.api.AuthApi;
+import com.yijian.them.basic.BasicActivity;
 import com.yijian.them.basic.BasicFragment;
 import com.yijian.them.ui.home.HomeMoudle;
 import com.yijian.them.ui.message.adapter.SystemMessageAdapter;
@@ -47,6 +48,7 @@ public class TeamMessageFragment extends BasicFragment {
 
     @Override
     protected void initView(Bundle bundle) {
+        context = (BasicActivity)getActivity();
         adapter = new SystemMessageAdapter();
         lvSystem.setAdapter(adapter);
         systemMessage();

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.yijian.them.R;
 import com.yijian.them.ui.home.HomeMoudle;
+import com.yijian.them.utils.JumpUtils;
 import com.yijian.them.utils.Times;
 import com.yijian.them.view.CircleImageView;
 import com.yijian.them.view.MyListView;
@@ -58,7 +59,7 @@ public class CommentReplyListAdapter extends BaseAdapter {
         if (replyType == 0) {
             holder.tvContent.setText(content);
         } else {
-            String str = "回复<font color='#999999'>@+" + dataBean.getToUname() + "</font>:<font color='#333333'>" + content + "</font>";
+            String str = "回复<font color='#999999'>@" + dataBean.getToUname() + "</font>:<font color='#333333'>" + content + "</font>";
             holder.tvContent.setText(Html.fromHtml(str));
         }
         try {
@@ -77,9 +78,16 @@ public class CommentReplyListAdapter extends BaseAdapter {
 //            CommentAdapter commentAdapter = new CommentAdapter(replyList);
 //            holder.mlvComment.setAdapter(commentAdapter);
 //        } else {
-            holder.mlvComment.setVisibility(View.GONE);
+        holder.mlvComment.setVisibility(View.GONE);
 //        }
-
+        holder.civHead1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HomeMoudle.DataBean dataBean = dataBeans.get(position);
+                String fromUid = dataBean.getFromUid();
+                JumpUtils.jumpUserInfoActivity(parent.getContext(), Integer.parseInt(fromUid));
+            }
+        });
         return convertView;
     }
 

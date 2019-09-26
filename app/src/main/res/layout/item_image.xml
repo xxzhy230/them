@@ -8,9 +8,15 @@
         android:id="@+id/ivImage"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/self_add" />
+        android:scaleType="centerCrop" />
 
+    <ImageView
+        android:id="@+id/ivPlay"
+        android:layout_centerInParent="true"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@mipmap/icon_play"
+        android:visibility="gone" />
     <ImageView
         android:id="@+id/ivDel"
         android:layout_width="40dp"

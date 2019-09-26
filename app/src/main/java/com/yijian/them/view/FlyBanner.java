@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.luck.picture.lib.photoview.PhotoView;
 import com.squareup.picasso.Picasso;
 import com.yijian.them.R;
 import com.yijian.them.common.App;
@@ -287,7 +288,7 @@ public class FlyBanner extends RelativeLayout {
 
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
-            ImageView imageView = new ImageView(getContext());
+            PhotoView imageView = new PhotoView(getContext());
             if (type == 1) {
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             }

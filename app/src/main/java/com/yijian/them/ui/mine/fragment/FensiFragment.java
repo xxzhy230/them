@@ -1,8 +1,13 @@
 package com.yijian.them.ui.mine.fragment;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.yijian.them.R;
@@ -18,9 +23,16 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import okhttp3.Call;
 
 public class FensiFragment extends BasicFragment {
+    @BindView(R.id.ivDefault)
+    ImageView ivDefault;
+    @BindView(R.id.tvDefault)
+    TextView tvDefault;
+    @BindView(R.id.llDefault)
+    LinearLayout llDefault;
     private String userId;
     @BindView(R.id.lvGuanzhuList)
     ListView lvGuanzhuList;
@@ -70,13 +82,19 @@ public class FensiFragment extends BasicFragment {
                 Gson gson = new Gson();
                 Follwermoudel follwermoudel = gson.fromJson(s, Follwermoudel.class);
                 int code = follwermoudel.getCode();
-                if (code==200) {
+                if (code == 200) {
                     List<Follwermoudel.DataBean> data = follwermoudel.getData();
                     if (data != null && data.size() > 0) {
+                        llDefault.setVisibility(View.GONE);
                         adapter.setData(data);
+                    }else{
+                        ivDefault.setImageResource(R.mipmap.default_attention);
+                        tvDefault.setText("还没有被粉丝关注");
+                        llDefault.setVisibility(View.VISIBLE);
                     }
                 }
             }
         });
     }
+
 }

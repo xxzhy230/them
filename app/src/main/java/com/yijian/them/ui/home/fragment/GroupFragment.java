@@ -72,41 +72,21 @@ public class GroupFragment extends BasicFragment {
             }
         });
         instance = TIMGroupManager.getInstance();
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         instance.getGroupList(new TIMValueCallBack<List<TIMGroupBaseInfo>>() {
             @Override
             public void onError(int i, String s) {
-                System.out.println("-------" + i + "----------" + s);
             }
 
             @Override
             public void onSuccess(List<TIMGroupBaseInfo> timGroupBaseInfos) {
                 if (timGroupBaseInfos != null && timGroupBaseInfos.size() > 0) {
                     groupAdapter.setData(timGroupBaseInfos);
-//                    List<String> mList = new ArrayList<>();
-//                    for (int i = 0; i < timGroupBaseInfos.size(); i++) {
-//                        mList.add(timGroupBaseInfos.get(i).getGroupId());
-//                    }
-//                    instance.getGroupInfo(mList, new TIMValueCallBack<List<TIMGroupDetailInfoResult>>() {
-//                        @Override
-//                        public void onError(int i, String s) {
-//                            System.out.println("-----onError-----" + s);
-//                        }
-//
-//                        @Override
-//                        public void onSuccess(List<TIMGroupDetailInfoResult> timGroupDetailInfoResults) {
-//
-//                            if (timGroupDetailInfoResults != null) {
-//                                for (int i = 0; i < timGroupDetailInfoResults.size(); i++) {
-//
-//                                    String resultInfo = timGroupDetailInfoResults.get(i).getResultInfo();
-//                                    if (resultInfo != null) {
-//                                        System.out.println("----------" + resultInfo);
-//                                    }
-//                                }
-//
-//                            }
-//                        }
-//                    });
                 }
             }
         });

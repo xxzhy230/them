@@ -143,7 +143,7 @@ public class SearchActivity extends BasicActivity {
         fragments.add(searchUserFragment);
     }
 
-    @OnClick({R.id.ivBack, R.id.ivClear, R.id.tvTag, R.id.tvDynamic, R.id.tvUser})
+    @OnClick({R.id.ivBack, R.id.ivClear, R.id.tvTag, R.id.tvDynamic, R.id.tvUser, R.id.ivSearch})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ivBack:
@@ -166,6 +166,13 @@ public class SearchActivity extends BasicActivity {
                 vpHome.setCurrentItem(2);
                 showTextState(2);
                 type = 2;
+                break;
+            case R.id.ivSearch:
+                searchKey = etSearch.getText().toString().trim();
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(etSearch.getWindowToken(), 0);
+                page = 0;
+                searchKey(searchKey, type);
                 break;
         }
     }

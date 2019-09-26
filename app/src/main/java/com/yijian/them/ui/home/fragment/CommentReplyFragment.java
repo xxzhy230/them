@@ -185,13 +185,15 @@ public class CommentReplyFragment extends BasicFragment {
     }
 
 
-    @OnClick({R.id.ivBack, R.id.tvSend, R.id.llCommentTitle})
+    @OnClick({R.id.ivBack, R.id.tvSend, R.id.llCommentTitle,R.id.civHead1})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ivBack:
                 getActivity().finish();
                 break;
-
+            case R.id.civHead1:
+                JumpUtils.jumpUserInfoActivity(getActivity(),Integer.parseInt(toUid));
+                break;
             case R.id.tvSend:
                 String comment = etComment.getText().toString().trim();
                 if (TextUtils.isEmpty(comment)) {
