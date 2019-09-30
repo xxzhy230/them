@@ -20,7 +20,6 @@ import com.squareup.picasso.Picasso;
 import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMGroupManager;
 import com.tencent.imsdk.TIMValueCallBack;
-import com.tencent.imsdk.ext.group.TIMGroupBaseInfo;
 import com.tencent.imsdk.ext.group.TIMGroupDetailInfoResult;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
 import com.yijian.them.R;
@@ -43,7 +42,6 @@ import com.yijian.them.utils.http.JsonResult;
 import com.yijian.them.utils.http.JsonUtil;
 import com.yijian.them.utils.picasso.PicassoRoundTransform;
 import com.yijian.them.view.MyListView;
-import com.yqjr.utils.base.BaseActivity;
 import com.yqjr.utils.service.OkHttp;
 import com.yqjr.utils.service.StringJsonCallBack;
 import com.yqjr.utils.spUtils.SPUtils;
@@ -110,7 +108,11 @@ public class HotTopicInfoActivity extends BasicActivity implements OnRefreshList
     private String tagHeat;
     private TopicGroupAdapter topicGroupAdapter;
     private String tagName;
-
+    @Override
+    public int initView() {
+        StatusBarUtil.setStatusBar(this, false, false);
+        return R.layout.activity_hot_topic_info;
+    }
     @Override
     public void initData() {
         ButterKnife.bind(this);
@@ -162,8 +164,8 @@ public class HotTopicInfoActivity extends BasicActivity implements OnRefreshList
             }
 
             @Override
-            public void svaeImage(List<String> urls) {
-                imageDialog = new ImageDialog(HotTopicInfoActivity.this, urls);
+            public void svaeImage(List<String> urls, int position) {
+                imageDialog = new ImageDialog(HotTopicInfoActivity.this, urls, position);
                 imageDialog.show();
                 imageDialog.setOnSaveImageListener(new ImageDialog.OnSaveImageListener() {
                     @Override
@@ -219,12 +221,7 @@ public class HotTopicInfoActivity extends BasicActivity implements OnRefreshList
         });
     }
 
-    @Override
-    public int initView() {
-        StatusBarUtil.setStatusBar(this, false, false);
-        return R.layout.activity_hot_topic_info;
 
-    }
 
 
     private TuijianAdapter dynamicAdapter;
@@ -307,7 +304,7 @@ public class HotTopicInfoActivity extends BasicActivity implements OnRefreshList
                     if (follow) {
                         tvFollow.setText(tagHeat + "人已参与");
                     } else {
-                        tvFollow.setText("一起参与吧" + tagHeat + "人已参与");
+                        tvFollow.setText("一起参与吧 " + tagHeat + "人已参与");
                     }
                     String tagUrl = data.getTagUrl();
                     if (!TextUtils.isEmpty(tagUrl)) {
@@ -382,9 +379,8 @@ public class HotTopicInfoActivity extends BasicActivity implements OnRefreshList
                 });
                 break;
             case R.id.tvFollow:
-                if (!follow) {
-                    followedTag();
-                }
+                AlertUtils.showProgress(false,this);
+                followedTag();
                 break;
             case R.id.ivSendDynamic:
                 SPUtils.putInt(Config.TOPICSENDDYNAMIC, 1);
@@ -412,7 +408,7 @@ public class HotTopicInfoActivity extends BasicActivity implements OnRefreshList
                         if (follow) {
                             tvFollow.setText(tagHeat + "人已参与");
                         } else {
-                            tvFollow.setText("一起参与吧" + tagHeat + "人已参与");
+                            tvFollow.setText("一起参与吧 " + tagHeat + "人已参与");
                         }
                     }
 

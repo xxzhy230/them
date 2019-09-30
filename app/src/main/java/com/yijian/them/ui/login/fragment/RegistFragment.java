@@ -89,7 +89,11 @@ public class RegistFragment extends BasicFragment {
                     ToastUtils.toastCenter(getActivity(), "请输入密码");
                     return;
                 }
-                verifyCode(phone1, code,password);
+                if (password.length() < 8) {
+                    ToastUtils.toastCenter(getActivity(), "密码长度不足8位!");
+                    return;
+                }
+                verifyCode(phone1, code, password);
                 break;
         }
     }
@@ -100,9 +104,9 @@ public class RegistFragment extends BasicFragment {
                 .compose(context.<JsonResult<Boolean>>applySchedulers())
                 .subscribe(context.newSubscriber(new CallBack<Boolean>() {
                     @Override
-                    public void success(Boolean response,int code) {
+                    public void success(Boolean response, int code) {
                         Log.d("校验验证码: ", response + "");
-                        JumpUtils.jumpLoginActivity(getActivity(),3,phone,password);
+                        JumpUtils.jumpLoginActivity(getActivity(), 3, phone, password);
                         getActivity().finish();
                     }
 
@@ -119,8 +123,8 @@ public class RegistFragment extends BasicFragment {
                 .compose(context.<JsonResult<String>>applySchedulers())
                 .subscribe(context.newSubscriber(new CallBack<String>() {
                     @Override
-                    public void success(String response,int code) {
-                        if (code == 200){
+                    public void success(String response, int code) {
+                        if (code == 200) {
                             ToastUtils.toastCenter(getActivity(), "获取验证码成功");
                             CountDownUtil countDownUtil = new CountDownUtil(btCode, 60, 1);
                             countDownUtil.start();

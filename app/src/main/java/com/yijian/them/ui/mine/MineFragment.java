@@ -83,7 +83,6 @@ public class MineFragment extends BasicFragment {
     protected void initView(Bundle bundle) {
         context = (BasicActivity) getActivity();
         getUserInfo();
-
         String versionCode = Utils.getVersionName();
         tvVersionInfo.setText("当前版本V" + versionCode);
     }

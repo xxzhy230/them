@@ -3,14 +3,11 @@ package com.yijian.them.ui.home.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -44,7 +41,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 public class GuanzhuFragment extends BasicFragment implements OnRefreshListener, OnLoadMoreListener {
     @BindView(R.id.tvTopic)
@@ -91,8 +87,8 @@ public class GuanzhuFragment extends BasicFragment implements OnRefreshListener,
             }
 
             @Override
-            public void svaeImage(List<String> urls) {
-                imageDialog = new ImageDialog(getActivity(), urls);
+            public void svaeImage(List<String> urls, int position) {
+                imageDialog = new ImageDialog(getActivity(), urls, position);
                 imageDialog.show();
                 imageDialog.setOnSaveImageListener(new ImageDialog.OnSaveImageListener() {
                     @Override

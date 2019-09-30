@@ -8,6 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.tencent.imsdk.TIMConversationType;
+import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
 import com.yijian.them.R;
 import com.yijian.them.api.AuthApi;
 import com.yijian.them.basic.BasicActivity;
@@ -166,8 +168,12 @@ public class TeamInfoActivity extends BasicActivity {
                     @Override
                     public void success(String str, int code) {
                         AlertUtils.dismissProgress();
-                        AlertUtils.dismissProgress();
-                        teamInfo(teamId);
+//                        teamInfo(teamId);
+                        ChatInfo chatInfo = new ChatInfo();
+                        chatInfo.setId(teamId);
+                        chatInfo.setChatName(teamName);
+                        chatInfo.setType(TIMConversationType.Group);
+                        JumpUtils.jumpMessageActivity(TeamInfoActivity.this,0,chatInfo);
                     }
 
                     @Override

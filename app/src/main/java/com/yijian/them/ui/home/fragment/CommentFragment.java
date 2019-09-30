@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -52,7 +51,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 public class CommentFragment extends BasicFragment {
     @BindView(R.id.ivBack)
@@ -262,8 +260,8 @@ public class CommentFragment extends BasicFragment {
                             nsgvImage.setAdapter(imageAdapter);
                             imageAdapter.setOnSaveImageListener(new ImageAdapter.OnSaveImageListener() {
                                 @Override
-                                public void onSaveImage(List<String> urls) {
-                                    imageDialog = new ImageDialog(getActivity(), urls);
+                                public void onSaveImage(List<String> urls, int position) {
+                                    imageDialog = new ImageDialog(getActivity(), urls, position);
                                     imageDialog.show();
                                     imageDialog.setOnSaveImageListener(new ImageDialog.OnSaveImageListener() {
                                         @Override

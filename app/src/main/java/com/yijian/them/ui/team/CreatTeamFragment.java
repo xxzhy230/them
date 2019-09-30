@@ -32,6 +32,7 @@ import com.yijian.them.common.Config;
 import com.yijian.them.utils.JumpUtils;
 import com.yijian.them.utils.dialog.AlertUtils;
 import com.yijian.them.utils.dialog.DialogOnitem;
+import com.yijian.them.utils.dialog.HintDialog;
 import com.yijian.them.utils.dialog.SealectImageDialog;
 import com.yijian.them.utils.http.CallBack;
 import com.yijian.them.utils.http.Http;
@@ -77,6 +78,7 @@ public class CreatTeamFragment extends BasicFragment {
     private String[] reportArr = new String[]{"从手机相册选择", "拍照"};
     private File headFile;
     private String teamId;
+    private HintDialog hintDialog;
 
     @Override
     protected void onClickEvent() {
@@ -225,6 +227,8 @@ public class CreatTeamFragment extends BasicFragment {
                         });
                 break;
             case R.id.tvLocation:
+                hintDialog = new HintDialog(getActivity());
+                hintDialog.show();
                 break;
         }
     }
@@ -239,7 +243,7 @@ public class CreatTeamFragment extends BasicFragment {
         AuthApi api = Http.http.createApi(AuthApi.class);
         Observable<JsonResult<String>> jsonResultObservable;
         if (headFile == null) {
-            jsonResultObservable = api.editTeam(teamId,teamName, teamContent);
+            jsonResultObservable = api.editTeam(teamId, teamName, teamContent);
         } else {
             Bitmap bitmap = BitmapFactory.decodeFile(headFile.getPath());
             int height = bitmap.getHeight();
@@ -247,7 +251,7 @@ public class CreatTeamFragment extends BasicFragment {
             MultipartBody.Part[] part = new MultipartBody.Part[1];
             RequestBody fileBody = RequestBody.create(MediaType.parse("multipart/form-data"), headFile);
             part[0] = MultipartBody.Part.createFormData("teamImgs", headFile.getName(), fileBody);
-            jsonResultObservable = api.editTeam(teamId,part, teamName, teamContent, height, width);
+            jsonResultObservable = api.editTeam(teamId, part, teamName, teamContent, height, width);
         }
 
         jsonResultObservable.compose(context.<JsonResult<String>>bindToLifecycle())
@@ -428,5 +432,13 @@ public class CreatTeamFragment extends BasicFragment {
 
     public void setTeamId(String teamId) {
         this.teamId = teamId;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (hintDialog != null) {
+            hintDialog.dismiss();
+        }
     }
 }

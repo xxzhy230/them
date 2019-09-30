@@ -312,6 +312,7 @@ public class EditInfoFragment extends BasicFragment {
                             }
                         } else if (type == 3) {//生日
                             tvBirthday.setText(birthday);
+                            SPUtils.putString(Config.BIRTHDAY, birthday);
                         }
                     }
 

@@ -107,8 +107,8 @@ public class UserInfoActivity extends BasicActivity implements OnRefreshListener
             }
 
             @Override
-            public void svaeImage(List<String> urls) {
-                imageDialog = new ImageDialog(UserInfoActivity.this, urls);
+            public void svaeImage(List<String> urls, int position) {
+                imageDialog = new ImageDialog(UserInfoActivity.this, urls, position);
                 imageDialog.show();
                 imageDialog.setOnSaveImageListener(new ImageDialog.OnSaveImageListener() {
                     @Override

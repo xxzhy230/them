@@ -39,234 +39,218 @@
 
     </RelativeLayout>
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_marginRight="15dp"
-                android:gravity="center_vertical|right">
-
-                <TextView
-                    android:id="@+id/tvGroupNum"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableRight="@mipmap/mine_icon_more"
-                    android:drawablePadding="10dp"
-                    android:text="查看1名群成员"
-                    android:textColor="@color/color_FF999999"
-                    android:textSize="15dp" />
-            </LinearLayout>
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:fillViewport="true"
-                android:scrollbars="none">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <GridView
-                        android:id="@+id/gvGroupHead"
-                        android:horizontalSpacing="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:numColumns="auto_fit" />
-                </LinearLayout>
-            </HorizontalScrollView>
-
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:background="@color/line" />
-
-            <LinearLayout
-                android:id="@+id/llGroupName"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="群聊名"
-                    android:textColor="@color/color_FF333333"
-                    android:textSize="15dp" />
-
-                <TextView
-                    android:id="@+id/tvGroupName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableRight="@mipmap/mine_icon_more"
-                    android:drawablePadding="10dp"
-                    android:gravity="right"
-                    android:text="群聊名"
-                    android:textColor="@color/color_FF999999"
-                    android:textSize="15dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llGroupHead"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="群聊头像"
-                    android:textColor="@color/color_FF333333" />
-
-                <com.yijian.them.view.CircleImageView
-                    android:id="@+id/civGroupHead"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:drawableRight="@mipmap/release_icon_edit"
-                    android:drawablePadding="10dp"
-                    android:src="@mipmap/sheet_ablum_icon" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:src="@mipmap/mine_icon_more" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llGroupRemark"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="群聊公告"
-                    android:textColor="@color/color_FF333333"
-                    android:textSize="15dp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:src="@mipmap/mine_icon_more" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:background="@color/line" />
-
-            <LinearLayout
-                android:id="@+id/llMyGroup"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="我参与的小队"
-                    android:textColor="@color/color_FF333333"
-                    android:textSize="15dp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:src="@mipmap/mine_icon_more" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:background="@color/line" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="置顶"
-                    android:textColor="@color/color_FF333333"
-                    android:textSize="15dp" />
-
-                <Switch
-                    android:id="@+id/sGroupTop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llReport"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="举报"
-                    android:textColor="@color/color_FF333333"
-                    android:textSize="15dp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:src="@mipmap/mine_icon_more" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:background="@color/line" />
-
+            android:layout_height="45dp"
+            android:layout_marginRight="15dp"
+            android:gravity="center_vertical|right">
 
             <TextView
-                android:id="@+id/tvOutGroup"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:gravity="center"
-                android:text="解散小队"
-                android:textColor="@color/color_3B7AFF"
-                android:textSize="16dp" />
+                android:id="@+id/tvGroupNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@mipmap/mine_icon_more"
+                android:drawablePadding="10dp"
+                android:text="查看1名群成员"
+                android:textColor="@color/color_FF999999"
+                android:textSize="15dp" />
         </LinearLayout>
-    </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvHead"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:scrollbars="none" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@color/line" />
+
+        <LinearLayout
+            android:id="@+id/llGroupName"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="群聊名"
+                android:textColor="@color/color_FF333333"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/tvGroupName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableRight="@mipmap/mine_icon_more"
+                android:drawablePadding="10dp"
+                android:gravity="right"
+                android:text="群聊名"
+                android:textColor="@color/color_FF999999"
+                android:textSize="15dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llGroupHead"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="群聊头像"
+                android:textColor="@color/color_FF333333" />
+
+            <com.yijian.them.view.CircleImageView
+                android:id="@+id/civGroupHead"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:drawableRight="@mipmap/release_icon_edit"
+                android:drawablePadding="10dp"
+                android:src="@mipmap/sheet_ablum_icon" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:src="@mipmap/mine_icon_more" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llGroupRemark"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="群聊公告"
+                android:textColor="@color/color_FF333333"
+                android:textSize="15dp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:src="@mipmap/mine_icon_more" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@color/line" />
+
+        <LinearLayout
+            android:id="@+id/llMyGroup"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="我参与的小队"
+                android:textColor="@color/color_FF333333"
+                android:textSize="15dp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:src="@mipmap/mine_icon_more" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@color/line" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="置顶"
+                android:textColor="@color/color_FF333333"
+                android:textSize="15dp" />
+
+            <Switch
+                android:id="@+id/sGroupTop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llReport"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="举报"
+                android:textColor="@color/color_FF333333"
+                android:textSize="15dp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:src="@mipmap/mine_icon_more" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@color/line" />
+
+        <TextView
+            android:id="@+id/tvOutGroup"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="解散小队"
+            android:textColor="@color/color_3B7AFF"
+            android:textSize="16dp" />
+    </LinearLayout>
 
 </LinearLayout>

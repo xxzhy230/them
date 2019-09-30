@@ -116,8 +116,8 @@ public class NearbyFragment extends BasicFragment implements OnRefreshListener, 
             }
 
             @Override
-            public void svaeImage(List<String> urls) {
-                imageDialog = new ImageDialog(getActivity(), urls);
+            public void svaeImage(List<String> urls, int position) {
+                imageDialog = new ImageDialog(getActivity(), urls, position);
                 imageDialog.show();
                 imageDialog.setOnSaveImageListener(new ImageDialog.OnSaveImageListener() {
                     @Override

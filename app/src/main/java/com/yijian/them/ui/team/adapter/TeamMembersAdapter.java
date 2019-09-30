@@ -65,7 +65,8 @@ public class TeamMembersAdapter extends BaseAdapter {
 
         TeamInfoMoudle.DataBean.MembersBean membersBean = mlist.get(position);
         String realImg = membersBean.getRealImg();
-        Picasso.with(parent.getContext()).load(realImg).into(holder.civTeamMember);
+        Picasso.with(parent.getContext()).load(realImg).placeholder(R.mipmap.register_icon_avatar).
+                error(R.mipmap.register_icon_avatar).into(holder.civTeamMember);
 //        holder.civTeamMember.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {

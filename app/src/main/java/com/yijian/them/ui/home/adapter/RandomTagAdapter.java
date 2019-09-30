@@ -47,7 +47,7 @@ public class RandomTagAdapter extends BaseAdapter {
         }
         HomeMoudle.DataBean dataBean = dataBeans.get(position);
         String tagName = dataBean.getTagName();
-        holder.tvTagname.setText(tagName);
+        holder.tvTagname.setText("#" + tagName + "#");
         return convertView;
     }
 

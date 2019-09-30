@@ -24,7 +24,11 @@ allprojects {
         mavenCentral()
         jcenter()
         google()
-
+        repositories {
+            flatDir {
+                dirs 'libs','..tuikit/libs'
+            }
+        }
     }
 }
 

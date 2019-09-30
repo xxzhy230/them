@@ -1,5 +1,6 @@
 package com.yijian.them.ui.message;
 
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.tencent.qcloud.tim.uikit.component.TitleBarLayout;
 import com.tencent.qcloud.tim.uikit.modules.chat.ChatLayout;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatManagerKit;
+import com.tencent.qcloud.tim.uikit.modules.chat.layout.message.MessageLayout;
 import com.yijian.them.R;
 import com.yijian.them.common.App;
 import com.yijian.them.utils.JumpUtils;
@@ -66,10 +68,27 @@ public class ChatFragment extends BaseFragment {
         titleBar.setOnRightClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                JumpUtils.jumpMessageActivity(getActivity(), 1, chatInfo);
+                String id = chatInfo.getId();
+                if (id.contains("teamId")) {
+                    JumpUtils.jumpMessageActivity(getActivity(), 1, chatInfo);
+                } else {
+                    JumpUtils.jumpMessageActivity(getActivity(), 5, chatInfo);
+                }
             }
         });
         setHeadImage();
+//        setMessageUserNick();
+    }
+
+    private void setMessageUserNick() {
+        // 从ChatLayout里获取MessageLayout
+        MessageLayout messageLayout = chatLayout.getMessageLayout();
+// 设置提示的背景
+        messageLayout.setTipsMessageBubble(new ColorDrawable(0xA020F000));
+// 设置提示的字体大小
+        messageLayout.setTipsMessageFontSize(20);
+// 设置提示的字体颜色
+        messageLayout.setTipsMessageFontColor(0x7CFC0000);
     }
 
     private void setHeadImage() {

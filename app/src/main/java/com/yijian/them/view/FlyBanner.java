@@ -174,7 +174,7 @@ public class FlyBanner extends RelativeLayout {
         if (images.size() <= 1)
             mIsOneImg = true;
         //初始化ViewPager
-        initViewPager();
+//        initViewPager(position);
         this.type = type;
     }
 
@@ -183,14 +183,14 @@ public class FlyBanner extends RelativeLayout {
      *
      * @param urls
      */
-    public void setImagesUrl(List<String> urls) {
+    public void setImagesUrl(List<String> urls, int position) {
         //加载网络图片
         mIsImageUrl = true;
         this.mImageUrls = urls;
         if (urls.size() <= 1)
             mIsOneImg = true;
         //初始化ViewPager
-        initViewPager();
+        initViewPager(position);
 
     }
 
@@ -225,7 +225,7 @@ public class FlyBanner extends RelativeLayout {
         }
     }
 
-    private void initViewPager() {
+    private void initViewPager(int position) {
         //当图片多于1张时添加指示点
         if (!mIsOneImg) {
             addPoints();
@@ -235,7 +235,7 @@ public class FlyBanner extends RelativeLayout {
         mViewPager.setAdapter(adapter);
         mViewPager.addOnPageChangeListener(mOnPageChangeListener);
         //跳转到首页
-        mViewPager.setCurrentItem(0, false);
+        mViewPager.setCurrentItem(position, false);
     }
 
 
@@ -303,7 +303,7 @@ public class FlyBanner extends RelativeLayout {
             imageView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mOnItemClickListener != null){
+                    if (mOnItemClickListener != null) {
                         mOnItemClickListener.onItemClick(position);
                     }
                 }

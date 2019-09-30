@@ -3,7 +3,6 @@ package com.yijian.them.ui.home.adapter;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -114,9 +113,9 @@ public class TuijianAdapter extends BaseAdapter {
             holder.nsgvImage.setAdapter(imageAdapter);
             imageAdapter.setOnSaveImageListener(new ImageAdapter.OnSaveImageListener() {
                 @Override
-                public void onSaveImage(List<String> urls) {
+                public void onSaveImage(List<String> urls, int position) {
                     if (onLikeListener != null) {
-                        onLikeListener.svaeImage(urls);
+                        onLikeListener.svaeImage(urls,position);
                     }
                 }
             });
@@ -338,7 +337,7 @@ public class TuijianAdapter extends BaseAdapter {
     public interface OnLikeListener {
         void like(HomeMoudle.DataBean dataBean);
 
-        void svaeImage(List<String> urls);
+        void svaeImage(List<String> urls, int position);
 
         void clickMore(HomeMoudle.DataBean dataBean);
     }

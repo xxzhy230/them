@@ -1,6 +1,5 @@
 package com.yijian.them.ui.home.adapter;
 
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -9,8 +8,6 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 import com.yijian.them.R;
 import com.yijian.them.common.App;
-import com.yijian.them.utils.dialog.ImageDialog;
-import com.yijian.them.view.FilletImageView;
 import com.yqjr.utils.utils.StringUtils;
 
 import java.io.File;
@@ -99,7 +96,7 @@ public class ImageAdapter extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
                         if (onSaveImageListener != null) {
-                            onSaveImageListener.onSaveImage(mlist);
+                            onSaveImageListener.onSaveImage(mlist,position);
                         }
                     }
                 });
@@ -168,7 +165,7 @@ public class ImageAdapter extends BaseAdapter {
     }
 
     public interface OnSaveImageListener {
-        void onSaveImage(List<String> urls);
+        void onSaveImage(List<String> urls, int position);
     }
 
     public interface OnAddImageListener {

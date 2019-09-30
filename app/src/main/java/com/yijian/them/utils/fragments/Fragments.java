@@ -22,6 +22,7 @@ import com.yijian.them.ui.message.ChatFragment;
 import com.yijian.them.ui.message.DynamicMessageFragment;
 import com.yijian.them.ui.message.GroupInfoFragment;
 import com.yijian.them.ui.message.MessageFragment;
+import com.yijian.them.ui.message.MessageInfoFragment;
 import com.yijian.them.ui.message.SystemMessageFragment;
 import com.yijian.them.ui.message.TeamMessageFragment;
 import com.yijian.them.ui.mine.MineFragment;
@@ -91,6 +92,7 @@ public class Fragments {
     private SystemMessageFragment systemMessageFragment;
     private DynamicMessageFragment dynamicMessageFragment;
 private TeamMessageFragment teamMessageFragment;
+    private MessageInfoFragment messageInfoFragment;
 
     public static Fragments init() {
         if (fragments == null) {
@@ -354,6 +356,13 @@ private TeamMessageFragment teamMessageFragment;
                     teamMessageFragment = new TeamMessageFragment();
                 }
                 fragmentTransaction.replace(frameLayout, teamMessageFragment);
+                break;
+            case 5://消息设置
+                if (messageInfoFragment == null) {
+                    messageInfoFragment = new MessageInfoFragment();
+                }
+                groupInfoFragment.setChatInfo(chatInfo);
+                fragmentTransaction.replace(frameLayout, messageInfoFragment);
                 break;
         }
         fragmentTransaction.commit();
