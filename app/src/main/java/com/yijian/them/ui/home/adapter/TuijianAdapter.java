@@ -18,6 +18,7 @@ import com.tencent.imsdk.TIMValueCallBack;
 import com.tencent.imsdk.ext.group.TIMGroupSelfInfo;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
 import com.yijian.them.R;
+import com.yijian.them.common.Config;
 import com.yijian.them.ui.home.HomeMoudle;
 import com.yijian.them.ui.home.activity.PlayPickActivity;
 import com.yijian.them.utils.JumpUtils;
@@ -104,9 +105,9 @@ public class TuijianAdapter extends BaseAdapter {
             }
             ImageAdapter imageAdapter = new ImageAdapter(imgUrls, 1);
             final String videoUrl = dataBean.getVideoUrl();
-            if (TextUtils.isEmpty(videoUrl)){
+            if (TextUtils.isEmpty(videoUrl)) {
                 imageAdapter.setVideo(false);
-            }else{
+            } else {
                 imageAdapter.setVideo(true);
             }
 
@@ -115,18 +116,15 @@ public class TuijianAdapter extends BaseAdapter {
                 @Override
                 public void onSaveImage(List<String> urls, int position) {
                     if (onLikeListener != null) {
-                        onLikeListener.svaeImage(urls,position);
+                        onLikeListener.svaeImage(urls, position);
                     }
                 }
             });
             imageAdapter.setOnPlayListener(new ImageAdapter.OnPlayListener() {
                 @Override
                 public void onPlay() {
-                    HomeMoudle.DataBean dataBean = mList.get(position);
-                    List<String> imgUrls = dataBean.getImgUrls();
                     Intent intent = new Intent(parent.getContext(), PlayPickActivity.class);
-                    intent.putExtra("videoUrls",videoUrl);
-                    intent.putExtra("imageUrls",imgUrls.get(0));
+                    intent.putExtra(Config.VIDEOURL, videoUrl);
                     parent.getContext().startActivity(intent);
                 }
             });
@@ -258,6 +256,14 @@ public class TuijianAdapter extends BaseAdapter {
                         if (s.equals("no permission")) {
                             GroupDialog dialog = new GroupDialog(parent.getContext(), dataBean.getGroupId(), dataBean.getGroupName());
                             dialog.show();
+                            dialog.setOnJoinListener(new GroupDialog.OnJoinListener() {
+                                @Override
+                                public void onJoinTeam(String teamId, String teamName) {
+                                    if (onLikeListener != null) {
+                                        onLikeListener.joinTeam(teamId, teamName);
+                                    }
+                                }
+                            });
                         } else if (s.equals("this group does not exist")) {
                             ToastUtils.toastCenter(parent.getContext(), "群组已解散");
                         }
@@ -340,5 +346,7 @@ public class TuijianAdapter extends BaseAdapter {
         void svaeImage(List<String> urls, int position);
 
         void clickMore(HomeMoudle.DataBean dataBean);
+
+        void joinTeam(String teamd, String teamName);
     }
 }

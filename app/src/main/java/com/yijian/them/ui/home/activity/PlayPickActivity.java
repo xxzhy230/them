@@ -1,177 +1,125 @@
 package com.yijian.them.ui.home.activity;
 
-import android.annotation.TargetApi;
-import android.content.pm.ActivityInfo;
-import android.os.Build;
+import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.transition.Transition;
 import android.view.View;
-import android.widget.ImageView;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 
-import com.shuyu.gsyvideoplayer.GSYVideoManager;
-import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
-import com.squareup.picasso.Picasso;
-import com.yijian.them.R;
-import com.yijian.them.video.OnTransitionListener;
-import com.yijian.them.video.SmartPickVideo;
-import com.yijian.them.video.SwitchVideoModel;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import com.tencent.qcloud.tim.uikit.component.video.UIKitVideoView;
+import com.tencent.qcloud.tim.uikit.component.video.VideoViewActivity;
+import com.tencent.qcloud.tim.uikit.component.video.proxy.IPlayer;
+import com.tencent.qcloud.tim.uikit.utils.ImageUtil;
+import com.tencent.qcloud.tim.uikit.utils.ScreenUtil;
+import com.tencent.qcloud.tim.uikit.utils.TUIKitConstants;
+import com.tencent.qcloud.tim.uikit.utils.TUIKitLog;
+import com.yijian.them.common.Config;
 
 /**
  * 单独的视频播放页面
  */
 public class PlayPickActivity extends AppCompatActivity {
 
-    public final static String IMG_TRANSITION = "IMG_TRANSITION";
-    public final static String TRANSITION = "TRANSITION";
+    private static final String TAG = VideoViewActivity.class.getSimpleName();
 
-    @BindView(R.id.spvPaly)
-    SmartPickVideo videoPlayer;
-
-    OrientationUtils orientationUtils;
-
-    private boolean isTransition;
-
-    private Transition transition;
+    private UIKitVideoView mVideoView;
+    private int videoWidth = 0;
+    private int videoHeight = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        TUIKitLog.i(TAG, "onCreate start");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_play_pick);
-        ButterKnife.bind(this);
-        isTransition = getIntent().getBooleanExtra(TRANSITION, false);
-        init();
-    }
+        //去除标题栏
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //去除状态栏
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setContentView(com.tencent.qcloud.tim.uikit.R.layout.activity_video_view);
+        mVideoView = findViewById(com.tencent.qcloud.tim.uikit.R.id.video_play_view);
 
-    private void init() {
-        String videoUrls = getIntent().getStringExtra("videoUrls");
-        String imageUrls = getIntent().getStringExtra("imageUrls");
-        String name2 = "清晰";
-        SwitchVideoModel switchVideoModel2 = new SwitchVideoModel(name2, videoUrls);
-
-        List<SwitchVideoModel> list = new ArrayList<>();
-        list.add(switchVideoModel2);
-
-        videoPlayer.setUp(list, false, "");
-
-        //增加封面
-        ImageView imageView = new ImageView(this);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        Picasso.with(this).load(imageUrls).into(imageView);
-//        imageView.setImageResource(R.mipmap.xxx1);
-        videoPlayer.setThumbImageView(imageView);
-
-        //增加title
-        videoPlayer.getTitleTextView().setVisibility(View.VISIBLE);
-
-        //设置返回键
-        videoPlayer.getBackButton().setVisibility(View.VISIBLE);
-
-        //设置旋转
-        orientationUtils = new OrientationUtils(this, videoPlayer);
-
-        //设置全屏按键功能,这是使用的是选择屏幕，而不是全屏
-        videoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
+        String imagePath = getIntent().getStringExtra(TUIKitConstants.CAMERA_IMAGE_PATH);
+        String videoUri = getIntent().getStringExtra(Config.VIDEOURL);
+//        Bitmap firstFrame = ImageUtil.getBitmapFormPath(imagePath);
+//        if (firstFrame != null) {
+//            videoWidth = firstFrame.getWidth();
+//            videoHeight = firstFrame.getHeight();
+//            updateVideoView();
+//        }
+        Uri uri = Uri.parse(videoUri);
+        mVideoView.setVideoURI(uri);
+        mVideoView.setOnPreparedListener(new IPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(IPlayer mediaPlayer) {
+                mVideoView.start();
+            }
+        });
+        mVideoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                orientationUtils.resolveByClick();
+                if (mVideoView.isPlaying()) {
+                    mVideoView.pause();
+                } else {
+                    mVideoView.start();
+                }
             }
         });
 
-        //是否可以滑动调整
-        videoPlayer.setIsTouchWiget(true);
-
-        //设置返回按键功能
-        videoPlayer.getBackButton().setOnClickListener(new View.OnClickListener() {
+        findViewById(com.tencent.qcloud.tim.uikit.R.id.video_view_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                mVideoView.stop();
+                finish();
             }
         });
-
-        //过渡动画
-        initTransition();
+        TUIKitLog.i(TAG, "onCreate end");
     }
 
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        videoPlayer.onVideoPause();
+    public void onConfigurationChanged(Configuration newConfig) {
+        TUIKitLog.i(TAG, "onConfigurationChanged start");
+        super.onConfigurationChanged(newConfig);
+        updateVideoView();
+        TUIKitLog.i(TAG, "onConfigurationChanged end");
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        videoPlayer.onVideoResume();
+    private void updateVideoView() {
+        TUIKitLog.i(TAG, "updateVideoView videoWidth: " + videoWidth + " videoHeight: " + videoHeight);
+        if (videoWidth <= 0 && videoHeight <= 0) {
+            return;
+        }
+        boolean isLandscape = true;
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            isLandscape = false;
+        }
+
+        int deviceWidth;
+        int deviceHeight;
+        if (isLandscape) {
+            deviceWidth = Math.max(ScreenUtil.getScreenWidth(this), ScreenUtil.getScreenHeight(this));
+            deviceHeight = Math.min(ScreenUtil.getScreenWidth(this), ScreenUtil.getScreenHeight(this));
+        } else {
+            deviceWidth = Math.min(ScreenUtil.getScreenWidth(this), ScreenUtil.getScreenHeight(this));
+            deviceHeight = Math.max(ScreenUtil.getScreenWidth(this), ScreenUtil.getScreenHeight(this));
+        }
+        int[] scaledSize = ScreenUtil.scaledSize(deviceWidth, deviceHeight, videoWidth, videoHeight);
+        //  TUIKitLog.i(TAG, "scaled width: " + scaledSize[0] + " height: " + scaledSize[1]);
+        ViewGroup.LayoutParams params = mVideoView.getLayoutParams();
+        params.width = scaledSize[0];
+        params.height = scaledSize[1];
+        mVideoView.setLayoutParams(params);
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (orientationUtils != null)
-            orientationUtils.releaseListener();
-    }
-
-    @Override
-    public void onBackPressed() {
-        //先返回正常状态
-        if (orientationUtils.getScreenType() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-            videoPlayer.getFullscreenButton().performClick();
-            return;
+        if (mVideoView != null) {
+            mVideoView.stop();
         }
-        //释放所有
-        videoPlayer.setVideoAllCallBack(null);
-        GSYVideoManager.releaseAllVideos();
-        if (isTransition && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            super.onBackPressed();
-        } else {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    finish();
-                    overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
-                }
-            }, 500);
-        }
-    }
-
-
-    private void initTransition() {
-        if (isTransition && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            postponeEnterTransition();
-            ViewCompat.setTransitionName(videoPlayer, IMG_TRANSITION);
-            addTransitionListener();
-            startPostponedEnterTransition();
-        } else {
-            videoPlayer.startPlayLogic();
-        }
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private boolean addTransitionListener() {
-        transition = getWindow().getSharedElementEnterTransition();
-        if (transition != null) {
-            transition.addListener(new OnTransitionListener(){
-                @Override
-                public void onTransitionEnd(Transition transition) {
-                    super.onTransitionEnd(transition);
-                    videoPlayer.startPlayLogic();
-                    transition.removeListener(this);
-                }
-            });
-            return true;
-        }
-        return false;
     }
 
 }

@@ -1,6 +1,7 @@
 package com.yijian.them.ui.home.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.InputType;
@@ -22,6 +23,7 @@ import com.yijian.them.basic.BasicActivity;
 import com.yijian.them.basic.BasicFragment;
 import com.yijian.them.common.Config;
 import com.yijian.them.ui.home.HomeMoudle;
+import com.yijian.them.ui.home.activity.PlayPickActivity;
 import com.yijian.them.ui.home.adapter.CommentListAdapter;
 import com.yijian.them.ui.home.adapter.ImageAdapter;
 import com.yijian.them.ui.login.DataMoudle;
@@ -122,6 +124,7 @@ public class CommentFragment extends BasicFragment {
             public void keyBoardShow(int height) {
                 StringUtils.setMargins(llComment, 0, 0, 0, height);
             }
+
             @Override
             public void keyBoardHide(int height) {
                 StringUtils.setMargins(llComment, 0, 0, 0, 0);
@@ -155,14 +158,14 @@ public class CommentFragment extends BasicFragment {
     }
 
 
-    @OnClick({R.id.ivBack, R.id.ivMore, R.id.tvZan, R.id.tvSend,R.id.civHead1})
+    @OnClick({R.id.ivBack, R.id.ivMore, R.id.tvZan, R.id.tvSend, R.id.civHead1})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ivBack:
                 getActivity().finish();
                 break;
             case R.id.civHead1:
-                JumpUtils.jumpUserInfoActivity(getContext(),userId);
+                JumpUtils.jumpUserInfoActivity(getContext(), userId);
                 break;
             case R.id.ivMore:
                 if (SPUtils.getInt(Config.USERID) == userId) {
@@ -256,21 +259,37 @@ public class CommentFragment extends BasicFragment {
                                 layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;
                                 nsgvImage.setLayoutParams(layoutParams);
                             }
+                            final String videoUrl = dataBean.getVideoUrl();
                             ImageAdapter imageAdapter = new ImageAdapter(imgUrls, 1);
+                            if (!TextUtils.isEmpty(videoUrl)) {
+                                imageAdapter.setVideo(true);
+                                imageAdapter.setOnPlayListener(new ImageAdapter.OnPlayListener() {
+                                    @Override
+                                    public void onPlay() {
+                                        Intent intent = new Intent(getActivity(), PlayPickActivity.class);
+                                        intent.putExtra(Config.VIDEOURL, videoUrl);
+                                        startActivity(intent);
+                                    }
+                                });
+                            } else {
+                                imageAdapter.setVideo(false);
+                                imageAdapter.setOnSaveImageListener(new ImageAdapter.OnSaveImageListener() {
+                                    @Override
+                                    public void onSaveImage(List<String> urls, int position) {
+                                        imageDialog = new ImageDialog(getActivity(), urls, position);
+                                        imageDialog.show();
+                                        imageDialog.setOnSaveImageListener(new ImageDialog.OnSaveImageListener() {
+                                            @Override
+                                            public void onSaveImage(String url) {
+                                                imageDialog.saveImage(url);
+                                            }
+                                        });
+                                    }
+                                });
+                            }
                             nsgvImage.setAdapter(imageAdapter);
-                            imageAdapter.setOnSaveImageListener(new ImageAdapter.OnSaveImageListener() {
-                                @Override
-                                public void onSaveImage(List<String> urls, int position) {
-                                    imageDialog = new ImageDialog(getActivity(), urls, position);
-                                    imageDialog.show();
-                                    imageDialog.setOnSaveImageListener(new ImageDialog.OnSaveImageListener() {
-                                        @Override
-                                        public void onSaveImage(String url) {
-                                            imageDialog.saveImage(url);
-                                        }
-                                    });
-                                }
-                            });
+
+
                         } else {
                             rcrlImage.setVisibility(View.GONE);
                         }

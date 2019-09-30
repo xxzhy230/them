@@ -14,6 +14,8 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.tencent.imsdk.TIMConversationType;
+import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
 import com.yijian.them.R;
 import com.yijian.them.api.AuthApi;
 import com.yijian.them.basic.BasicActivity;
@@ -22,6 +24,7 @@ import com.yijian.them.common.Config;
 import com.yijian.them.ui.home.HomeMoudle;
 import com.yijian.them.ui.home.adapter.TuijianAdapter;
 import com.yijian.them.ui.login.DataMoudle;
+import com.yijian.them.ui.team.TeamInfoActivity;
 import com.yijian.them.utils.JumpUtils;
 import com.yijian.them.utils.dialog.AlertUtils;
 import com.yijian.them.utils.dialog.DynamicDialog;
@@ -89,7 +92,7 @@ public class TuijianFragment extends BasicFragment implements OnRefreshListener,
 
             @Override
             public void svaeImage(List<String> urls, int position) {
-                imageDialog = new ImageDialog(getActivity(), urls,position);
+                imageDialog = new ImageDialog(getActivity(), urls, position);
                 imageDialog.show();
                 imageDialog.setOnSaveImageListener(new ImageDialog.OnSaveImageListener() {
                     @Override
@@ -130,8 +133,12 @@ public class TuijianFragment extends BasicFragment implements OnRefreshListener,
                     });
                 }
             }
-        });
 
+            @Override
+            public void joinTeam(String teamId, String teamName) {
+                teamOutOrAdd(teamId, teamName);
+            }
+        });
     }
 
     @Override
@@ -146,7 +153,6 @@ public class TuijianFragment extends BasicFragment implements OnRefreshListener,
             recommended();
             SPUtils.putInt(Config.SENDDYNAMIC, 0);
         }
-
     }
 
     /**
@@ -165,9 +171,6 @@ public class TuijianFragment extends BasicFragment implements OnRefreshListener,
                     public void success(String response, int code) {
                         AlertUtils.dismissProgress();
                         Log.d("加入黑名单: ", response + "");
-//                        List<HomeMoudle.DataBean> list = adapter.getList();
-//                        list.remove(dataBean);
-//                        adapter.notifyDataSetChanged();
                         page = 1;
                         recommended();
                     }
@@ -284,7 +287,7 @@ public class TuijianFragment extends BasicFragment implements OnRefreshListener,
                     public void success(List<HomeMoudle.DataBean> response, int code) {
                         AlertUtils.dismissProgress();
                         Log.d("获取推荐信息: ", response + "");
-                        if (page == 1){
+                        if (page == 1) {
                             adapter.clear();
                         }
                         if (code == 10001) {
@@ -344,5 +347,28 @@ public class TuijianFragment extends BasicFragment implements OnRefreshListener,
                 ToastUtils.toastCenter(getActivity(), "请开启读写内存卡权限");
             }
         }
+    }
+
+    private void teamOutOrAdd(final String teamId, final String teamName) {
+        Http.http.createApi(AuthApi.class).teamOutOrAdd(teamId, "1")
+                .compose(context.<JsonResult<String>>bindToLifecycle())
+                .compose(context.<JsonResult<String>>applySchedulers())
+                .subscribe(context.newSubscriber(new CallBack<String>() {
+                    @Override
+                    public void success(String str, int code) {
+                        AlertUtils.dismissProgress();
+                        ChatInfo chatInfo = new ChatInfo();
+                        chatInfo.setId(teamId);
+                        chatInfo.setChatName(teamName);
+                        chatInfo.setType(TIMConversationType.Group);
+                        JumpUtils.jumpMessageActivity(getActivity(), 0, chatInfo);
+                    }
+
+                    @Override
+                    public void fail(String errorMessage, int status) {
+                        AlertUtils.dismissProgress();
+                        ToastUtils.toastCenter(getActivity(), errorMessage + "");
+                    }
+                }));
     }
 }

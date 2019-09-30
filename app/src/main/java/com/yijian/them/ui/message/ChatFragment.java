@@ -11,6 +11,7 @@ import com.tencent.imsdk.TIMGroupManager;
 import com.tencent.imsdk.TIMGroupMemberInfo;
 import com.tencent.imsdk.TIMUserProfile;
 import com.tencent.imsdk.TIMValueCallBack;
+import com.tencent.qcloud.tim.uikit.component.NoticeLayout;
 import com.tencent.qcloud.tim.uikit.component.TitleBarLayout;
 import com.tencent.qcloud.tim.uikit.modules.chat.ChatLayout;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
@@ -61,8 +62,6 @@ public class ChatFragment extends BaseFragment {
         chatLayout.initDefault();
 // 传入 ChatInfo 的实例，这个实例必须包含必要的聊天信息，一般从调用方传入
         chatLayout.setChatInfo(chatInfo);
-//        chatLayout.getMessageLayout().setBackgroundResource(R.color.white);
-//        chatLayout.getInputLayout().setBackgroundResource(R.color.white);
         chatManager = chatLayout.getChatManager();
         TitleBarLayout titleBar = chatLayout.getTitleBar();
         titleBar.setOnRightClickListener(new View.OnClickListener() {
@@ -77,18 +76,29 @@ public class ChatFragment extends BaseFragment {
             }
         });
         setHeadImage();
-//        setMessageUserNick();
+        setNotice();
+
+        setMessageUserNick();
+    }
+
+    private void setNotice() {
+        // 从 ChatLayout 里获取 NoticeLayout
+        NoticeLayout noticeLayout = chatLayout.getNoticeLayout();
+// 可以使通知区域一致展示
+        noticeLayout.alwaysShow(false);
+        noticeLayout.setVisibility(View.GONE);
     }
 
     private void setMessageUserNick() {
-        // 从ChatLayout里获取MessageLayout
+// 从 ChatLayout 里获取 MessageLayout
         MessageLayout messageLayout = chatLayout.getMessageLayout();
-// 设置提示的背景
-        messageLayout.setTipsMessageBubble(new ColorDrawable(0xA020F000));
-// 设置提示的字体大小
-        messageLayout.setTipsMessageFontSize(20);
-// 设置提示的字体颜色
-        messageLayout.setTipsMessageFontColor(0x7CFC0000);
+////// 设置头像 //////
+// 设置默认头像，默认与朋友与自己的头像相同
+        messageLayout.setAvatar(R.mipmap.register_icon_avatar);
+// 设置头像圆角，不设置则默认不做圆角处理
+        messageLayout.setAvatarRadius(50);
+// 设置头像大小
+        messageLayout.setAvatarSize(new int[]{48, 48});
     }
 
     private void setHeadImage() {

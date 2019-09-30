@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.yijian.them.R;
 import com.yijian.them.ui.home.HomeMoudle;
+import com.yijian.them.utils.JumpUtils;
 import com.yijian.them.utils.Times;
 import com.yijian.them.view.CircleImageView;
 import com.yijian.them.view.MyListView;
@@ -40,7 +41,7 @@ public class DynamicMessageAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
             convertView = View.inflate(parent.getContext(), R.layout.item_dynamic_message, null);
@@ -92,6 +93,15 @@ public class DynamicMessageAdapter extends BaseAdapter {
             Picasso.with(parent.getContext()).load(fromAvatar).into(holder.civHeadImage);
             holder.civHeadImage.setVisibility(View.VISIBLE);
         }
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HomeMoudle.DataBean dataBean = mList.get(position);
+                int dynamicId = dataBean.getDynamicId();
+                JumpUtils.jumpDynamicActivity(parent.getContext(), 7, "", dynamicId + "");
+            }
+        });
         return convertView;
     }
 

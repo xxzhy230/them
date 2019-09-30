@@ -11,7 +11,6 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -22,18 +21,17 @@ import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
-import com.squareup.picasso.Picasso;
 import com.yijian.them.R;
 import com.yijian.them.api.AuthApi;
 import com.yijian.them.basic.BasicActivity;
 import com.yijian.them.basic.BasicFragment;
 import com.yijian.them.common.Config;
 import com.yijian.them.ui.home.adapter.ImageAdapter;
-import com.yijian.them.ui.login.DataMoudle;
 import com.yijian.them.utils.FileUtil;
 import com.yijian.them.utils.JumpUtils;
 import com.yijian.them.utils.StringUtils;
 import com.yijian.them.utils.dialog.AlertUtils;
+import com.yijian.them.utils.dialog.SelectImageOrVideoDialog;
 import com.yijian.them.utils.http.CallBack;
 import com.yijian.them.utils.http.Http;
 import com.yijian.them.utils.http.JsonResult;
@@ -111,7 +109,6 @@ public class SendDynamicFragment extends BasicFragment {
             tvHot.setClickable(false);
             tvHot.setEnabled(false);
         }
-
         etContent.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -136,7 +133,6 @@ public class SendDynamicFragment extends BasicFragment {
             }
         });
         initImage();
-
     }
 
     private void initImage() {
@@ -147,7 +143,8 @@ public class SendDynamicFragment extends BasicFragment {
         imageAdapter.setOnAddImageListener(new ImageAdapter.OnAddImageListener() {
             @Override
             public void onAddImage() {
-                select_photo();
+                showSelectImage();
+
             }
 
             @Override
@@ -157,6 +154,21 @@ public class SendDynamicFragment extends BasicFragment {
                 imageAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    /**
+     * 选择图片或者视频
+     */
+    private void showSelectImage() {
+        SelectImageOrVideoDialog selectImageOrVideoDialog = new SelectImageOrVideoDialog(getActivity());
+        selectImageOrVideoDialog.setOnClicklistener(new SelectImageOrVideoDialog.OnClicklistener() {
+            @Override
+            public void onClick(int type) {
+                SendDynamicFragment.this.type = type;
+                select_photo(type);
+            }
+        });
+        selectImageOrVideoDialog.show();
     }
 
 
@@ -193,9 +205,6 @@ public class SendDynamicFragment extends BasicFragment {
         AlertUtils.showProgress(false, getActivity());
         AuthApi api = Http.http.createApi(AuthApi.class);
         Observable<JsonResult<String>> jsonResultObservable = null;
-        if (mList.size() ==1){
-            type=0;
-        }
         if (type == 2) {
             File file = new File(videoPath);
             RequestBody fileBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
@@ -244,7 +253,7 @@ public class SendDynamicFragment extends BasicFragment {
      */
     private final int SELECT_PHOTO = 10001;
 
-    private void select_photo() {
+    private void select_photo(int type) {
         if (ContextCompat.checkSelfPermission(getActivity(),
                 "android.permission.WRITE_EXTERNAL_STORAGE")
                 != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(getActivity(),
@@ -256,18 +265,30 @@ public class SendDynamicFragment extends BasicFragment {
                     new String[]{"android.permission.WRITE_EXTERNAL_STORAGE", "android.permission.READ_EXTERNAL_STORAGE", "android.permission.CAMERA"},
                     SELECT_PHOTO);
         } else {
-            openAlbum();
+            openAlbum(type);
         }
     }
 
-    private void openAlbum() {
-        PictureSelectionModel pictureSelectionModel = PictureSelector.create(this).openGallery(PictureMimeType.ofImage());
-        pictureSelectionModel.compress(true);
-        pictureSelectionModel.selectionMode(PictureConfig.SINGLE);
-        pictureSelectionModel.isCamera(false).
-                minimumCompressSize(200).isGif(false).
-                maxSelectNum(9 - selectNum).selectionMode(PictureConfig.MULTIPLE).
-                forResult(PictureConfig.CHOOSE_REQUEST);
+    private void openAlbum(int type) {
+        PictureSelectionModel pictureSelectionModel;
+        if (type == 1) {
+            pictureSelectionModel = PictureSelector.create(this).openGallery(PictureMimeType.ofImage());
+            pictureSelectionModel.compress(true);
+            pictureSelectionModel.selectionMode(PictureConfig.SINGLE);
+            pictureSelectionModel.isCamera(false).
+                    minimumCompressSize(200).isGif(false).
+                    maxSelectNum(9 - selectNum).selectionMode(PictureConfig.MULTIPLE).
+                    forResult(PictureConfig.CHOOSE_REQUEST);
+        } else {
+            pictureSelectionModel = PictureSelector.create(this).openGallery(PictureMimeType.ofVideo());
+            pictureSelectionModel.compress(true);
+            pictureSelectionModel.selectionMode(PictureConfig.SINGLE);
+            pictureSelectionModel.isCamera(false).
+                    minimumCompressSize(200).isGif(false).
+                    maxSelectNum(1).selectionMode(PictureConfig.MULTIPLE).
+                    forResult(PictureConfig.CHOOSE_REQUEST);
+        }
+
     }
 
     @Override
@@ -289,7 +310,6 @@ public class SendDynamicFragment extends BasicFragment {
                 LocalMedia localMedia = selectList.get(0);
                 String pictureType = localMedia.getPictureType();
                 if ("image/jpeg".equals(pictureType)) {
-                    type = 1;
                     rlVideo.setVisibility(View.GONE);
                     nsgvImage.setVisibility(View.VISIBLE);
                     selectNum = selectList.size();
@@ -302,15 +322,11 @@ public class SendDynamicFragment extends BasicFragment {
                     }
                     imageAdapter.setData(mList);
                 } else if ("video/mp4".equals(pictureType)) {
-                    type = 2;
                     rlVideo.setVisibility(View.VISIBLE);
                     nsgvImage.setVisibility(View.GONE);
                     videoPath = localMedia.getPath();
                     Bitmap videoThumb = FileUtil.getVideoThumb(videoPath);
                     ivVideoBg.setImageBitmap(videoThumb);
-                } else if ("audio/mpeg".equals(pictureType)) {
-                    rlVideo.setVisibility(View.VISIBLE);
-                    nsgvImage.setVisibility(View.GONE);
                 }
             }
         } else if (requestCode == 5) {
@@ -320,8 +336,6 @@ public class SendDynamicFragment extends BasicFragment {
         } else if (requestCode == 4) {
             tagId = data.getStringExtra(Config.TAGID);
             tagName = data.getStringExtra(Config.TAGNAME);
-//            topicId = data.getStringExtra(Config.TOPICID);
-//            topicName = data.getStringExtra(Config.TOPICNAME);
             tvHot.setText(tagName);
         }
     }
@@ -336,7 +350,7 @@ public class SendDynamicFragment extends BasicFragment {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == SELECT_PHOTO) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openAlbum();
+                openAlbum(type);
             } else {
                 ToastUtils.toastCenter(getActivity(), "请开启读写权限");
             }
@@ -349,5 +363,6 @@ public class SendDynamicFragment extends BasicFragment {
         SPUtils.putString(Config.TAGNAME, null);
         SPUtils.putString(Config.TAGID, null);
         SPUtils.putInt(Config.TOPICSENDDYNAMIC, 0);
+
     }
 }

@@ -1,15 +1,12 @@
 package com.yijian.them.ui.home;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yijian.them.R;
-import com.yijian.them.ui.home.activity.PlayPickActivity;
 import com.yijian.them.ui.home.adapter.HomeAdapter;
 import com.yijian.them.ui.home.fragment.GuanzhuFragment;
 import com.yijian.them.ui.home.fragment.NearbyFragment;

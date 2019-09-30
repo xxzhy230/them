@@ -551,4 +551,11 @@ public interface AuthApi {
      */
     @GET("push/dynamic")
     Observable<JsonResult<List<HomeMoudle.DataBean>>> dynamicMessage();
+
+    /**
+     * 动态消息
+     */
+    @GET("push/team")
+    Observable<JsonResult<List<HomeMoudle.DataBean>>> teamMessage();
+
 }

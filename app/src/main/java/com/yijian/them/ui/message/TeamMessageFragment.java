@@ -13,6 +13,7 @@ import com.yijian.them.basic.BasicActivity;
 import com.yijian.them.basic.BasicFragment;
 import com.yijian.them.ui.home.HomeMoudle;
 import com.yijian.them.ui.message.adapter.SystemMessageAdapter;
+import com.yijian.them.ui.message.adapter.TeamMessageAdapter;
 import com.yijian.them.utils.http.CallBack;
 import com.yijian.them.utils.http.Http;
 import com.yijian.them.utils.http.JsonResult;
@@ -32,7 +33,7 @@ public class TeamMessageFragment extends BasicFragment {
     LinearLayout llDefault;
     @BindView(R.id.lvSystem)
     ListView lvSystem;
-    private SystemMessageAdapter adapter;
+    private TeamMessageAdapter adapter;
 
     @Override
     protected void onClickEvent() {
@@ -49,13 +50,13 @@ public class TeamMessageFragment extends BasicFragment {
     @Override
     protected void initView(Bundle bundle) {
         context = (BasicActivity)getActivity();
-        adapter = new SystemMessageAdapter();
+        adapter = new TeamMessageAdapter();
         lvSystem.setAdapter(adapter);
-        systemMessage();
+        teamMessage();
     }
 
-    private void systemMessage() {
-        Http.http.createApi(AuthApi.class).systemMessage()
+    private void teamMessage() {
+        Http.http.createApi(AuthApi.class).teamMessage()
                 .compose(context.<JsonResult<List<HomeMoudle.DataBean>>>bindToLifecycle())
                 .compose(context.<JsonResult<List<HomeMoudle.DataBean>>>applySchedulers())
                 .subscribe(context.newSubscriber(new CallBack<List<HomeMoudle.DataBean>>() {
@@ -66,7 +67,7 @@ public class TeamMessageFragment extends BasicFragment {
                             adapter.setData(response);
                         } else {
                             llDefault.setVisibility(View.VISIBLE);
-                            tvDefault.setText("暂无系统消息");
+                            tvDefault.setText("暂无小队消息");
                             ivDefault.setImageResource(R.mipmap.default_message);
                         }
                     }

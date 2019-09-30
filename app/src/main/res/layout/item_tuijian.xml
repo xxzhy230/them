@@ -133,7 +133,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginRight="15dp"
                 android:gravity="center_vertical">
 
                 <TextView
@@ -142,7 +141,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textColor="@color/color_FF999999"
-                    android:textSize="12dp" />
+                    android:textSize="11dp" />
 
                 <TextView
                     android:id="@+id/tvPLNum"
@@ -153,18 +152,18 @@
                     android:drawablePadding="5dp"
                     android:text="评论"
                     android:textColor="@color/color_FF333333"
-                    android:textSize="12dp" />
+                    android:textSize="11dp" />
 
                 <TextView
                     android:id="@+id/tvZanNum"
-                    android:layout_width="60dp"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@mipmap/home_zan"
                     android:drawablePadding="5dp"
                     android:gravity=""
                     android:text="点赞"
                     android:textColor="@color/color_FF333333"
-                    android:textSize="12dp" />
+                    android:textSize="11dp" />
             </LinearLayout>
         </LinearLayout>
 

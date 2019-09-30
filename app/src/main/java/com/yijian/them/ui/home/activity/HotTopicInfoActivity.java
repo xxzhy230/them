@@ -108,11 +108,13 @@ public class HotTopicInfoActivity extends BasicActivity implements OnRefreshList
     private String tagHeat;
     private TopicGroupAdapter topicGroupAdapter;
     private String tagName;
+
     @Override
     public int initView() {
         StatusBarUtil.setStatusBar(this, false, false);
         return R.layout.activity_hot_topic_info;
     }
+
     @Override
     public void initData() {
         ButterKnife.bind(this);
@@ -206,6 +208,11 @@ public class HotTopicInfoActivity extends BasicActivity implements OnRefreshList
                     });
                 }
             }
+
+            @Override
+            public void joinTeam(String teamd, String teamName) {
+                teamOutOrAdd(teamd, teamName);
+            }
         });
         mlvTopicGroup.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -220,8 +227,6 @@ public class HotTopicInfoActivity extends BasicActivity implements OnRefreshList
             }
         });
     }
-
-
 
 
     private TuijianAdapter dynamicAdapter;
@@ -379,7 +384,7 @@ public class HotTopicInfoActivity extends BasicActivity implements OnRefreshList
                 });
                 break;
             case R.id.tvFollow:
-                AlertUtils.showProgress(false,this);
+                AlertUtils.showProgress(false, this);
                 followedTag();
                 break;
             case R.id.ivSendDynamic:
@@ -500,11 +505,7 @@ public class HotTopicInfoActivity extends BasicActivity implements OnRefreshList
                     public void success(String response, int code) {
                         AlertUtils.dismissProgress();
                         Log.d("加入黑名单: ", response + "");
-//                        List<HomeMoudle.DataBean> list = adapter.getList();
-//                        list.remove(dataBean);
-//                        adapter.notifyDataSetChanged();
                         page = 1;
-//                        following();
                     }
 
                     @Override
@@ -557,5 +558,26 @@ public class HotTopicInfoActivity extends BasicActivity implements OnRefreshList
         refreshLayout.finishLoadMore();
     }
 
+    private void teamOutOrAdd(final String teamId, final String teamName) {
+        Http.http.createApi(AuthApi.class).teamOutOrAdd(teamId, "1")
+                .compose(this.<JsonResult<String>>bindToLifecycle())
+                .compose(this.<JsonResult<String>>applySchedulers())
+                .subscribe(this.newSubscriber(new CallBack<String>() {
+                    @Override
+                    public void success(String str, int code) {
+                        AlertUtils.dismissProgress();
+                        ChatInfo chatInfo = new ChatInfo();
+                        chatInfo.setId(teamId);
+                        chatInfo.setChatName(teamName);
+                        chatInfo.setType(TIMConversationType.Group);
+                        JumpUtils.jumpMessageActivity(HotTopicInfoActivity.this, 0, chatInfo);
+                    }
 
+                    @Override
+                    public void fail(String errorMessage, int status) {
+                        AlertUtils.dismissProgress();
+                        ToastUtils.toastCenter(HotTopicInfoActivity.this, errorMessage + "");
+                    }
+                }));
+    }
 }

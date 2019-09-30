@@ -43,9 +43,9 @@ android {
         }
     }
         packagingOptions {
-            exclude 'lib/armeabi-v7a/libijkplayer.so'
-            exclude 'lib/armeabi-v7a/libijksdl.so'
-            exclude 'lib/armeabi-v7a/libijkffmpeg.so'
+//            exclude 'lib/armeabi-v7a/libijkplayer.so'
+//            exclude 'lib/armeabi-v7a/libijksdl.so'
+//            exclude 'lib/armeabi-v7a/libijkffmpeg.so'
         }
 }
 repositories {
@@ -90,9 +90,8 @@ dependencies {
     implementation files('libs/jpush-android-3.3.4.jar')
     implementation 'com.tencent.bugly:crashreport:latest.release' //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9
     implementation 'com.tencent.bugly:nativecrashreport:latest.release' //其中latest.release指代最新Bugly NDK版本号，也可以指定明确的版本号，例如3.0
-    api 'com.shuyu:gsyVideoPlayer-java:5.0.2'
-    api 'com.shuyu:gsyVideoPlayer-ex_so:5.0.2'
-//    implementation 'com.tencent.imsdk:tuikit:4.4.900'
+//    api 'com.shuyu:gsyVideoPlayer-java:5.0.2'
+//    api 'com.shuyu:gsyVideoPlayer-ex_so:5.0.2'
     implementation project(path: ':tuikit')
 
 }

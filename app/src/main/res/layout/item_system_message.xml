@@ -13,8 +13,8 @@
     <ImageView
         android:scaleType="centerCrop"
         android:id="@+id/ivImage"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:src="@mipmap/message_notice" />
     </com.gcssloop.widget.RCRelativeLayout>
     <LinearLayout

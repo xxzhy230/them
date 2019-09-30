@@ -168,7 +168,6 @@ public class TeamInfoActivity extends BasicActivity {
                     @Override
                     public void success(String str, int code) {
                         AlertUtils.dismissProgress();
-//                        teamInfo(teamId);
                         ChatInfo chatInfo = new ChatInfo();
                         chatInfo.setId(teamId);
                         chatInfo.setChatName(teamName);

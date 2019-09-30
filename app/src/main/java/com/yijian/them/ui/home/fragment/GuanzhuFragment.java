@@ -14,6 +14,8 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.tencent.imsdk.TIMConversationType;
+import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
 import com.yijian.them.R;
 import com.yijian.them.api.AuthApi;
 import com.yijian.them.basic.BasicActivity;
@@ -129,6 +131,11 @@ public class GuanzhuFragment extends BasicFragment implements OnRefreshListener,
                     });
                 }
 
+            }
+
+            @Override
+            public void joinTeam(String teamd, String teamName) {
+                teamOutOrAdd(teamd, teamName);
             }
         });
         gvTag.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -352,5 +359,28 @@ public class GuanzhuFragment extends BasicFragment implements OnRefreshListener,
     public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
         following();
         refreshLayout.finishLoadMore();
+    }
+
+    private void teamOutOrAdd(final String teamId, final String teamName) {
+        Http.http.createApi(AuthApi.class).teamOutOrAdd(teamId, "1")
+                .compose(context.<JsonResult<String>>bindToLifecycle())
+                .compose(context.<JsonResult<String>>applySchedulers())
+                .subscribe(context.newSubscriber(new CallBack<String>() {
+                    @Override
+                    public void success(String str, int code) {
+                        AlertUtils.dismissProgress();
+                        ChatInfo chatInfo = new ChatInfo();
+                        chatInfo.setId(teamId);
+                        chatInfo.setChatName(teamName);
+                        chatInfo.setType(TIMConversationType.Group);
+                        JumpUtils.jumpMessageActivity(getActivity(), 0, chatInfo);
+                    }
+
+                    @Override
+                    public void fail(String errorMessage, int status) {
+                        AlertUtils.dismissProgress();
+                        ToastUtils.toastCenter(getActivity(), errorMessage + "");
+                    }
+                }));
     }
 }

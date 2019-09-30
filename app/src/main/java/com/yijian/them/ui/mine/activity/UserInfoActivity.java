@@ -14,6 +14,8 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.squareup.picasso.Picasso;
+import com.tencent.imsdk.TIMConversationType;
+import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
 import com.yijian.them.R;
 import com.yijian.them.api.AuthApi;
 import com.yijian.them.basic.BasicActivity;
@@ -22,6 +24,7 @@ import com.yijian.them.ui.home.HomeMoudle;
 import com.yijian.them.ui.home.adapter.TuijianAdapter;
 import com.yijian.them.ui.login.DataMoudle;
 import com.yijian.them.utils.JumpUtils;
+import com.yijian.them.utils.StringUtils;
 import com.yijian.them.utils.dialog.AlertUtils;
 import com.yijian.them.utils.dialog.DynamicDialog;
 import com.yijian.them.utils.dialog.ImageDialog;
@@ -77,6 +80,10 @@ public class UserInfoActivity extends BasicActivity implements OnRefreshListener
     LinearLayout llDefault;
     @BindView(R.id.srlLayout)
     SmartRefreshLayout srlLayout;
+    @BindView(R.id.ivSex)
+    ImageView ivSex;
+    @BindView(R.id.tvAge)
+    TextView tvAge;
     private int page = 1;
     private int userId;
     private TuijianAdapter adapter;
@@ -148,6 +155,11 @@ public class UserInfoActivity extends BasicActivity implements OnRefreshListener
                     });
                 }
             }
+
+            @Override
+            public void joinTeam(String teamd, String teamName) {
+                teamOutOrAdd(teamd,teamName);
+            }
         });
     }
 
@@ -166,6 +178,7 @@ public class UserInfoActivity extends BasicActivity implements OnRefreshListener
         }
 
     }
+
     /**
      * 个人动态
      */
@@ -196,14 +209,14 @@ public class UserInfoActivity extends BasicActivity implements OnRefreshListener
                         llDefault.setVisibility(View.VISIBLE);
                         tvDefault.setText("暂无动态");
                     }
-                }else if (code == 10000){
+                } else if (code == 10000) {
                     srlLayout.finishLoadMoreWithNoMoreData();
                     if (page == 1) {
                         llDefault.setVisibility(View.VISIBLE);
                         ivDefault.setImageResource(R.mipmap.default_dynamic);
                         tvDefault.setText("暂无动态，快发个动态吧");
                     }
-                }else if (code == 50002) {
+                } else if (code == 50002) {
                     llDefault.setVisibility(View.VISIBLE);
                     ivDefault.setImageResource(R.mipmap.default_load);
                     tvDefault.setText("哎呀！加载失败");
@@ -239,6 +252,15 @@ public class UserInfoActivity extends BasicActivity implements OnRefreshListener
                     Picasso.with(UserInfoActivity.this).load(realImg).into(civHead);
                     tvNickName.setText(nickName);
                     tvRemark.setText(sign);
+                    String birthday = data.getBirthday();
+                    String age = StringUtils.getAge(birthday);
+                    tvAge.setText(age);
+                    String gender = data.getGender();
+                    if ("1".equals(gender)) {
+                        ivSex.setImageResource(R.mipmap.register_icon_man_selected);
+                    } else {
+                        ivSex.setImageResource(R.mipmap.register_icon_woman_selected);
+                    }
                 }
             }
         });
@@ -412,5 +434,28 @@ public class UserInfoActivity extends BasicActivity implements OnRefreshListener
         adapter.clear();
         dynamicInfo();
         refreshLayout.finishRefresh();
+    }
+
+    private void teamOutOrAdd(final String teamId, final String teamName) {
+        Http.http.createApi(AuthApi.class).teamOutOrAdd(teamId, "1")
+                .compose(this.<JsonResult<String>>bindToLifecycle())
+                .compose(this.<JsonResult<String>>applySchedulers())
+                .subscribe(this.newSubscriber(new CallBack<String>() {
+                    @Override
+                    public void success(String str, int code) {
+                        AlertUtils.dismissProgress();
+                        ChatInfo chatInfo = new ChatInfo();
+                        chatInfo.setId(teamId);
+                        chatInfo.setChatName(teamName);
+                        chatInfo.setType(TIMConversationType.Group);
+                        JumpUtils.jumpMessageActivity(UserInfoActivity.this, 0, chatInfo);
+                    }
+
+                    @Override
+                    public void fail(String errorMessage, int status) {
+                        AlertUtils.dismissProgress();
+                        ToastUtils.toastCenter(UserInfoActivity.this, errorMessage + "");
+                    }
+                }));
     }
 }
