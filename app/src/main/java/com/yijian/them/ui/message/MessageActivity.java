@@ -58,6 +58,7 @@ public class MessageActivity extends BasicActivity {
 
         if (messageType == 1 ||
                 messageType == 0 ||
+                messageType == 5 ||
                 messageType == 6 ||
                 messageType == 7 ||
                 messageType == 8) {

@@ -1,8 +1,13 @@
 package com.yijian.them.ui.team.moudle;
 
-import com.tencent.imsdk.TIMGroupMemberInfo;
+import android.text.TextUtils;
 
+import com.tencent.imsdk.TIMGroupMemberInfo;
+import com.tencent.imsdk.TIMUserProfile;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class TeamInfoMoudle {
@@ -292,14 +297,24 @@ public class TeamInfoMoudle {
                 this.userId = userId;
             }
 
-//            public void changeData(List<TIMGroupMemberInfo> timGroupMemberInfos) {
-//                List<MembersBean> mList = new ArrayList();
-//                for (int i = 0; i < timGroupMemberInfos.size(); i++) {
-//                    MembersBean membersBean = new MembersBean();
-//                    TIMGroupMemberInfo timGroupMemberInfo = timGroupMemberInfos.get(i);
-//                    membersBean.setRealImg(timGroupMemberInfo.);
-//                }
-//            }
+            public List<TeamInfoMoudle.DataBean.MembersBean> changeData(List<TIMUserProfile> timUserProfiles) {
+                List<TeamInfoMoudle.DataBean.MembersBean> mList = new ArrayList<>();
+                for (int i = 0; i < timUserProfiles.size(); i++) {
+                    TeamInfoMoudle.DataBean.MembersBean membersBean = new MembersBean();
+                    membersBean.setBirthday(new SimpleDateFormat("yyyy-MM-dd").format(new Date(timUserProfiles.get(i).getBirthday())));
+                    membersBean.setNickName(timUserProfiles.get(i).getNickName());
+                    membersBean.setRealImg(timUserProfiles.get(i).getFaceUrl());
+                    membersBean.setGender(timUserProfiles.get(i).getGender() + "");
+                    String identifier = timUserProfiles.get(i).getIdentifier();
+                    if (TextUtils.isEmpty(identifier)) {
+                        identifier = "0";
+                    }
+                    membersBean.setUserId(Integer.parseInt(identifier));
+                    mList.add(membersBean);
+                }
+                return mList;
+            }
+
         }
     }
 }

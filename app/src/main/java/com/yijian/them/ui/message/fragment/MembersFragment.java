@@ -1,6 +1,7 @@
 package com.yijian.them.ui.message.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.tencent.imsdk.TIMFriendshipManager;
+import com.tencent.imsdk.TIMGroupManager;
+import com.tencent.imsdk.TIMGroupMemberInfo;
+import com.tencent.imsdk.TIMUserProfile;
+import com.tencent.imsdk.TIMValueCallBack;
+import com.tencent.imsdk.ext.group.TIMGroupMemberResult;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
 import com.yijian.them.R;
 import com.yijian.them.api.AuthApi;
@@ -70,14 +77,54 @@ public class MembersFragment extends BasicFragment {
                     if (members.size() > 0) {
                         tvState.setText("删除");
                         tvState.setTextColor(getResources().getColor(R.color.color_F06063));
-                    }else{
+                    } else {
                         tvState.setText("取消");
                         tvState.setTextColor(getResources().getColor(R.color.color_FF333333));
                     }
                 }
             }
         });
-        getTeamMembers();
+        if (groupId.contains("teamId")) {
+            getTeamMembers();
+        } else {
+            getGroupMembers();
+        }
+
+    }
+
+    /**
+     * 获取群组成员
+     */
+    private void getGroupMembers() {
+        TIMGroupManager.getInstance().getGroupMembers(groupId, new TIMValueCallBack<List<TIMGroupMemberInfo>>() {
+            @Override
+            public void onError(int i, String s) {
+                Log.d("群成员列表失败  ", s + "  状态码  " + i);
+            }
+
+            @Override
+            public void onSuccess(List<TIMGroupMemberInfo> timGroupMemberInfos) {
+                List<String> userIdList = new ArrayList<>();
+                for (int i = 0; i < timGroupMemberInfos.size(); i++) {
+                    TIMGroupMemberInfo timGroupMemberInfo = timGroupMemberInfos.get(i);
+                    String userId = timGroupMemberInfo.getUser();
+                    userIdList.add(userId);
+                }
+                TIMFriendshipManager.getInstance().getUsersProfile(userIdList, true, new TIMValueCallBack<List<TIMUserProfile>>() {
+                    @Override
+                    public void onError(int i, String s) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(List<TIMUserProfile> timUserProfiles) {
+                        TeamInfoMoudle.DataBean.MembersBean membersBean = new TeamInfoMoudle.DataBean.MembersBean();
+                        List<TeamInfoMoudle.DataBean.MembersBean> membersBeans = membersBean.changeData(timUserProfiles);
+                        membersAdapter.setData(membersBeans);
+                    }
+                });
+            }
+        });
     }
 
     /**
@@ -120,7 +167,12 @@ public class MembersFragment extends BasicFragment {
                     if (delList.size() == 0) {
                         return;
                     }
-                    delTeamMember(delList);
+                    if (groupId.contains("teamId")) {
+                        delTeamMember(delList);
+                    } else {
+                        delGroupUser(delList);
+                    }
+
                 } else {
                     if (type == 0) {
                         type = 1;
@@ -134,9 +186,39 @@ public class MembersFragment extends BasicFragment {
                         membersAdapter.setType(type);
                     }
                 }
-
                 break;
         }
+    }
+
+    private void delGroupUser(final List<TeamInfoMoudle.DataBean.MembersBean> delList) {
+        List<String> mList = new ArrayList<>();
+        for (int i = 0; i < delList.size(); i++) {
+            mList.add(delList.get(i).getUserId() + "");
+        }
+        TIMGroupManager.DeleteMemberParam param = new TIMGroupManager.DeleteMemberParam(groupId, mList);
+        TIMGroupManager.getInstance().deleteGroupMember(param, new TIMValueCallBack<List<TIMGroupMemberResult>>() {
+            @Override
+            public void onError(int i, String s) {
+
+            }
+
+            @Override
+            public void onSuccess(List<TIMGroupMemberResult> timGroupMemberResults) {
+                List<TeamInfoMoudle.DataBean.MembersBean> delLists = new ArrayList<>();
+                for (int i = 0; i < timGroupMemberResults.size(); i++) {
+                    long result = timGroupMemberResults.get(i).getResult();
+                    if (result == 1) {
+                        String userId = timGroupMemberResults.get(i).getUser();
+                        for (int j = 0; j < delList.size(); j++) {
+                            if (userId.equals(delList.get(j).getUserId() + "")) {
+                                delLists.add(delList.get(j));
+                            }
+                        }
+                    }
+                }
+                membersAdapter.delMembers(delLists);
+            }
+        });
     }
 
     private void delTeamMember(final List<TeamInfoMoudle.DataBean.MembersBean> delList) {

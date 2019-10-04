@@ -13,6 +13,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.tencent.imsdk.TIMCallBack;
+import com.tencent.imsdk.TIMGroupManager;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
 import com.yijian.them.R;
 import com.yijian.them.api.AuthApi;
@@ -40,6 +42,7 @@ public class EditTeamFragment extends BasicFragment {
     TextView tvTeamTitle;
     private int type = 7;  //7 小队名称  8 签名
     private ChatInfo chatInfo;
+    private String groupId;
 
     public void setType(int type) {
         this.type = type;
@@ -60,6 +63,7 @@ public class EditTeamFragment extends BasicFragment {
     @Override
     protected void initView(Bundle bundle) {
         context = (BasicActivity) getActivity();
+        groupId = chatInfo.getId();
         if (type == 7) {
             tvTeamTitle.setText("修改群名称");
             String chatName = chatInfo.getChatName();
@@ -99,22 +103,68 @@ public class EditTeamFragment extends BasicFragment {
                 getActivity().finish();
                 break;
             case R.id.tvState:
-                String trim = etNickOrRemark.getText().toString().trim();
+                final String trim = etNickOrRemark.getText().toString().trim();
                 if (type == 7) {
                     if (TextUtils.isEmpty(trim)) {
                         ToastUtils.toastCenter(getActivity(), "请输入群名称");
                         return;
                     }
-                    editTeamName(trim);
+                    if (groupId.contains("teamId")){
+                        editTeamName(trim);
+                    }else {
+                        editGroupName(trim,1);
+                    }
+
                 } else {
                     if (TextUtils.isEmpty(trim)) {
                         ToastUtils.toastCenter(getActivity(), "请输入群公告");
                         return;
                     }
-                    editTeamDesc(trim);
+                    if (groupId.contains("teamId")){
+                        editTeamDesc(trim);
+                    }else {
+                        editGroupName(trim,2);
+                    }
                 }
                 break;
         }
+    }
+
+    /**
+     * 修改群信息
+     * @param trim
+     * @param type 1 修改群名陈  2 修改群公告
+     */
+    private void editGroupName(final String trim, final int type) {
+        TIMGroupManager.ModifyGroupInfoParam  param = new TIMGroupManager.ModifyGroupInfoParam(groupId);
+        if (type == 1){
+            param.setGroupName(trim);
+        }else{
+            param.setNotification(trim);
+        }
+
+        TIMGroupManager.getInstance().modifyGroupInfo(param, new TIMCallBack() {
+            @Override
+            public void onError(int i, String s) {
+
+            }
+
+            @Override
+            public void onSuccess() {
+                if (type == 1){
+                    chatInfo.setChatName(trim);
+                    SPUtils.putString(Config.GROUPTITLE, trim);
+                    Intent intent = new Intent();
+                    intent.putExtra("teamName",trim);
+                    getActivity().setResult(0, intent);
+                    getActivity().finish();
+                }else{
+                    chatInfo.setDesc(trim);
+                    getActivity().finish();
+                }
+
+            }
+        });
     }
 
     /**
@@ -123,7 +173,7 @@ public class EditTeamFragment extends BasicFragment {
      * @param teamName
      */
     private void editTeamName(final String teamName) {
-        final String groupId = chatInfo.getId();
+
         Http.http.createApi(AuthApi.class).editTeamName(groupId.replace("team:teamId:", ""), teamName)
                 .compose(context.<JsonResult<String>>bindToLifecycle())
                 .compose(context.<JsonResult<String>>applySchedulers())

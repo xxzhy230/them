@@ -43,47 +43,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginRight="15dp"
-            android:gravity="center_vertical|right">
-
-            <TextView
-                android:id="@+id/tvGroupNum"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableRight="@mipmap/mine_icon_more"
-                android:drawablePadding="10dp"
-                android:text="查看1名群成员"
-                android:textColor="@color/color_FF999999"
-                android:textSize="15dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:gravity="center_vertical"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rvHead"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:scrollbars="none" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:background="@color/line" />
-
         <LinearLayout
             android:id="@+id/llGroupName"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:gravity="center_vertical">
@@ -110,7 +73,7 @@
         <LinearLayout
             android:id="@+id/llGroupHead"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:gravity="center_vertical">
@@ -140,7 +103,7 @@
         <LinearLayout
             android:id="@+id/llGroupRemark"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:gravity="center_vertical">
@@ -159,15 +122,42 @@
                 android:layout_marginLeft="10dp"
                 android:src="@mipmap/mine_icon_more" />
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/llMembers"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:gravity="center_vertical">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="群成员"
+                android:textColor="@color/color_FF333333"
+                android:textSize="15dp" />
+            <TextView
+                android:id="@+id/tvTeamNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3人"
+                android:textColor="@color/color_FF333333"
+                android:textSize="15dp" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:src="@mipmap/mine_icon_more" />
+        </LinearLayout>
         <View
             android:layout_width="match_parent"
-            android:layout_height="10dp"
+            android:layout_height="1dp"
             android:background="@color/line" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:gravity="center_vertical">
@@ -190,7 +180,7 @@
         <LinearLayout
             android:id="@+id/llReport"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:gravity="center_vertical">
@@ -212,17 +202,21 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="10dp"
+            android:layout_height="1dp"
             android:background="@color/line" />
 
         <TextView
             android:id="@+id/tvOutGroup"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="70dp"
             android:gravity="center"
             android:text="解散群组"
             android:textColor="@color/color_3B7AFF"
             android:textSize="16dp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/line" />
     </LinearLayout>
 
 </LinearLayout>
