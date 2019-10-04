@@ -496,8 +496,8 @@ public class HotTopicInfoActivity extends BasicActivity implements OnRefreshList
      */
     private void blackUser(final HomeMoudle.DataBean dataBean) {
         AlertUtils.showProgress(false, HotTopicInfoActivity.this);
-        int dynamicId = dataBean.getDynamicId();
-        Http.http.createApi(AuthApi.class).blackUser(dynamicId + "")
+        int userId = dataBean.getUserBriefVo().getUserId();
+        Http.http.createApi(AuthApi.class).blackUser(userId + "")
                 .compose(this.<JsonResult<String>>bindToLifecycle())
                 .compose(this.<JsonResult<String>>applySchedulers())
                 .subscribe(this.newSubscriber(new CallBack<String>() {
@@ -505,7 +505,7 @@ public class HotTopicInfoActivity extends BasicActivity implements OnRefreshList
                     public void success(String response, int code) {
                         AlertUtils.dismissProgress();
                         Log.d("加入黑名单: ", response + "");
-                        page = 1;
+                        ToastUtils.toastCenter(HotTopicInfoActivity.this,"加入黑名单成功");
                     }
 
                     @Override
@@ -559,7 +559,7 @@ public class HotTopicInfoActivity extends BasicActivity implements OnRefreshList
     }
 
     private void teamOutOrAdd(final String teamId, final String teamName) {
-        Http.http.createApi(AuthApi.class).teamOutOrAdd(teamId, "1")
+        Http.http.createApi(AuthApi.class).teamOutOrAdd(teamId.replace("team:teamId:", ""), "1")
                 .compose(this.<JsonResult<String>>bindToLifecycle())
                 .compose(this.<JsonResult<String>>applySchedulers())
                 .subscribe(this.newSubscriber(new CallBack<String>() {

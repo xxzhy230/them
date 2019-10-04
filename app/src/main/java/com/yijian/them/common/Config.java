@@ -39,6 +39,7 @@ public class Config {
     public static final String SEARCHKEY = "SEARCHKEY";
     public static final String TEAMTYPE = "TEAMTYPE";
     public static final String TEAMTITLE = "TEAMTITLE";
+    public static final String GROUPTITLE = "GROUPTITLE";
     public static final String TEAMDESC = "TEAMDESC";
     public static final String CREATTEAM = "CREATTEAM";
     public static final String SENDDYNAMIC="SENDDYNAMIC";

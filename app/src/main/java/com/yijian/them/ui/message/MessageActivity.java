@@ -1,8 +1,5 @@
 package com.yijian.them.ui.message;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -15,8 +12,6 @@ import com.yijian.them.basic.BasicActivity;
 import com.yijian.them.common.Config;
 import com.yijian.them.utils.StatusBarUtils;
 import com.yijian.them.utils.fragments.Fragments;
-
-import java.io.Serializable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,17 +46,21 @@ public class MessageActivity extends BasicActivity {
         messageType = getIntent().getIntExtra(Config.MESSAGETYPE, 0);
         String title = getIntent().getStringExtra(Config.MINETITLE);
         ChatInfo chatInfo = (ChatInfo) getIntent().getSerializableExtra(Config.CHATINFO);
-        if (messageType == 4){
+        if (messageType == 4) {
             tvTitleBar.setText("小队信息");
-        }else if (messageType == 2){
+        } else if (messageType == 2) {
             tvTitleBar.setText("官方通知");
-        }else if (messageType == 3){
+        } else if (messageType == 3) {
             tvTitleBar.setText("评论与赞");
-        }else{
+        } else {
             tvTitleBar.setText(title);
         }
 
-        if (messageType == 1 || messageType == 0){
+        if (messageType == 1 ||
+                messageType == 0 ||
+                messageType == 6 ||
+                messageType == 7 ||
+                messageType == 8) {
             vIncludeBar.setVisibility(View.GONE);
             rlTitleBar.setVisibility(View.GONE);
         }

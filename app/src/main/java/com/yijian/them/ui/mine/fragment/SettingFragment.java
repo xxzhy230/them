@@ -68,7 +68,8 @@ public class SettingFragment extends BasicFragment {
     }
 
 
-    @OnClick({R.id.llChangePwd, R.id.llChangePhone, R.id.llAnQuanSetting, R.id.llClear, R.id.llShare, R.id.llOutLogin})
+    @OnClick({R.id.llChangePwd, R.id.llChangePhone, R.id.llAnQuanSetting, R.id.llClear, R.id.llShare,
+            R.id.llOutLogin,R.id.llBlackList})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.llChangePwd:
@@ -131,6 +132,9 @@ public class SettingFragment extends BasicFragment {
                     }
                 }, "退出登录", "点击确认退出登录");
                 dialog.show();
+                break;
+            case R.id.llBlackList:
+                JumpUtils.jumpMineActivity(getActivity(), 18, "黑名单管理");
                 break;
         }
     }

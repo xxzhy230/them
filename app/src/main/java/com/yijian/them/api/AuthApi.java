@@ -3,6 +3,7 @@ package com.yijian.them.api;
 
 import com.yijian.them.ui.home.HomeMoudle;
 import com.yijian.them.ui.login.DataMoudle;
+import com.yijian.them.ui.mine.moudel.Follwermoudel;
 import com.yijian.them.ui.team.TeamMoudle;
 import com.yijian.them.ui.team.moudle.TeamInfoMoudle;
 import com.yijian.them.utils.http.Http;
@@ -347,6 +348,18 @@ public interface AuthApi {
     Observable<JsonResult<String>> blackUser(@Path("userId") String userId);
 
     /**
+     * 黑名单列表
+     */
+    @GET("blacklist")
+    Observable<JsonResult<List<Follwermoudel.DataBean>>> blackList();
+
+    /**
+     * 移除黑名单
+     */
+    @PUT("blacklist/user/{userId}")
+    Observable<JsonResult<String>> delBlackUser(@Path("userId") String userId);
+
+    /**
      * 举报动态
      */
     @POST("dynamicReport")
@@ -377,6 +390,25 @@ public interface AuthApi {
      */
     @GET("v2/team/{teamId}")
     Observable<JsonResult<TeamInfoMoudle.DataBean>> teamInfo(@Path("teamId") String teamId);
+    /**
+     * 修改小队描述
+     */
+    @POST("v2/team/{teamId}")
+    Observable<JsonResult<String>> editTeamDesc(@Path("teamId") String teamId,
+                                                @Query("teamDesc") String teamDesc);
+    /**
+     * 修改小队名称
+     */
+    @POST("v2/team/{teamId}")
+    Observable<JsonResult<String>> editTeamName(@Path("teamId") String teamId,
+                                                @Query("teamName") String teamName);
+    /**
+     * 修改小队头像
+     */
+    @Multipart
+    @POST("v2/team/{teamId}")
+    Observable<JsonResult<String>> editTeamImg(@Path("teamId") String teamId,
+                                               @Part MultipartBody.Part[] images);
 
     /**
      * 加入或退出小队
@@ -546,6 +578,7 @@ public interface AuthApi {
      */
     @GET("announcement")
     Observable<JsonResult<List<HomeMoudle.DataBean>>> systemMessage();
+
     /**
      * 动态消息
      */
@@ -557,5 +590,12 @@ public interface AuthApi {
      */
     @GET("push/team")
     Observable<JsonResult<List<HomeMoudle.DataBean>>> teamMessage();
+
+    /**
+     * 删除小队中的成员
+     */
+    @PUT("v2/team/{teamId}/members")
+    Observable<JsonResult<String>> delTeamMember(@Path("teamId") String teamId, @Body Map<String, String> params);
+
 
 }

@@ -73,7 +73,7 @@ public class JumpUtils {
     }
 
     /**
-     * 跳转到主界面
+     * 跳转消息相关界面
      *
      * @param context
      * @param chatInfo
@@ -85,6 +85,18 @@ public class JumpUtils {
         context.startActivity(intent);
     }
 
+    /**
+     * 跳转消息相关界面
+     *
+     * @param mFragment
+     * @param chatInfo
+     */
+    public static void jumpMessageActivity(Fragment mFragment, int type, ChatInfo chatInfo) {
+        Intent intent = new Intent(mFragment.getContext(), MessageActivity.class);
+        intent.putExtra(Config.MESSAGETYPE, type);
+        intent.putExtra(Config.CHATINFO, chatInfo);
+        mFragment.startActivityForResult(intent, type);
+    }
 
     public static void jumpWebActivity(Context context, String title, String url) {
         Intent intent = new Intent(context, WebActivity.class);

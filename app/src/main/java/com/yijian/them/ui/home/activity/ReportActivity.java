@@ -124,7 +124,6 @@ public class ReportActivity extends BasicActivity {
                 } else if (reportType == 2){
                     tagReport(reason + "," + content);
                 }else if (reportType == 3){
-//                    teamId
                     teamReport(reason + "," + content);
                 }
 

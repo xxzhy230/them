@@ -1,4 +1,4 @@
-package com.yijian.them.ui.message;
+package com.yijian.them.ui.message.fragment;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +22,7 @@ import com.yijian.them.api.AuthApi;
 import com.yijian.them.basic.BasicActivity;
 import com.yijian.them.basic.BasicFragment;
 import com.yijian.them.common.Config;
+import com.yijian.them.ui.message.MessageActivity;
 import com.yijian.them.ui.team.adapter.TeamMembersAdapter;
 import com.yijian.them.ui.team.moudle.TeamInfoMoudle;
 import com.yijian.them.utils.JumpUtils;
@@ -52,8 +53,6 @@ public class MessageInfoFragment extends BasicFragment {
     LinearLayout llGroupHead;
     @BindView(R.id.llGroupRemark)
     LinearLayout llGroupRemark;
-    @BindView(R.id.llMyGroup)
-    LinearLayout llMyGroup;
     @BindView(R.id.sGroupTop)
     Switch sGroupTop;
     @BindView(R.id.llReport)
@@ -75,7 +74,7 @@ public class MessageInfoFragment extends BasicFragment {
 
     @Override
     protected View getResourceView() {
-        View view = View.inflate(getActivity(), R.layout.fragment_group_info, null);
+        View view = View.inflate(getActivity(), R.layout.fragment_message_info, null);
         ButterKnife.bind(this, view);
         return view;
     }
@@ -83,16 +82,14 @@ public class MessageInfoFragment extends BasicFragment {
     @Override
     protected void initView(Bundle bundle) {
         context = (BasicActivity) getActivity();
+        if (chatInfo==null){
+            return;
+        }
         String chatName = chatInfo.getChatName();
         tvGroupName.setText(chatName);
         groupId = chatInfo.getId();
-        if (groupId.contains("teamId")) {
-            tvOutGroup.setText("解散小队");
-            getTeamMembers();
-        } else {
-            tvOutGroup.setText("解散群组");
-            getGroupMembers();
-        }
+        tvOutGroup.setText("解散群组");
+        getGroupMembers();
         topConversation = ConversationManagerKit.getInstance().isTopConversation(groupId);
         if (topConversation) {
             sGroupTop.setChecked(true);
@@ -161,20 +158,9 @@ public class MessageInfoFragment extends BasicFragment {
                     TIMGroupMemberInfo timGroupMemberInfo = timGroupMemberInfos.get(i);
                     String userId = timGroupMemberInfo.getUser();
                     if (userId.equals(SPUtils.getInt(Config.USERID) + "")) {
-                        type = 1;
-                        if (groupId.contains("teamId")) {
-                            tvOutGroup.setText("解散小队");
-                        } else {
-                            tvOutGroup.setText("解散群组");
-                        }
-                        break;
+                        tvOutGroup.setText("解散群组");
                     } else {
-                        type = 0;
-                        if (groupId.contains("teamId")) {
-                            tvOutGroup.setText("退出小队");
-                        } else {
-                            tvOutGroup.setText("退出群组");
-                        }
+                        tvOutGroup.setText("退出群组");
                     }
                 }
             }
@@ -182,7 +168,7 @@ public class MessageInfoFragment extends BasicFragment {
     }
 
 
-    @OnClick({R.id.ivBack, R.id.llGroupName, R.id.llGroupHead, R.id.llGroupRemark, R.id.llMyGroup, R.id.llReport, R.id.tvOutGroup})
+    @OnClick({R.id.ivBack, R.id.llGroupName, R.id.llGroupHead, R.id.llGroupRemark, R.id.llReport, R.id.tvOutGroup})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ivBack:
@@ -194,27 +180,13 @@ public class MessageInfoFragment extends BasicFragment {
                 break;
             case R.id.llGroupRemark:
                 break;
-            case R.id.llMyGroup:
-                JumpUtils.jumpTeamActivity(getActivity(), 1, "我参与的小队", "");
-                break;
             case R.id.llReport:
-
-
                 break;
             case R.id.tvOutGroup:
                 if (type == 1) {//解散小队
-                    if (groupId.contains("teamId")) {
-                        delTeam();
-                    } else {
-                        delGroup();
-                    }
+                    delGroup();
                 } else {//退出小队
-                    if (groupId.contains("teamId")) {
-                        outTeam();
-                    } else {
-                        outGroup();
-                    }
-
+                    outGroup();
                 }
                 break;
         }
@@ -260,57 +232,6 @@ public class MessageInfoFragment extends BasicFragment {
         });
     }
 
-    /**
-     * 退出小队
-     */
-    private void outTeam() {
-        Http.http.createApi(AuthApi.class).teamOutOrAdd(groupId.replace("team:teamId:", ""), "0")
-                .compose(context.<JsonResult<String>>bindToLifecycle())
-                .compose(context.<JsonResult<String>>applySchedulers())
-                .subscribe(context.newSubscriber(new CallBack<String>() {
-                    @Override
-                    public void success(String response, int code) {
-                        Log.d("退出小队: ", response + "");
-                        SPUtils.putString(Config.DELTEAMCHAT, groupId);
-                        if (code == 200) {
-                            ToastUtils.toastCenter(getActivity(), "退出成功");
-                            AppManager.getAppManager().finishActivity(MessageActivity.class);
-                            getActivity().finish();
-                        }
-                    }
-
-                    @Override
-                    public void fail(String errorMessage, int status) {
-                        ToastUtils.toastCenter(getActivity(), errorMessage + "");
-                    }
-                }));
-    }
-
-    /**
-     * 解散小队
-     */
-    private void delTeam() {
-        Http.http.createApi(AuthApi.class).delTeam(groupId.replace("team:teamId:", ""))
-                .compose(context.<JsonResult<String>>bindToLifecycle())
-                .compose(context.<JsonResult<String>>applySchedulers())
-                .subscribe(context.newSubscriber(new CallBack<String>() {
-                    @Override
-                    public void success(String response, int code) {
-                        Log.d("解散小队: ", response + "");
-                        SPUtils.putString(Config.DELTEAMCHAT, groupId);
-                        if (code == 200) {
-                            ToastUtils.toastCenter(getActivity(), "退出成功");
-                            AppManager.getAppManager().finishActivity(MessageActivity.class);
-                            getActivity().finish();
-                        }
-                    }
-
-                    @Override
-                    public void fail(String errorMessage, int status) {
-                        ToastUtils.toastCenter(getActivity(), errorMessage + "");
-                    }
-                }));
-    }
 
     public void setChatInfo(ChatInfo chatInfo) {
         this.chatInfo = chatInfo;

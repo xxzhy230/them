@@ -78,6 +78,11 @@ public class NewFragment extends BasicFragment implements OnRefreshListener, OnL
         srlLayout.setOnLoadMoreListener(this);
         adapter = new TuijianAdapter();
         lvHomeTuijian.setAdapter(adapter);
+        page = 1;
+        if (adapter != null) {
+            adapter.clear();
+        }
+        dynamicNew();
         adapter.setOnLikeListener(new TuijianAdapter.OnLikeListener() {
 
             @Override
@@ -118,7 +123,7 @@ public class NewFragment extends BasicFragment implements OnRefreshListener, OnL
                         @Override
                         public void onClick(int type) {
                             if (type == 1) {
-                                JumpUtils.jumpReportActivity(getActivity(), dataBean.getDynamicId() + "",0,"","");
+                                JumpUtils.jumpReportActivity(getActivity(), dataBean.getDynamicId() + "", 0, "", "");
                             } else if (type == 2) {
                                 blackDynamic(dataBean);
                             } else {
@@ -131,20 +136,12 @@ public class NewFragment extends BasicFragment implements OnRefreshListener, OnL
 
             @Override
             public void joinTeam(String teamd, String teamName) {
-                teamOutOrAdd(teamd,teamName);
+                teamOutOrAdd(teamd, teamName);
             }
         });
 
     }
-    @Override
-    public void onResume() {
-        super.onResume();
-        page = 1;
-        if (adapter != null) {
-            adapter.clear();
-        }
-        dynamicNew();
-    }
+
     /**
      * 加入黑名单
      *
@@ -152,20 +149,15 @@ public class NewFragment extends BasicFragment implements OnRefreshListener, OnL
      */
     private void blackUser(final HomeMoudle.DataBean dataBean) {
         AlertUtils.showProgress(false, getActivity());
-        int dynamicId = dataBean.getDynamicId();
-        Http.http.createApi(AuthApi.class).blackUser(dynamicId + "")
+        int userId = dataBean.getUserBriefVo().getUserId();
+        Http.http.createApi(AuthApi.class).blackUser(userId + "")
                 .compose(context.<JsonResult<String>>bindToLifecycle())
                 .compose(context.<JsonResult<String>>applySchedulers())
                 .subscribe(context.newSubscriber(new CallBack<String>() {
                     @Override
                     public void success(String response, int code) {
                         AlertUtils.dismissProgress();
-                        Log.d("加入黑名单: ", response + "");
-//                        List<HomeMoudle.DataBean> list = adapter.getList();
-//                        list.remove(dataBean);
-//                        adapter.notifyDataSetChanged();
-                        page = 1;
-                        dynamicNew();
+                        ToastUtils.toastCenter(getActivity(),"加入黑名单成功");
                     }
 
                     @Override
@@ -204,6 +196,7 @@ public class NewFragment extends BasicFragment implements OnRefreshListener, OnL
                     }
                 }));
     }
+
     /**
      * 删除动态
      *
@@ -339,7 +332,7 @@ public class NewFragment extends BasicFragment implements OnRefreshListener, OnL
     }
 
     private void teamOutOrAdd(final String teamId, final String teamName) {
-        Http.http.createApi(AuthApi.class).teamOutOrAdd(teamId, "1")
+        Http.http.createApi(AuthApi.class).teamOutOrAdd(teamId.replace("team:teamId:", ""), "1")
                 .compose(context.<JsonResult<String>>bindToLifecycle())
                 .compose(context.<JsonResult<String>>applySchedulers())
                 .subscribe(context.newSubscriber(new CallBack<String>() {

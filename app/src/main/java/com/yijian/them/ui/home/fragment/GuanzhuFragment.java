@@ -295,20 +295,15 @@ public class GuanzhuFragment extends BasicFragment implements OnRefreshListener,
      */
     private void blackUser(final HomeMoudle.DataBean dataBean) {
         AlertUtils.showProgress(false, getActivity());
-        int dynamicId = dataBean.getDynamicId();
-        Http.http.createApi(AuthApi.class).blackUser(dynamicId + "")
+        int userId = dataBean.getUserBriefVo().getUserId();
+        Http.http.createApi(AuthApi.class).blackUser(userId + "")
                 .compose(context.<JsonResult<String>>bindToLifecycle())
                 .compose(context.<JsonResult<String>>applySchedulers())
                 .subscribe(context.newSubscriber(new CallBack<String>() {
                     @Override
                     public void success(String response, int code) {
                         AlertUtils.dismissProgress();
-                        Log.d("加入黑名单: ", response + "");
-//                        List<HomeMoudle.DataBean> list = adapter.getList();
-//                        list.remove(dataBean);
-//                        adapter.notifyDataSetChanged();
-                        page = 1;
-                        following();
+                        ToastUtils.toastCenter(getActivity(),"加入黑名单成功");
                     }
 
                     @Override
@@ -362,7 +357,7 @@ public class GuanzhuFragment extends BasicFragment implements OnRefreshListener,
     }
 
     private void teamOutOrAdd(final String teamId, final String teamName) {
-        Http.http.createApi(AuthApi.class).teamOutOrAdd(teamId, "1")
+        Http.http.createApi(AuthApi.class).teamOutOrAdd(teamId.replace("team:teamId:", ""), "1")
                 .compose(context.<JsonResult<String>>bindToLifecycle())
                 .compose(context.<JsonResult<String>>applySchedulers())
                 .subscribe(context.newSubscriber(new CallBack<String>() {

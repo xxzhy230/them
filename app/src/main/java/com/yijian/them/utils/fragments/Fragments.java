@@ -20,13 +20,16 @@ import com.yijian.them.ui.login.fragment.LoginFragment;
 import com.yijian.them.ui.login.fragment.RegistFragment;
 import com.yijian.them.ui.message.ChatFragment;
 import com.yijian.them.ui.message.DynamicMessageFragment;
-import com.yijian.them.ui.message.GroupInfoFragment;
+import com.yijian.them.ui.message.fragment.EditTeamFragment;
+import com.yijian.them.ui.message.fragment.GroupInfoFragment;
 import com.yijian.them.ui.message.MessageFragment;
-import com.yijian.them.ui.message.MessageInfoFragment;
+import com.yijian.them.ui.message.fragment.MembersFragment;
+import com.yijian.them.ui.message.fragment.MessageInfoFragment;
 import com.yijian.them.ui.message.SystemMessageFragment;
 import com.yijian.them.ui.message.TeamMessageFragment;
 import com.yijian.them.ui.mine.MineFragment;
 import com.yijian.them.ui.mine.fragment.AboutFragment;
+import com.yijian.them.ui.mine.fragment.BlackListFragment;
 import com.yijian.them.ui.mine.fragment.ChangePhoneFragment;
 import com.yijian.them.ui.mine.fragment.CodeFragment;
 import com.yijian.them.ui.mine.fragment.DongTaiFragment;
@@ -72,7 +75,7 @@ public class Fragments {
     private SetPwdFragment setPwdFragment;
     private CodeFragment codeFragment;
     private ChangePhoneFragment changePhoneFragment;
-
+    private BlackListFragment blackListFragment;
 
     private ChatFragment chartFragment;
     private GroupInfoFragment groupInfoFragment;
@@ -91,8 +94,10 @@ public class Fragments {
 
     private SystemMessageFragment systemMessageFragment;
     private DynamicMessageFragment dynamicMessageFragment;
-private TeamMessageFragment teamMessageFragment;
+    private TeamMessageFragment teamMessageFragment;
     private MessageInfoFragment messageInfoFragment;
+    private MembersFragment membersFragment;
+    private EditTeamFragment editTeamFragment;
 
     public static Fragments init() {
         if (fragments == null) {
@@ -246,7 +251,7 @@ private TeamMessageFragment teamMessageFragment;
                 if (editFragment == null) {
                     setPwdFragment = new SetPwdFragment();
                 }
-                if (setPwdFragment==null){
+                if (setPwdFragment == null) {
                     return;
                 }
                 setPwdFragment.setType(0);
@@ -256,7 +261,7 @@ private TeamMessageFragment teamMessageFragment;
                 if (setPwdFragment == null) {
                     setPwdFragment = new SetPwdFragment();
                 }
-                if (setPwdFragment==null){
+                if (setPwdFragment == null) {
                     return;
                 }
                 setPwdFragment.setType(1);
@@ -287,6 +292,12 @@ private TeamMessageFragment teamMessageFragment;
                     changePhoneFragment = new ChangePhoneFragment();
                 }
                 fragmentTransaction.replace(frameLayout, changePhoneFragment);
+                break;
+            case 18://黑名单管理
+                if (blackListFragment == null) {
+                    blackListFragment = new BlackListFragment();
+                }
+                fragmentTransaction.replace(frameLayout, blackListFragment);
                 break;
         }
         fragmentTransaction.commit();
@@ -361,8 +372,29 @@ private TeamMessageFragment teamMessageFragment;
                 if (messageInfoFragment == null) {
                     messageInfoFragment = new MessageInfoFragment();
                 }
-                groupInfoFragment.setChatInfo(chatInfo);
+                messageInfoFragment.setChatInfo(chatInfo);
                 fragmentTransaction.replace(frameLayout, messageInfoFragment);
+                break;
+            case 6://群成员列表
+                if (membersFragment == null) {
+                    membersFragment = new MembersFragment();
+                }
+                membersFragment.setChatInfo(chatInfo);
+                fragmentTransaction.replace(frameLayout, membersFragment);
+                break;
+            case 7://修改小队名称
+                if (editTeamFragment == null) {
+                    editTeamFragment = new EditTeamFragment();
+                }
+                editTeamFragment.setChatInfo(chatInfo, 7);
+                fragmentTransaction.replace(frameLayout, editTeamFragment);
+                break;
+            case 8://修改小队描述
+                if (editTeamFragment == null) {
+                    editTeamFragment = new EditTeamFragment();
+                }
+                editTeamFragment.setChatInfo(chatInfo, 8);
+                fragmentTransaction.replace(frameLayout, editTeamFragment);
                 break;
         }
         fragmentTransaction.commit();

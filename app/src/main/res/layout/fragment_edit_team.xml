@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <include layout="@layout/include_statusbar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp">
+
+        <TextView
+            android:id="@+id/tvCannel"
+            android:layout_width="60dp"
+            android:layout_height="45dp"
+            android:gravity="center"
+            android:text="取消"
+            android:textColor="@color/color_FF333333"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/tvTeamTitle"
+            android:layout_width="60dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="群成员列表"
+            android:textColor="@color/color_FF333333"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvState"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="5dp"
+            android:gravity="center"
+            android:text="保存"
+            android:textColor="@color/color_FF333333"
+            android:textSize="16dp" />
+    </LinearLayout>
+    <EditText
+        android:id="@+id/etNickOrRemark"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@color/white"
+        android:gravity="top"
+        android:padding="15dp"
+        android:textColor="@color/color_FF333333"
+        android:textColorHint="@color/color_FF999999"
+        android:textSize="14dp" />
+
+</LinearLayout>

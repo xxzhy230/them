@@ -162,17 +162,15 @@ public class TuijianFragment extends BasicFragment implements OnRefreshListener,
      */
     private void blackUser(final HomeMoudle.DataBean dataBean) {
         AlertUtils.showProgress(false, getActivity());
-        int dynamicId = dataBean.getDynamicId();
-        Http.http.createApi(AuthApi.class).blackUser(dynamicId + "")
+        int userId = dataBean.getUserBriefVo().getUserId();
+        Http.http.createApi(AuthApi.class).blackUser(userId + "")
                 .compose(context.<JsonResult<String>>bindToLifecycle())
                 .compose(context.<JsonResult<String>>applySchedulers())
                 .subscribe(context.newSubscriber(new CallBack<String>() {
                     @Override
                     public void success(String response, int code) {
                         AlertUtils.dismissProgress();
-                        Log.d("加入黑名单: ", response + "");
-                        page = 1;
-                        recommended();
+                        ToastUtils.toastCenter(getActivity(),"加入黑名单成功");
                     }
 
                     @Override

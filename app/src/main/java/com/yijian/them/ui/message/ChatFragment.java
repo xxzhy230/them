@@ -1,14 +1,14 @@
 package com.yijian.them.ui.message;
 
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.tencent.imsdk.TIMFriendshipManager;
 import com.tencent.imsdk.TIMGroupManager;
 import com.tencent.imsdk.TIMGroupMemberInfo;
+import com.tencent.imsdk.TIMMessage;
 import com.tencent.imsdk.TIMUserProfile;
 import com.tencent.imsdk.TIMValueCallBack;
 import com.tencent.qcloud.tim.uikit.component.NoticeLayout;
@@ -17,19 +17,19 @@ import com.tencent.qcloud.tim.uikit.modules.chat.ChatLayout;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatManagerKit;
 import com.tencent.qcloud.tim.uikit.modules.chat.layout.message.MessageLayout;
+import com.tencent.qcloud.tim.uikit.modules.message.MessageInfo;
 import com.yijian.them.R;
-import com.yijian.them.common.App;
+import com.yijian.them.common.Config;
 import com.yijian.them.utils.JumpUtils;
 import com.yqjr.utils.Utils;
-import com.yqjr.utils.base.BaseActivity;
 import com.yqjr.utils.base.BaseFragment;
+import com.yqjr.utils.spUtils.SPUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 public class ChatFragment extends BaseFragment {
     @BindView(R.id.chat_layout)
@@ -57,6 +57,16 @@ public class ChatFragment extends BaseFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        String groupTitle = SPUtils.getString(Config.GROUPTITLE);
+        if (!TextUtils.isEmpty(groupTitle)) {
+            chatLayout.getTitleBar().setTitle(groupTitle, TitleBarLayout.POSITION.MIDDLE);
+            SPUtils.putString(Config.GROUPTITLE, null);
+        }
+    }
+
+    @Override
     protected void initView(Bundle bundle) {
 // 单聊面板的默认 UI 和交互初始化
         chatLayout.initDefault();
@@ -64,6 +74,7 @@ public class ChatFragment extends BaseFragment {
         chatLayout.setChatInfo(chatInfo);
         chatManager = chatLayout.getChatManager();
         TitleBarLayout titleBar = chatLayout.getTitleBar();
+        titleBar.getRightIcon().setImageResource(R.mipmap.home_more);
         titleBar.setOnRightClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,7 +88,6 @@ public class ChatFragment extends BaseFragment {
         });
         setHeadImage();
         setNotice();
-
         setMessageUserNick();
     }
 
@@ -91,7 +101,7 @@ public class ChatFragment extends BaseFragment {
 
     private void setMessageUserNick() {
 // 从 ChatLayout 里获取 MessageLayout
-        MessageLayout messageLayout = chatLayout.getMessageLayout();
+        final MessageLayout messageLayout = chatLayout.getMessageLayout();
 ////// 设置头像 //////
 // 设置默认头像，默认与朋友与自己的头像相同
         messageLayout.setAvatar(R.mipmap.register_icon_avatar);
@@ -99,6 +109,17 @@ public class ChatFragment extends BaseFragment {
         messageLayout.setAvatarRadius(50);
 // 设置头像大小
         messageLayout.setAvatarSize(new int[]{48, 48});
+        messageLayout.setOnItemClickListener(new MessageLayout.OnItemClickListener() {
+            @Override
+            public void onMessageLongClick(View view, int position, MessageInfo messageInfo) {
+                messageLayout.showItemPopMenu(position, messageInfo, view);
+            }
+
+            @Override
+            public void onUserIconClick(View view, int position, MessageInfo messageInfo) {
+
+            }
+        });
     }
 
     private void setHeadImage() {

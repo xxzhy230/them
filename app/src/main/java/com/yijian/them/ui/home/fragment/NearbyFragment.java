@@ -163,16 +163,9 @@ public class NearbyFragment extends BasicFragment implements OnRefreshListener, 
         });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        page = 1;
-        getData();
-    }
 
     private void nearby(String cityCode, String latitude, String longitude) {
         AlertUtils.showProgress(false, getActivity());
-
         Http.http.createApi(AuthApi.class).nearby(cityCode, latitude, longitude, page, "10")
                 .compose(context.<JsonResult<List<HomeMoudle.DataBean>>>bindToLifecycle())
                 .compose(context.<JsonResult<List<HomeMoudle.DataBean>>>applySchedulers())
@@ -315,7 +308,7 @@ public class NearbyFragment extends BasicFragment implements OnRefreshListener, 
         }
     }
     private void teamOutOrAdd(final String teamId, final String teamName) {
-        Http.http.createApi(AuthApi.class).teamOutOrAdd(teamId, "1")
+        Http.http.createApi(AuthApi.class).teamOutOrAdd(teamId.replace("team:teamId:", ""), "1")
                 .compose(context.<JsonResult<String>>bindToLifecycle())
                 .compose(context.<JsonResult<String>>applySchedulers())
                 .subscribe(context.newSubscriber(new CallBack<String>() {

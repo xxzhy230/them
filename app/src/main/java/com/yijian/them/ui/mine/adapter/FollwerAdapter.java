@@ -14,6 +14,7 @@ import com.yijian.them.R;
 import com.yijian.them.api.AuthApi;
 import com.yijian.them.ui.mine.moudel.Follwermoudel;
 import com.yijian.them.utils.JumpUtils;
+import com.yijian.them.utils.dialog.HintDialog;
 import com.yijian.them.view.CircleImageView;
 import com.yqjr.utils.service.OkHttp;
 import com.yqjr.utils.service.StringJsonCallBack;
@@ -32,7 +33,12 @@ import okhttp3.Call;
 
 public class FollwerAdapter extends BaseAdapter {
     private List<Follwermoudel.DataBean> data = new ArrayList<>();
-    private int type = 1; // 1 关注 2 粉丝
+    private int type = 1; // 1 关注 2 粉丝 3 黑名单
+    private OnDelBlackListener onDelBlackListener;
+
+    public void setOnDelBlackListener(OnDelBlackListener onDelBlackListener) {
+        this.onDelBlackListener = onDelBlackListener;
+    }
 
     public FollwerAdapter(int type) {
         this.type = type;
@@ -83,17 +89,28 @@ public class FollwerAdapter extends BaseAdapter {
         } else {
             holder.ivSex.setImageResource(R.mipmap.self_boy);
         }
-        boolean followed = dataBean.isFollowed();
-        if (followed) {
-            holder.tvNoFollower.setTextColor(parent.getContext().getResources().getColor(R.color.white));
-            holder.tvNoFollower.setBackgroundResource(R.drawable.shape_follower_yes_bg);
-            holder.tvNoFollower.setText("已关注");
-            holder.tvNoFollower.setTextColor(parent.getContext().getResources().getColor(R.color.color_FF666666));
-            holder.tvNoFollower.setBackgroundResource(R.drawable.shape_follower_no_bg);
+        if (type == 3) {
+            holder.tvNoFollower.setVisibility(View.GONE);
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Follwermoudel.DataBean dataBean = data.get(position);
+                    showDel(parent.getContext(), dataBean);
+                }
+            });
         } else {
-            holder.tvNoFollower.setTextColor(parent.getContext().getResources().getColor(R.color.white));
-            holder.tvNoFollower.setBackgroundResource(R.drawable.shape_follower_yes_bg);
-            holder.tvNoFollower.setText("关注");
+            boolean followed = dataBean.isFollowed();
+            if (followed) {
+                holder.tvNoFollower.setTextColor(parent.getContext().getResources().getColor(R.color.white));
+                holder.tvNoFollower.setBackgroundResource(R.drawable.shape_follower_yes_bg);
+                holder.tvNoFollower.setText("已关注");
+                holder.tvNoFollower.setTextColor(parent.getContext().getResources().getColor(R.color.color_FF666666));
+                holder.tvNoFollower.setBackgroundResource(R.drawable.shape_follower_no_bg);
+            } else {
+                holder.tvNoFollower.setTextColor(parent.getContext().getResources().getColor(R.color.white));
+                holder.tvNoFollower.setBackgroundResource(R.drawable.shape_follower_yes_bg);
+                holder.tvNoFollower.setText("关注");
+            }
         }
         holder.tvNoFollower.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,14 +124,40 @@ public class FollwerAdapter extends BaseAdapter {
             public void onClick(View v) {
                 Follwermoudel.DataBean dataBean = data.get(position);
                 int userId = dataBean.getUserId();
-                JumpUtils.jumpUserInfoActivity(parent.getContext(),userId);
+                JumpUtils.jumpUserInfoActivity(parent.getContext(), userId);
             }
         });
         return convertView;
     }
 
-    static
-    class ViewHolder {
+    private void showDel(Context context, final Follwermoudel.DataBean dataBean) {
+        String nickName = dataBean.getNickName();
+        HintDialog hintDialog = new HintDialog(context);
+        hintDialog.setMessage("确定将'" + nickName + "'从黑名单中移除?", true);
+        hintDialog.setOnCommitListener(new HintDialog.OnCommitListener() {
+            @Override
+            public void onCommit() {
+                if (onDelBlackListener != null) {
+                    onDelBlackListener.onDelBlack(dataBean);
+                }
+            }
+        });
+        hintDialog.show();
+    }
+
+    /**
+     * 黑名单列表移除
+     *
+     * @param dataBean
+     */
+    public void delItem(Follwermoudel.DataBean dataBean) {
+        if (data != null) {
+            data.remove(dataBean);
+            notifyDataSetChanged();
+        }
+    }
+
+    static class ViewHolder {
         @BindView(R.id.civHead)
         CircleImageView civHead;
         @BindView(R.id.tvNickName)
@@ -163,5 +206,12 @@ public class FollwerAdapter extends BaseAdapter {
                 }
             }
         });
+    }
+
+    /**
+     * 移除黑名单监听
+     */
+    public interface OnDelBlackListener {
+        void onDelBlack(Follwermoudel.DataBean dataBean);
     }
 }

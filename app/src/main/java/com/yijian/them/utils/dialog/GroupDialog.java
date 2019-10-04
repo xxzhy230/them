@@ -42,7 +42,7 @@ public class GroupDialog extends BaseDialog {
             public void onClick(View v) {
                 if (onJoinListener != null) {
                     if (groupId.contains("teamId")) {//添加小队
-                        onJoinListener.onJoinTeam(groupId,groupName);
+                        onJoinListener.onJoinTeam(groupId, groupName);
                     } else {//加入群聊
                         joinGroup();
                     }
@@ -53,7 +53,7 @@ public class GroupDialog extends BaseDialog {
 
 
     private void joinGroup() {
-        TIMGroupManager.getInstance().applyJoinGroup(groupId, "", new TIMCallBack() {
+        TIMGroupManager.getInstance().applyJoinGroup(groupId, "申请加入群聊", new TIMCallBack() {
             @Override
             public void onError(int i, String s) {
                 dismiss();
@@ -64,6 +64,7 @@ public class GroupDialog extends BaseDialog {
             public void onSuccess() {
                 dismiss();
                 ChatInfo chatInfo = new ChatInfo();
+                System.out.println("群id ----------  " + groupId);
                 chatInfo.setId(groupId);
                 chatInfo.setType(TIMConversationType.Group);
                 chatInfo.setChatName(groupName);
@@ -91,6 +92,6 @@ public class GroupDialog extends BaseDialog {
     }
 
     public interface OnJoinListener {
-        void onJoinTeam(String teamId,String teamName);
+        void onJoinTeam(String teamId, String teamName);
     }
 }

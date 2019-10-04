@@ -305,20 +305,15 @@ public class UserInfoActivity extends BasicActivity implements OnRefreshListener
      */
     private void blackUser(final HomeMoudle.DataBean dataBean) {
         AlertUtils.showProgress(false, UserInfoActivity.this);
-        int dynamicId = dataBean.getDynamicId();
-        Http.http.createApi(AuthApi.class).blackUser(dynamicId + "")
+        int userId = dataBean.getUserBriefVo().getUserId();
+        Http.http.createApi(AuthApi.class).blackUser(userId + "")
                 .compose(this.<JsonResult<String>>bindToLifecycle())
                 .compose(this.<JsonResult<String>>applySchedulers())
                 .subscribe(this.newSubscriber(new CallBack<String>() {
                     @Override
                     public void success(String response, int code) {
                         AlertUtils.dismissProgress();
-                        Log.d("加入黑名单: ", response + "");
-//                        List<HomeMoudle.DataBean> list = adapter.getList();
-//                        list.remove(dataBean);
-//                        adapter.notifyDataSetChanged();
-//                        page = 1;
-//                        dynamicInfo();
+                        ToastUtils.toastCenter(UserInfoActivity.this,"加入黑名单成功");
                     }
 
                     @Override
@@ -437,7 +432,7 @@ public class UserInfoActivity extends BasicActivity implements OnRefreshListener
     }
 
     private void teamOutOrAdd(final String teamId, final String teamName) {
-        Http.http.createApi(AuthApi.class).teamOutOrAdd(teamId, "1")
+        Http.http.createApi(AuthApi.class).teamOutOrAdd(teamId.replace("team:teamId:", ""), "1")
                 .compose(this.<JsonResult<String>>bindToLifecycle())
                 .compose(this.<JsonResult<String>>applySchedulers())
                 .subscribe(this.newSubscriber(new CallBack<String>() {
