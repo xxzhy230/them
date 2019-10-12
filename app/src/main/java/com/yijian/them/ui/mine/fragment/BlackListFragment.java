@@ -116,7 +116,6 @@ public class BlackListFragment extends BasicFragment {
                             tvDefault.setText("暂无添加黑名单成员");
                         }
                     }
-
                     @Override
                     public void fail(String errorMessage, int status) {
                         AlertUtils.dismissProgress();
@@ -124,5 +123,4 @@ public class BlackListFragment extends BasicFragment {
                     }
                 }));
     }
-
 }

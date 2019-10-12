@@ -1,187 +1,182 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="5dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp">
+    <!--android:background="@drawable/shape_grey_5_line_bg"-->
 
-    <com.gcssloop.widget.RCRelativeLayout
-        android:id="@+id/rcrlImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:round_corner="10dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.yijian.them.view.CircleImageView
+                android:id="@+id/civTeamUser"
+                android:layout_width="40dp"
+                android:layout_height="40dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvTeamUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textSize="14dp" />
+
+                <LinearLayout
+                    android:id="@+id/llSex"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shape_3b7aff_25_bg"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <ImageView
+                        android:id="@+id/ivSex"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/register_icon_man" />
+
+                    <TextView
+                        android:id="@+id/tvTeamUserSex"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textSize="13dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginTop="10dp">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="150dp">
+            <com.gcssloop.widget.RCRelativeLayout
+                android:id="@+id/rcrlImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:round_corner="10dp">
 
                 <ImageView
                     android:id="@+id/ivImageBg"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_width="93dp"
+                    android:layout_height="102dp"
                     android:scaleType="centerCrop" />
+            </com.gcssloop.widget.RCRelativeLayout>
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="#113B7AFF" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <com.yijian.them.view.CircleImageView
-                            android:id="@+id/civTeamUser"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="10dp">
-
-                                <TextView
-                                    android:id="@+id/tvTeamUserName"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:textColor="@color/white"
-                                    android:textSize="16dp" />
-
-                                <TextView
-                                    android:id="@+id/tvDis"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textColor="@color/white"
-                                    android:textSize="14dp" />
-                            </LinearLayout>
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="10dp">
-
-                                <LinearLayout
-                                    android:id="@+id/llSex"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:background="@drawable/shape_3b7aff_25_bg"
-                                    android:gravity="center_vertical"
-                                    android:paddingLeft="10dp"
-                                    android:paddingRight="10dp">
-
-                                    <ImageView
-                                        android:id="@+id/ivSex"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:src="@mipmap/register_icon_man" />
-
-                                    <TextView
-                                        android:id="@+id/tvTeamUserSex"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginLeft="5dp"
-                                        android:gravity="center"
-                                        android:textColor="@color/white"
-                                        android:textSize="14dp" />
-                                </LinearLayout>
-
-                                <TextView
-                                    android:id="@+id/tvTeamTime"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentRight="true"
-                                    android:textColor="@color/white"
-                                    android:textSize="14dp" />
-                            </RelativeLayout>
-                        </LinearLayout>
-                    </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
 
                     <TextView
                         android:id="@+id/tvTeamName"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:textColor="@color/white"
-                        android:textSize="16dp" />
+                        android:layout_weight="1"
+                        android:textColor="@color/black"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" />
+                    <TextView
+                        android:id="@+id/tvTeamTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@color/black"
+                        android:textSize="10dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
 
                     <TextView
                         android:id="@+id/tvTeamDesc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:textColor="@color/white"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"
                         android:textSize="12dp" />
-                </LinearLayout>
-            </RelativeLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="@drawable/shape_white_10_lrb_bg"
-                android:gravity="center">
-
-                <LinearLayout
-                    android:id="@+id/llChat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center">
 
                     <TextView
+                        android:id="@+id/tvDis"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:drawableLeft="@mipmap/team_icon_chat"
-                        android:drawablePadding="5dp"
-                        android:gravity="center"
-                        android:text="进入群聊"
-                        android:textColor="@color/color_FF999999"
-                        android:textSize="13dp" />
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="10dp" />
                 </LinearLayout>
 
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="30dp"
-                    android:background="@color/line" />
-
-                <TextView
-                    android:id="@+id/tvOutTeam"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="15dp"
-                    android:drawableLeft="@mipmap/team_icon_exit"
-                    android:drawablePadding="5dp"
-                    android:gravity="center"
-                    android:text="退出小队"
-                    android:textColor="@color/color_FF999999"
-                    android:textSize="13dp" />
             </LinearLayout>
         </LinearLayout>
-    </com.gcssloop.widget.RCRelativeLayout>
-</LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="right">
+
+            <TextView
+                android:id="@+id/tvGroupChat"
+                android:layout_width="70dp"
+                android:layout_height="28dp"
+                android:background="@drawable/shape_3b7aff_20_line_bg"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:text="进入群聊"
+                android:textColor="@color/color_FF3F6EB5"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="70dp"
+                android:layout_height="28dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/shape_3b7aff_20_line_bg"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:text="隐藏/显示"
+                android:textColor="@color/color_FF3F6EB5"
+                android:textSize="12dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tvOutTeam"
+                android:layout_width="70dp"
+                android:layout_height="28dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/shape_aaaaaa_20_line_bg"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:text="退出小队"
+                android:textColor="@color/color_FF999999"
+                android:textSize="12dp" />
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

@@ -1,5 +1,6 @@
 package com.yijian.them.ui.mine.activity;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.yijian.them.common.Config;
 import com.yijian.them.ui.home.HomeMoudle;
 import com.yijian.them.ui.home.adapter.TuijianAdapter;
 import com.yijian.them.ui.login.DataMoudle;
+import com.yijian.them.ui.mine.moudel.Follwermoudel;
 import com.yijian.them.utils.JumpUtils;
 import com.yijian.them.utils.StringUtils;
 import com.yijian.them.utils.dialog.AlertUtils;
@@ -37,6 +39,9 @@ import com.yqjr.utils.service.StringJsonCallBack;
 import com.yqjr.utils.spUtils.SPUtils;
 import com.yqjr.utils.utils.StatusBarUtil;
 import com.yqjr.utils.utils.ToastUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
@@ -84,10 +89,19 @@ public class UserInfoActivity extends BasicActivity implements OnRefreshListener
     ImageView ivSex;
     @BindView(R.id.tvAge)
     TextView tvAge;
+    @BindView(R.id.llFollowed)
+    LinearLayout llFollowed;
+    @BindView(R.id.llC2C)
+    LinearLayout llC2C;
+    @BindView(R.id.llHint)
+    LinearLayout llHint;
+    @BindView(R.id.tvFollowed)
+    TextView tvFollowed;
     private int page = 1;
     private int userId;
     private TuijianAdapter adapter;
     private ImageDialog imageDialog;
+    private String nickName;
 
     @Override
     public int initView() {
@@ -104,6 +118,11 @@ public class UserInfoActivity extends BasicActivity implements OnRefreshListener
         userId = getIntent().getIntExtra(Config.USERID, 0);
         adapter = new TuijianAdapter();
         lvDongtai.setAdapter(adapter);
+        if (userId == SPUtils.getInt(Config.USERID)) {
+            llHint.setVisibility(View.GONE);
+        } else {
+            llHint.setVisibility(View.VISIBLE);
+        }
         user();
         dynamicInfo();
         getStatistics();
@@ -158,12 +177,12 @@ public class UserInfoActivity extends BasicActivity implements OnRefreshListener
 
             @Override
             public void joinTeam(String teamd, String teamName) {
-                teamOutOrAdd(teamd,teamName);
+                teamOutOrAdd(teamd, teamName);
             }
         });
     }
 
-    @OnClick({R.id.tvTitleBar, R.id.llGuanzhu, R.id.llFensi})
+    @OnClick({R.id.tvTitleBar, R.id.llGuanzhu, R.id.llFensi, R.id.llFollowed, R.id.llC2C})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tvTitleBar:
@@ -174,6 +193,16 @@ public class UserInfoActivity extends BasicActivity implements OnRefreshListener
                 break;
             case R.id.llFensi:
                 JumpUtils.jumpFollowerActivity(this, 9, "我的粉丝", userId);
+                break;
+            case R.id.llFollowed://关注
+                isfollow(userId);
+                break;
+            case R.id.llC2C:
+                ChatInfo chatInfo = new ChatInfo();
+                chatInfo.setId(userId + "");
+                chatInfo.setChatName(nickName);
+                chatInfo.setType(TIMConversationType.C2C);
+                JumpUtils.jumpMessageActivity(this, 0, chatInfo);
                 break;
         }
 
@@ -225,6 +254,38 @@ public class UserInfoActivity extends BasicActivity implements OnRefreshListener
         });
     }
 
+    private void isfollow(int userId) {
+        OkHttp.post().addHeader("token", SPUtils.getToken()).url(AuthApi.FOLLOW + userId)
+                .build().execute(new StringJsonCallBack() {
+            @Override
+            public void onError(Call call, Exception e, int i) {
+                super.onError(call, e, i);
+            }
+
+            @Override
+            public void onResponse(String s, int i) {
+                super.onResponse(s, i);
+                System.out.println("关注 : " + s);
+                try {
+                    JSONObject jsonObject = new JSONObject(s);
+                    int code = jsonObject.getInt("code");
+                    String data = jsonObject.getString("data");
+                    if (code == 200) {
+                        if ("关注成功".equals(data)) {
+                            tvFollowed.setText("已关注");
+                            llFollowed.setBackgroundResource(R.drawable.shape_3b7aff_25_bg);
+                        } else {
+                            llFollowed.setBackgroundResource(R.drawable.shape_5e92fc_25_bg);
+                            tvFollowed.setText("+ 关注");
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
     /**
      * 获取用户信息
      */
@@ -245,7 +306,7 @@ public class UserInfoActivity extends BasicActivity implements OnRefreshListener
                 int code = dataMoudle.getCode();
                 if (code == 200) {
                     DataMoudle.DataBean data = dataMoudle.getData();
-                    String nickName = data.getNickName();
+                    nickName = data.getNickName();
                     String realImg = data.getRealImg();
                     String sign = data.getSign();
                     Picasso.with(UserInfoActivity.this).load(realImg).into(ivImageBg);
@@ -260,6 +321,14 @@ public class UserInfoActivity extends BasicActivity implements OnRefreshListener
                         ivSex.setImageResource(R.mipmap.register_icon_man_selected);
                     } else {
                         ivSex.setImageResource(R.mipmap.register_icon_woman_selected);
+                    }
+                    boolean followed = data.isFollowed();
+                    if (followed) {
+                        tvFollowed.setText("已关注");
+                        llFollowed.setBackgroundResource(R.drawable.shape_3b7aff_25_bg);
+                    } else {
+                        llFollowed.setBackgroundResource(R.drawable.shape_5e92fc_25_bg);
+                        tvFollowed.setText("+ 关注");
                     }
                 }
             }
@@ -313,7 +382,7 @@ public class UserInfoActivity extends BasicActivity implements OnRefreshListener
                     @Override
                     public void success(String response, int code) {
                         AlertUtils.dismissProgress();
-                        ToastUtils.toastCenter(UserInfoActivity.this,"加入黑名单成功");
+                        ToastUtils.toastCenter(UserInfoActivity.this, "加入黑名单成功");
                     }
 
                     @Override

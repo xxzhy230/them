@@ -77,13 +77,15 @@ public class TeamListAdapter extends BaseAdapter {
         final TeamMoudle.DataBean dataBean = mList.get(position);
         String teamName = dataBean.getTeamName();
         String teamDesc = dataBean.getTeamDesc();
-        holder.tvTeamDesc.setText(teamDesc);
+        holder.tvTeamDesc.setText("活动内容 : " + teamDesc);
         holder.tvTeamName.setText(teamName);
+        String createAt = dataBean.getCreateAt();
+        holder.tvTeamTime.setText(createAt.split(" ")[0]);
         String distance = dataBean.getDistance();
         if (TextUtils.isEmpty(distance)) {
             distance = "0";
         }
-        holder.tvDis.setText("距离你:" + (Double.parseDouble(distance) * 1000) + "Km");
+        holder.tvDis.setText((Double.parseDouble(distance) / 1000) + "Km");
         List<String> teamImgUrls = dataBean.getTeamImgUrls();
         if (teamImgUrls != null && teamImgUrls.size() > 0) {
             String s = teamImgUrls.get(0);
@@ -99,9 +101,9 @@ public class TeamListAdapter extends BaseAdapter {
             holder.tvTeamUserName.setText(nickName);
             int userId = membersBean.getUserId();
             if (userId == SPUtils.getInt(Config.USERID)) {
-                holder.tvOutTeam.setVisibility(View.GONE);
+                holder.tvOutTeam.setText("解散小队");
             } else {
-                holder.tvOutTeam.setVisibility(View.VISIBLE);
+                holder.tvOutTeam.setText("退出小队");
             }
             Picasso.with(mContext).load(realImg).into(holder.civTeamUser);
             if ("1".equals(gender)) {
@@ -112,7 +114,7 @@ public class TeamListAdapter extends BaseAdapter {
                 holder.ivSex.setImageResource(R.mipmap.register_icon_woman_selected);
             }
             holder.tvTeamUserSex.setText(StringUtils.getAge(birthday));
-            holder.llChat.setOnClickListener(new View.OnClickListener() {
+            holder.tvGroupChat.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     TeamMoudle.DataBean dataBean = mList.get(position);
@@ -165,12 +167,10 @@ public class TeamListAdapter extends BaseAdapter {
         TextView tvTeamName;
         @BindView(R.id.tvTeamDesc)
         TextView tvTeamDesc;
-        @BindView(R.id.llChat)
-        LinearLayout llChat;
         @BindView(R.id.tvOutTeam)
         TextView tvOutTeam;
-        @BindView(R.id.rcrlImage)
-        RCRelativeLayout rcrlImage;
+        @BindView(R.id.tvGroupChat)
+        TextView tvGroupChat;
         @BindView(R.id.ivSex)
         ImageView ivSex;
         @BindView(R.id.llSex)

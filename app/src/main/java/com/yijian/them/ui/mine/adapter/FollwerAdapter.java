@@ -196,7 +196,6 @@ public class FollwerAdapter extends BaseAdapter {
                             boolean followed = dataBean.isFollowed();
                             dataBean.setFollowed(!followed);
                         }
-
                         notifyDataSetChanged();
                     } else {
                         ToastUtils.toastCenter(mContext, msg);

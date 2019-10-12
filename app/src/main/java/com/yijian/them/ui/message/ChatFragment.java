@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMFriendshipManager;
 import com.tencent.imsdk.TIMGroupManager;
 import com.tencent.imsdk.TIMGroupMemberInfo;
@@ -78,12 +79,19 @@ public class ChatFragment extends BaseFragment {
         titleBar.setOnRightClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                TIMConversationType type = chatInfo.getType();
                 String id = chatInfo.getId();
-                if (id.contains("teamId")) {
+                if (type.equals(TIMConversationType.C2C)){
                     JumpUtils.jumpMessageActivity(getActivity(), 1, chatInfo);
-                } else {
-                    JumpUtils.jumpMessageActivity(getActivity(), 5, chatInfo);
+                }else{
+                    if (id.contains("teamId")) {
+                        JumpUtils.jumpMessageActivity(getActivity(), 1, chatInfo);
+                    } else {
+                        JumpUtils.jumpMessageActivity(getActivity(), 5, chatInfo);
+                    }
                 }
+
+
             }
         });
         setHeadImage();

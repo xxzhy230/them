@@ -77,8 +77,8 @@
 
             <com.yijian.them.view.CircleImageView
                 android:id="@+id/civHead"
-                android:layout_width="60dp"
-                android:layout_height="60dp" />
+                android:layout_width="85dp"
+                android:layout_height="85dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -108,7 +108,6 @@
 
                     <TextView
                         android:id="@+id/tvAge"
-                        android:text="11111"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
@@ -124,6 +123,50 @@
                     android:layout_marginTop="5dp"
                     android:textColor="@color/white"
                     android:textSize="12dp" />
+
+                <LinearLayout
+                    android:id="@+id/llHint"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:id="@+id/llC2C"
+                        android:layout_width="75dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/shape_5e92fc_25_bg"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:src="@mipmap/message" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="私聊"
+                            android:textColor="@color/white"
+                            android:textSize="12dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llFollowed"
+                        android:layout_width="75dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/shape_3b7aff_25_bg"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/tvFollowed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="已关注"
+                            android:textColor="@color/white"
+                            android:textSize="12dp" />
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>

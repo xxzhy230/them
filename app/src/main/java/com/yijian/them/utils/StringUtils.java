@@ -34,7 +34,7 @@ public class StringUtils {
         String[] split = date.split("-");
         String year = split[0];
         int age = getYear() - Integer.parseInt(year);
-        return age + "";
+        return age == 0 ? "1" : age + "";
     }
 
     /**

@@ -44,7 +44,6 @@ public class DataMoudle {
         private String userSign;
         private String token;
 
-
         public String getCode() {
             return code;
         }
@@ -70,7 +69,6 @@ public class DataMoudle {
             this.token = token;
         }
 
-
         private String realImg;
         private String birthday;
         private String gender;
@@ -79,7 +77,6 @@ public class DataMoudle {
         private String sign;
         private int userId;
         private boolean followed;
-
 
         public String getRealImg() {
             return realImg;
@@ -146,7 +143,6 @@ public class DataMoudle {
         }
 
 
-
         private int dynamicCount;
         private int fansCount;
         private int followingCount;
@@ -185,7 +181,6 @@ public class DataMoudle {
         }
 
 
-
         private int isLike;
 
         public int getIsLike() {
@@ -195,7 +190,6 @@ public class DataMoudle {
         public void setIsLike(int isLike) {
             this.isLike = isLike;
         }
-
 
 
         private String tagDesc;
