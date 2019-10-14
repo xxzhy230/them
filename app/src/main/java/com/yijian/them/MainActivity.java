@@ -2,6 +2,7 @@ package com.yijian.them;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -10,8 +11,10 @@ import android.widget.RadioGroup;
 
 import com.squareup.picasso.Picasso;
 import com.tencent.imsdk.TIMCallBack;
+import com.tencent.imsdk.TIMFriendshipManager;
 import com.tencent.imsdk.TIMGroupManager;
 import com.tencent.imsdk.TIMManager;
+import com.tencent.imsdk.TIMUserProfile;
 import com.yijian.them.api.AuthApi;
 import com.yijian.them.basic.BasicActivity;
 import com.yijian.them.common.Config;
@@ -24,6 +27,8 @@ import com.yqjr.utils.base.AppManager;
 import com.yqjr.utils.spUtils.SPUtils;
 import com.yqjr.utils.utils.StatusBarUtil;
 import com.yqjr.utils.utils.ToastUtils;
+
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -104,7 +109,7 @@ public class MainActivity extends BasicActivity implements RadioGroup.OnCheckedC
                 .compose(this.<JsonResult<DataMoudle.DataBean>>applySchedulers())
                 .subscribe(this.newSubscriber(new CallBack<DataMoudle.DataBean>() {
                     @Override
-                    public void success(DataMoudle.DataBean response,int code) {
+                    public void success(DataMoudle.DataBean response, int code) {
                         Log.d("获取用户信息: ", response + "");
                         String birthday = response.getBirthday();
                         String gender = response.getGender();
@@ -121,8 +126,12 @@ public class MainActivity extends BasicActivity implements RadioGroup.OnCheckedC
                         SPUtils.putString(Config.REGN, regn);
                         SPUtils.putString(Config.REALIMG, realImg);
                         SPUtils.putString(Config.SIGN, sign);
+                        String regist = SPUtils.getString(Config.REGIST);
+                        if (!TextUtils.isEmpty(regist)) {
+                            setUserInfo(nickName, gender, realImg);
+                            SPUtils.putString(Config.REGIST, "");
+                        }
                     }
-
                     @Override
                     public void fail(String errorMessage, int status) {
                         ToastUtils.toastCenter(MainActivity.this, errorMessage + "");
@@ -130,6 +139,30 @@ public class MainActivity extends BasicActivity implements RadioGroup.OnCheckedC
                 }));
     }
 
+    /**
+     * 设置个人信息
+     *
+     * @param nickName
+     * @param gender
+     * @param realImg
+     */
+    private void setUserInfo(String nickName,  String gender, String realImg) {
+        HashMap<String, Object> map = new HashMap();
+        map.put(TIMUserProfile.TIM_PROFILE_TYPE_KEY_NICK, nickName);
+        map.put(TIMUserProfile.TIM_PROFILE_TYPE_KEY_GENDER, gender);
+        map.put(TIMUserProfile.TIM_PROFILE_TYPE_KEY_FACEURL, realImg);
+        TIMFriendshipManager.getInstance().modifySelfProfile(map, new TIMCallBack() {
+            @Override
+            public void onError(int i, String s) {
+
+            }
+
+            @Override
+            public void onSuccess() {
+
+            }
+        });
+    }
 
 
 }

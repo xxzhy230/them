@@ -89,7 +89,6 @@ public class MineActivity extends BasicActivity {
                     setUser(11, inputText);
                 }else if (mineType == 1){
                     ((FeedBackFragment) Fragments.init().getFragment(1)).feedback();
-
                 }
                 break;
         }
@@ -102,7 +101,7 @@ public class MineActivity extends BasicActivity {
     private void setUser(final int type, final String content) {
         AuthApi api = Http.http.createApi(AuthApi.class);
         Observable<JsonResult<DataMoudle.DataBean>> jsonResultObservable = null;
-        if (type == 10) {//头像
+        if (type == 10) {//昵称
             jsonResultObservable = api.setUserNickName(content);
         } else if (type == 11) {//签名
             jsonResultObservable = api.setUserSign(content + "");
@@ -114,12 +113,13 @@ public class MineActivity extends BasicActivity {
                     public void success(DataMoudle.DataBean response, int code) {
                         if (type == 10) {//昵称
                             SPUtils.putString(Config.NICKNAME, content);
+                            SPUtils.putString(Config.EDITUSERINFO,"1");
                         } else if (type == 11) {//签名
+                            SPUtils.putString(Config.EDITUSERINFO,"1");
                             SPUtils.putString(Config.SIGN, content);
                         }
                         finish();
                     }
-
                     @Override
                     public void fail(String errorMessage, int status) {
                         ToastUtils.toastCenter(MineActivity.this, errorMessage + "");

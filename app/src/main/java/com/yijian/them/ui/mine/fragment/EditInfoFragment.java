@@ -162,7 +162,6 @@ public class EditInfoFragment extends BasicFragment {
                 break;
             case R.id.llRemark:
                 JumpUtils.jumpMineActivity(getActivity(),11,"个性签名");
-
                 break;
         }
     }
@@ -304,6 +303,7 @@ public class EditInfoFragment extends BasicFragment {
                     public void success(DataMoudle.DataBean response,int code) {
                         if (type == 1) {//头像
                             Picasso.with(getActivity()).load(headFile).into(civHead);
+                            SPUtils.putString(Config.EDITUSERINFO,"1");
                         } else if (type == 2) {//性别
                             if (sex == 1) {
                                 tvSex.setText("男");
@@ -313,6 +313,7 @@ public class EditInfoFragment extends BasicFragment {
                         } else if (type == 3) {//生日
                             tvBirthday.setText(birthday);
                             SPUtils.putString(Config.BIRTHDAY, birthday);
+                            SPUtils.putString(Config.EDITUSERINFO,"1");
                         }
                     }
 

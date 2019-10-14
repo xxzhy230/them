@@ -22,6 +22,7 @@ import com.yijian.them.common.Config;
 import com.yijian.them.jpush.ExampleUtil;
 import com.yijian.them.ui.login.DataMoudle;
 import com.yijian.them.utils.JumpUtils;
+import com.yijian.them.utils.dialog.AlertUtils;
 import com.yijian.them.utils.http.CallBack;
 import com.yijian.them.utils.http.Http;
 import com.yijian.them.utils.http.JsonResult;
@@ -55,7 +56,6 @@ public class LoginFragment extends BasicFragment {
 
     @Override
     public void onClickEvent() {
-
     }
 
     @Override
@@ -76,6 +76,7 @@ public class LoginFragment extends BasicFragment {
             ToastUtils.toastCenter(getActivity(), "请输入密码");
             return;
         }
+        AlertUtils.showProgress(false,getActivity());
         login(phone, password);
     }
 
@@ -104,6 +105,7 @@ public class LoginFragment extends BasicFragment {
 
                     @Override
                     public void fail(String errorMessage, int status) {
+                        AlertUtils.dismissProgress();
                         ToastUtils.toastCenter(getActivity(), errorMessage + "");
                     }
                 }));
@@ -111,14 +113,18 @@ public class LoginFragment extends BasicFragment {
 
     private void messageLogin() {
         setAlias(SPUtils.getInt(Config.USERID) + "");
-        TIMManager.getInstance().login(SPUtils.getInt(Config.USERID) + "", SPUtils.getString(Config.USERSIGN), new TIMCallBack() {
+        TIMManager.getInstance().login(SPUtils.getInt(Config.USERID) + "",
+                SPUtils.getString(Config.USERSIGN),
+                new TIMCallBack() {
             @Override
             public void onError(int i, String s) {
+                AlertUtils.dismissProgress();
                 Log.d("IM登录 Error: ", s);
             }
 
             @Override
             public void onSuccess() {
+                AlertUtils.dismissProgress();
                 Log.d("IM登录 : ", "Success");
                 JumpUtils.jumpMainActivity(getActivity());
                 getActivity().finish();

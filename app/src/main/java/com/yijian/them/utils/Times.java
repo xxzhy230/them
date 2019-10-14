@@ -146,13 +146,11 @@ public class Times {
     public static final Date dateTimeFromStr(String stringDateTime) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date time = null;
-
         try {
             time = sdf.parse(stringDateTime);
         } catch (ParseException var4) {
             var4.printStackTrace();
         }
-
         return time;
     }
 
@@ -526,6 +524,10 @@ public class Times {
     public static String getTime(String date) throws ParseException {
         Date start = Times.getDate(date, Times.YMDHMS_BREAK);
         return Times.showTimeText(start);
+    }
+
+    public static long getBirthDay(String birthday) {
+        return dateTimeFromStr(birthday + " 00:00:00").getTime();
     }
 
 }

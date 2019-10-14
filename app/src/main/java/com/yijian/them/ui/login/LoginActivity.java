@@ -28,7 +28,6 @@ public class LoginActivity extends BasicActivity {
         Fragments.init().commitLogin(loginType, fragmentManager, R.id.flLogin);
     }
 
-
     @OnClick({R.id.tvTitleBar})
     public void onViewClicked(View view) {
         switch (view.getId()){

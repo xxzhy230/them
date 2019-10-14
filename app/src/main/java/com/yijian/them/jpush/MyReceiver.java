@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+import com.yijian.them.utils.JumpUtils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -45,7 +47,15 @@ public class MyReceiver extends BroadcastReceiver {
 
 			} else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
 				Logger.d(TAG, "[MyReceiver] 用户点击打开了通知");
-
+				JSONObject json = new JSONObject(bundle.getString(JPushInterface.EXTRA_EXTRA));
+				int anInt = json.getInt("pushType");
+				if (anInt == 31||anInt == 1||anInt == 2||anInt == 32){//评论
+					JumpUtils.jumpMessageActivity(context,3,null);
+				}else if (anInt == 81||anInt == 82){
+					JumpUtils.jumpMessageActivity(context,4,null);
+				}else{
+					JumpUtils.jumpMessageActivity(context,2,null);
+				}
 				//打开自定义的Activity
 //				Intent i = new Intent(context, TestActivity.class);
 //				i.putExtras(bundle);

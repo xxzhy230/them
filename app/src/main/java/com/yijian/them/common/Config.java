@@ -46,6 +46,8 @@ public class Config {
     public static final String TOPICSENDDYNAMIC="TOPICSENDDYNAMIC";
     public static final String DELTEAMCHAT="DELTEAMCHAT";
     public static final String VIDEOURL = "VIDEOURL";
+    public static final String REGIST = "REGIST";
+    public static final String EDITUSERINFO = "EDITUSERINFO";
     public static HomeMoudle.DataBean dataBean;
 
 }

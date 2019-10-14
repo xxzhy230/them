@@ -10,6 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.tencent.imsdk.TIMCallBack;
+import com.tencent.imsdk.TIMFriendshipManager;
+import com.tencent.imsdk.TIMUserProfile;
 import com.yijian.them.R;
 import com.yijian.them.api.AuthApi;
 import com.yijian.them.basic.BasicActivity;
@@ -17,6 +20,7 @@ import com.yijian.them.basic.BasicFragment;
 import com.yijian.them.common.Config;
 import com.yijian.them.ui.login.DataMoudle;
 import com.yijian.them.utils.JumpUtils;
+import com.yijian.them.utils.Times;
 import com.yijian.them.utils.http.CallBack;
 import com.yijian.them.utils.http.Http;
 import com.yijian.them.utils.http.JsonResult;
@@ -24,6 +28,8 @@ import com.yijian.them.view.CircleImageView;
 import com.yqjr.utils.Utils;
 import com.yqjr.utils.spUtils.SPUtils;
 import com.yqjr.utils.utils.ToastUtils;
+
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -88,12 +94,12 @@ public class MineFragment extends BasicFragment {
     }
 
     private void getStatistics() {
-        Http.http.createApi(AuthApi.class).getStatistics(SPUtils.getInt(Config.USERID)+"")
+        Http.http.createApi(AuthApi.class).getStatistics(SPUtils.getInt(Config.USERID) + "")
                 .compose(context.<JsonResult<DataMoudle.DataBean>>bindToLifecycle())
                 .compose(context.<JsonResult<DataMoudle.DataBean>>applySchedulers())
                 .subscribe(context.newSubscriber(new CallBack<DataMoudle.DataBean>() {
                     @Override
-                    public void success(DataMoudle.DataBean response,int code) {
+                    public void success(DataMoudle.DataBean response, int code) {
                         Log.d("获取统计数据", response + "");
                         int dynamicCount = response.getDynamicCount();
                         int fansCount = response.getFansCount();
@@ -119,7 +125,7 @@ public class MineFragment extends BasicFragment {
                 .compose(context.<JsonResult<DataMoudle.DataBean>>applySchedulers())
                 .subscribe(context.newSubscriber(new CallBack<DataMoudle.DataBean>() {
                     @Override
-                    public void success(DataMoudle.DataBean response,int code) {
+                    public void success(DataMoudle.DataBean response, int code) {
                         Log.d("获取用户信息: ", response + "");
                         String birthday = response.getBirthday();
                         String gender = response.getGender();
@@ -140,6 +146,12 @@ public class MineFragment extends BasicFragment {
                         Picasso.with(getActivity()).load(realImg).into(civHead);
                         tvUserName.setText(nickName);
                         tvRemark.setText(sign);
+                        String editUserInfo = SPUtils.getString(Config.EDITUSERINFO);
+                        if (!TextUtils.isEmpty(editUserInfo)) {
+                            setUserInfo(nickName,  gender, realImg, sign);
+                            SPUtils.putString(Config.EDITUSERINFO, "");
+                        }
+
                     }
 
                     @Override
@@ -154,7 +166,7 @@ public class MineFragment extends BasicFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.llUserInfo:
-                JumpUtils.jumpMineActivity(getActivity(), 5, "");
+                JumpUtils.jumpUserInfoActivity(getActivity(), SPUtils.getInt(Config.USERID));
                 break;
             case R.id.llDongTai:
                 JumpUtils.jumpUserInfoActivity(getActivity(), SPUtils.getInt(Config.USERID));
@@ -164,11 +176,9 @@ public class MineFragment extends BasicFragment {
                 break;
             case R.id.llGuanzhu:
                 JumpUtils.jumpUserInfoActivity(getActivity(), SPUtils.getInt(Config.USERID));
-//                JumpUtils.jumpFollowerActivity(getActivity(), 8, "我的关注",0);
                 break;
             case R.id.llFensi:
                 JumpUtils.jumpUserInfoActivity(getActivity(), SPUtils.getInt(Config.USERID));
-//                JumpUtils.jumpFollowerActivity(getActivity(), 9, "我的粉丝",0);
                 break;
             case R.id.llEditInfo:
                 JumpUtils.jumpMineActivity(getActivity(), 0, "资料修改");
@@ -191,14 +201,36 @@ public class MineFragment extends BasicFragment {
     @Override
     public void onResume() {
         super.onResume();
-        String sign = SPUtils.getString(Config.SIGN);
-        if (!TextUtils.isEmpty(sign)) {
-            tvRemark.setText(sign);
-        }
-        String nickName = SPUtils.getString(Config.NICKNAME);
-        if (!TextUtils.isEmpty(nickName)) {
-            tvUserName.setText(nickName);
+        String editUserInfo = SPUtils.getString(Config.EDITUSERINFO);
+        if (!TextUtils.isEmpty(editUserInfo)) {
+            getUserInfo();
         }
         getStatistics();
+    }
+
+    /**
+     * 设置个人信息
+     *
+     * @param nickName
+     * @param gender
+     * @param realImg  * @param sign
+     */
+    private void setUserInfo(String nickName, String gender, String realImg, String sign) {
+        HashMap<String, Object> map = new HashMap();
+        map.put(TIMUserProfile.TIM_PROFILE_TYPE_KEY_NICK, nickName);
+        map.put(TIMUserProfile.TIM_PROFILE_TYPE_KEY_GENDER, gender);
+        map.put(TIMUserProfile.TIM_PROFILE_TYPE_KEY_FACEURL, realImg);
+        map.put(TIMUserProfile.TIM_PROFILE_TYPE_KEY_SELFSIGNATURE, sign);
+        TIMFriendshipManager.getInstance().modifySelfProfile(map, new TIMCallBack() {
+            @Override
+            public void onError(int i, String s) {
+                Log.d("修改IM资料", "失败----" + s);
+            }
+
+            @Override
+            public void onSuccess() {
+                Log.d("修改IM资料", "成功");
+            }
+        });
     }
 }

@@ -53,11 +53,12 @@ public class StringUtils {
             return "0m";
         }
         double dis = Double.parseDouble(distance);
-        if (dis > 1000) {
-            return com.yqjr.utils.utils.StringUtils.double1String(dis / 1000) + "Km";
-        } else {
-            return com.yqjr.utils.utils.StringUtils.double1String(dis) + "m";
-        }
+        return dis * 1000 + "Km";
+//        if (dis > 1000) {
+//            return com.yqjr.utils.utils.StringUtils.double1String(dis / 1000) + "Km";
+//        } else {
+//            return com.yqjr.utils.utils.StringUtils.double1String(dis) + "m";
+//        }
 
     }
 }

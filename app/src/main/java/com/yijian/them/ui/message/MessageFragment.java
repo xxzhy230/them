@@ -11,8 +11,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.tencent.imsdk.TIMConversation;
 import com.tencent.imsdk.TIMConversationType;
+import com.tencent.imsdk.TIMFriendshipManager;
 import com.tencent.imsdk.TIMManager;
+import com.tencent.imsdk.TIMUserProfile;
+import com.tencent.imsdk.TIMValueCallBack;
 import com.tencent.qcloud.tim.uikit.component.TitleBarLayout;
 import com.tencent.qcloud.tim.uikit.modules.chat.GroupChatManagerKit;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
@@ -27,6 +31,9 @@ import com.yijian.them.common.Config;
 import com.yijian.them.utils.JumpUtils;
 import com.yijian.them.utils.dialog.ConversDialog;
 import com.yqjr.utils.spUtils.SPUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,6 +62,8 @@ public class MessageFragment extends BasicFragment implements ConversationManage
     @BindView(R.id.llDefault)
     LinearLayout llDefault;
     private ConversationListAdapter adapter;
+    private int itemCount;
+    private boolean isFlag = false;
 
     @Override
     protected View getResourceView() {
@@ -74,7 +83,74 @@ public class MessageFragment extends BasicFragment implements ConversationManage
         ConversationManagerKit.getInstance().addUnreadWatcher(this);
         TitleBarLayout titleBar = conversationLayout.getTitleBar();
         titleBar.setVisibility(View.GONE);
+        getConversationList();
 
+    }
+
+    private void getConversationList() {
+        List<TIMConversation> conversationList = TIMManager.getInstance().getConversationList();
+        List<String> mList = new ArrayList<>();
+        for (int i = 0; i < conversationList.size(); i++) {
+            TIMConversation timConversation = conversationList.get(i);
+            TIMConversationType type = timConversation.getType();
+            if (type.equals(TIMConversationType.C2C)) {
+                String peer = timConversation.getPeer();
+                mList.add(peer);
+            }
+        }
+        if (mList.size() > 0) {
+            getFriendsHead(mList);
+        } else {
+            // 会话列表面板的默认 UI 和交互初始化
+            conversationLayout.initDefault();
+            adapter = conversationLayout.getConversationList().getAdapter();
+            itemCount = adapter.getItemCount();
+            if (itemCount == 0) {
+                llDefault.setVisibility(View.VISIBLE);
+                tvDefault.setText("暂无消息");
+                ivDefault.setImageResource(R.mipmap.default_message);
+            } else {
+                llDefault.setVisibility(View.GONE);
+            }
+            setConvers();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isFlag){
+            getConversationList();
+        }
+        String groupId = SPUtils.getString(Config.DELTEAMCHAT);
+        if (!TextUtils.isEmpty(groupId)) {
+            adapter = conversationLayout.getConversationList().getAdapter();
+            itemCount = adapter.getItemCount();
+            for (int i = 0; i < itemCount; i++) {
+                ConversationInfo item = adapter.getItem(i);
+                String id = item.getId();
+                if (id.equals(groupId)) {
+                    boolean group = item.isGroup();
+                    if (group) {
+                        TIMManager.getInstance().deleteConversation(TIMConversationType.Group, id);
+                    } else {
+                        TIMManager.getInstance().deleteConversation(TIMConversationType.C2C, id);
+                    }
+                    adapter.removeItem(i);
+                    break;
+                }
+            }
+            SPUtils.putString(Config.DELTEAMCHAT, null);
+        }
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        System.out.println("------------"+hidden);
+        if (!hidden){
+            getConversationList();
+        }
     }
 
     private void setConvers() {
@@ -88,7 +164,7 @@ public class MessageFragment extends BasicFragment implements ConversationManage
         listLayout.setOnItemLongClickListener(new ConversationListLayout.OnItemLongClickListener() {
             @Override
             public void OnItemLongClick(View view, int position, ConversationInfo conversationInfo) {
-                startPopShow(view, position, conversationInfo);
+                startPopShow(position, conversationInfo);
             }
         });
 
@@ -100,11 +176,12 @@ public class MessageFragment extends BasicFragment implements ConversationManage
                 chatInfo.setId(conversationInfo.getId());
                 chatInfo.setChatName(conversationInfo.getTitle());
                 JumpUtils.jumpMessageActivity(getActivity(), 0, chatInfo);
+                isFlag= true;
             }
         });
     }
 
-    private void startPopShow(View view, final int position, ConversationInfo conversationInfo) {
+    private void startPopShow(final int position, ConversationInfo conversationInfo) {
         ConversDialog conversDialog = new ConversDialog(getActivity());
         int unRead = conversationInfo.getUnRead();
         final String id = conversationInfo.getId();
@@ -140,43 +217,33 @@ public class MessageFragment extends BasicFragment implements ConversationManage
                 }
             }
         });
-
-
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        // 会话列表面板的默认 UI 和交互初始化
-        conversationLayout.initDefault();
-        adapter = conversationLayout.getConversationList().getAdapter();
-        int itemCount = adapter.getItemCount();
-        String groupId = SPUtils.getString(Config.DELTEAMCHAT);
-        if (!TextUtils.isEmpty(groupId)) {
-            for (int i = 0; i < itemCount; i++) {
-                ConversationInfo item = adapter.getItem(i);
-                String id = item.getId();
-                if (id.equals(groupId)) {
-                    boolean group = item.isGroup();
-                    if (group) {
-                        TIMManager.getInstance().deleteConversation(TIMConversationType.Group, id);
-                    } else {
-                        TIMManager.getInstance().deleteConversation(TIMConversationType.C2C, id);
-                    }
-                    adapter.removeItem(i);
-                    break;
-                }
+
+
+    private void getFriendsHead(List<String> mList) {
+        TIMFriendshipManager.getInstance().getUsersProfile(mList, true, new TIMValueCallBack<List<TIMUserProfile>>() {
+            @Override
+            public void onError(int i, String s) {
+
             }
-            SPUtils.putString(Config.DELTEAMCHAT, null);
-        }
-        if (itemCount == 0) {
-            llDefault.setVisibility(View.VISIBLE);
-            tvDefault.setText("暂无消息");
-            ivDefault.setImageResource(R.mipmap.default_message);
-        } else {
-            llDefault.setVisibility(View.GONE);
-        }
-        setConvers();
+
+            @Override
+            public void onSuccess(List<TIMUserProfile> timUserProfiles) {
+                // 会话列表面板的默认 UI 和交互初始化
+                conversationLayout.initDefault();
+                adapter = conversationLayout.getConversationList().getAdapter();
+                itemCount = adapter.getItemCount();
+                if (itemCount == 0) {
+                    llDefault.setVisibility(View.VISIBLE);
+                    tvDefault.setText("暂无消息");
+                    ivDefault.setImageResource(R.mipmap.default_message);
+                } else {
+                    llDefault.setVisibility(View.GONE);
+                }
+                setConvers();
+            }
+        });
     }
 
     @OnClick({R.id.rlSystem, R.id.rlTeamMessage, R.id.rlPZ})
